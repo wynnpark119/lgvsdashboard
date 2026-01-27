@@ -1,0 +1,163 @@
+# =============================================================================
+# LG VS GEO - LinkedIn Intelligence Taskfile
+# =============================================================================
+# 설치: https://taskfile.dev/installation/
+# 사용법: task <command>
+# =============================================================================
+
+version: '3'
+
+vars:
+  VENV: .venv
+  PYTHON: "{{.VENV}}/bin/python"
+  GEO: "{{.VENV}}/bin/geo"
+  LOG_DIR: ./logs
+  BACKUP_DIR: ./backups
+  DATA_DIR: ./data
+  DATE:
+    sh: date +%Y%m%d_%H%M%S
+
+tasks:
+  # ===========================================================================
+  # 설치
+  # ===========================================================================
+  install:
+    desc: 의존성 설치
+    cmds:
+      - python3.11 -m venv {{.VENV}}
+      - "{{.VENV}}/bin/pip install --upgrade pip"
+      - "{{.VENV}}/bin/pip install -e '.[dev]'"
+    status:
+      - test -f {{.VENV}}/bin/geo
+
+  # ===========================================================================
+  # 데이터베이스
+  # ===========================================================================
+  init-db:
+    desc: DB 초기화 + 시드 데이터
+    deps: [ensure-dirs]
+    cmds:
+      - "{{.GEO}} init-db --seed 2>&1 | tee -a {{.LOG_DIR}}/init-db.log"
+
+  # ===========================================================================
+  # 수집 - 전체
+  # ===========================================================================
+  collect-all:
+    desc: 전체 수집 (CSE + RSS + Email)
+    deps: [ensure-dirs]
+    cmds:
+      - task: collect-cse
+      - task: collect-rss
+      - task: collect-email
+      - echo "✅ 전체 수집 완료 {{.DATE}}"
+
+  # ===========================================================================
+  # 수집 - Google CSE
+  # ===========================================================================
+  collect-cse:
+    desc: Google CSE 수집 (5개 쿼리, 각 3페이지)
+    deps: [ensure-dirs]
+    cmds:
+      - echo "🔍 Google CSE 수집 시작 {{.DATE}}"
+      - |
+        for qid in 1 2 3 4 5; do
+          echo "  쿼리 ID $qid 수집 중..."
+          {{.GEO}} ingest google-cse --query-id $qid --pages 3 2>&1 | tee -a {{.LOG_DIR}}/cse_{{.DATE}}.log || true
+          sleep 2
+        done
+      - echo "✅ CSE 수집 완료"
+
+  # ===========================================================================
+  # 수집 - RSS
+  # ===========================================================================
+  collect-rss:
+    desc: RSS 피드 수집
+    deps: [ensure-dirs]
+    cmds:
+      - echo "📡 RSS 수집 시작 {{.DATE}}"
+      - |
+        for sid in 1 2 3; do
+          {{.GEO}} ingest rss --source-id $sid 2>&1 | tee -a {{.LOG_DIR}}/rss_{{.DATE}}.log || true
+        done
+      - echo "✅ RSS 수집 완료"
+
+  # ===========================================================================
+  # 수집 - Email
+  # ===========================================================================
+  collect-email:
+    desc: Email (.eml) 수집
+    deps: [ensure-dirs]
+    cmds:
+      - echo "📧 Email 수집 시작 {{.DATE}}"
+      - |
+        if [ -d "{{.DATA_DIR}}/eml" ] && [ "$(ls -A {{.DATA_DIR}}/eml 2>/dev/null)" ]; then
+          {{.GEO}} ingest email --path {{.DATA_DIR}}/eml --query-id 1 2>&1 | tee -a {{.LOG_DIR}}/email_{{.DATE}}.log || true
+        else
+          echo "  ⚠️ {{.DATA_DIR}}/eml 폴더가 비어있음"
+        fi
+      - echo "✅ Email 수집 완료"
+
+  # ===========================================================================
+  # 백업
+  # ===========================================================================
+  backup:
+    desc: DB 백업 (날짜별)
+    deps: [ensure-dirs]
+    cmds:
+      - echo "💾 DB 백업 시작 {{.DATE}}"
+      - |
+        if [ -f "{{.DATA_DIR}}/geo.db" ]; then
+          cp {{.DATA_DIR}}/geo.db {{.BACKUP_DIR}}/geo_{{.DATE}}.db
+          echo "✅ 백업 완료: {{.BACKUP_DIR}}/geo_{{.DATE}}.db"
+          find {{.BACKUP_DIR}} -name "*.db" -mtime +30 -delete 2>/dev/null || true
+          echo "  🗑️ 30일 이상 된 백업 정리 완료"
+        else
+          echo "  ⚠️ DB 파일 없음"
+          exit 1
+        fi
+
+  # ===========================================================================
+  # 대시보드
+  # ===========================================================================
+  dashboard:
+    desc: Streamlit 대시보드 실행
+    cmds:
+      - "{{.GEO}} dashboard"
+
+  # ===========================================================================
+  # 정리
+  # ===========================================================================
+  clean:
+    desc: 캐시 정리
+    cmds:
+      - find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+      - find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+      - echo "✅ 정리 완료"
+
+  clean-logs:
+    desc: 7일 이상 된 로그 삭제
+    cmds:
+      - find {{.LOG_DIR}} -name "*.log" -mtime +7 -delete 2>/dev/null || true
+      - echo "✅ 로그 정리 완료"
+
+  # ===========================================================================
+  # 유틸리티
+  # ===========================================================================
+  ensure-dirs:
+    internal: true
+    cmds:
+      - mkdir -p {{.LOG_DIR}} {{.BACKUP_DIR}} {{.DATA_DIR}}/eml {{.DATA_DIR}}/csv
+    status:
+      - test -d {{.LOG_DIR}}
+      - test -d {{.BACKUP_DIR}}
+
+  # ===========================================================================
+  # 일일 작업 (Cron 대체)
+  # ===========================================================================
+  daily:
+    desc: 일일 작업 (수집 + 백업)
+    cmds:
+      - task: backup
+      - task: collect-all
+      - task: clean-logs
+      - echo "✅ 일일 작업 완료 {{.DATE}}"
