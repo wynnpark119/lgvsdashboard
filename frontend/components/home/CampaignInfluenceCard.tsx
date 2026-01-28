@@ -8,39 +8,53 @@ interface CampaignInfluenceCardProps {
   data: CampaignContext[];
 }
 
-// 캠페인별 YoY 데이터
+// 캠페인별 YoY 데이터 (2026 사업계획 기준)
 const CAMPAIGN_YOY = {
+  'lg-on-board-2026': {
+    lastYear: { visitors: 12500, engagement: 45, deepReview: 22 },
+    thisYear: { visitors: 21300, engagement: 68, deepReview: 38 },
+    yoyChange: { visitors: 70, engagement: 51, deepReview: 73 },
+  },
   'ces-2026': {
     lastYear: { visitors: 5200, engagement: 42, deepReview: 18 },
-    thisYear: { visitors: 8542, engagement: 68, deepReview: 32 },
-    yoyChange: { visitors: 64, engagement: 62, deepReview: 78 },
+    thisYear: { visitors: 9850, engagement: 72, deepReview: 35 },
+    yoyChange: { visitors: 89, engagement: 71, deepReview: 94 },
   },
-  'q4-display-campaign': {
-    lastYear: { visitors: 3800, engagement: 28, deepReview: 8 },
-    thisYear: { visitors: 4100, engagement: 32, deepReview: 10 },
-    yoyChange: { visitors: 8, engagement: 14, deepReview: 25 },
+  'ai-on-board': {
+    lastYear: { visitors: 3200, engagement: 38, deepReview: 15 },
+    thisYear: { visitors: 5800, engagement: 58, deepReview: 28 },
+    yoyChange: { visitors: 81, engagement: 53, deepReview: 87 },
   },
-  'tech-webinar-series': {
+  'public-webinar-2026': {
     lastYear: { visitors: 1200, engagement: 55, deepReview: 22 },
-    thisYear: { visitors: 1850, engagement: 72, deepReview: 35 },
-    yoyChange: { visitors: 54, engagement: 31, deepReview: 59 },
+    thisYear: { visitors: 2150, engagement: 78, deepReview: 42 },
+    yoyChange: { visitors: 79, engagement: 42, deepReview: 91 },
   },
 };
 
-// 캠페인별 주요 드라이버 (온라인 측정 가능 항목만)
+// 캠페인별 주요 드라이버 (2026 사업계획 기준)
 const CAMPAIGN_DRIVERS = {
+  'lg-on-board-2026': [
+    { type: 'ads', name: 'LinkedIn Thought Leader Ads (ETR 5.2%)', contribution: 35 },
+    { type: 'content', name: 'HPC/Transformable Display 랜딩페이지', contribution: 28 },
+    { type: 'ads', name: 'Google SA/DA Always-On', contribution: 22 },
+    { type: 'content', name: 'Technical Whitepaper 다운로드', contribution: 15 },
+  ],
   'ces-2026': [
-    { type: 'content', name: 'CES 데모 영상 (LG.com)', contribution: 38 },
-    { type: 'content', name: 'Next-Gen Cockpit 랜딩페이지', contribution: 32 },
-    { type: 'ads', name: 'LinkedIn - OEM Decision Makers', contribution: 20 },
+    { type: 'content', name: 'CES 2026 데모 영상 (LG.com)', contribution: 32 },
+    { type: 'content', name: 'LG P-pod 랜딩페이지', contribution: 28 },
+    { type: 'ads', name: 'LinkedIn ABM - OEM 타겟', contribution: 25 },
+    { type: 'ads', name: 'Reddit 신규 채널 테스트', contribution: 15 },
   ],
-  'q4-display-campaign': [
-    { type: 'ads', name: 'Google Display - Automotive', contribution: 45 },
-    { type: 'ads', name: 'YouTube Pre-roll', contribution: 35 },
+  'ai-on-board': [
+    { type: 'content', name: 'AI 솔루션 소개 영상', contribution: 38 },
+    { type: 'ads', name: 'LinkedIn Thought Leader Ads', contribution: 32 },
+    { type: 'content', name: 'Expert Discussion 시리즈', contribution: 30 },
   ],
-  'tech-webinar-series': [
-    { type: 'content', name: 'ADAS Webinar 등록/시청', contribution: 40 },
-    { type: 'content', name: 'Case Study PDF 다운로드', contribution: 30 },
+  'public-webinar-2026': [
+    { type: 'content', name: 'Public 웨비나 등록/시청', contribution: 45 },
+    { type: 'content', name: 'Case Study 다운로드', contribution: 30 },
+    { type: 'ads', name: 'LinkedIn 웨비나 프로모션', contribution: 25 },
   ],
 };
 

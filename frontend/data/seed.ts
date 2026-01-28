@@ -39,6 +39,30 @@ interface TechnologyBaseMetrics {
 }
 
 const BASE_METRICS: TechnologyBaseMetrics[] = [
+  // 전략과제 (2026 수주 목표)
+  {
+    id: 'hpc',
+    sessions: 5200,
+    avgTimeOnPage: 4.2,
+    viewDepth: 78,
+    returnVisitRate: 52,
+    multiContentRate: 45,
+    inquiryCount: 95,
+    paidRatio: 25,
+    changeVsPrevious: 35,
+  },
+  {
+    id: 'transformable-display',
+    sessions: 4800,
+    avgTimeOnPage: 4.0,
+    viewDepth: 75,
+    returnVisitRate: 48,
+    multiContentRate: 42,
+    inquiryCount: 88,
+    paidRatio: 28,
+    changeVsPrevious: 28,
+  },
+  // Core
   {
     id: 'digital-cockpit',
     sessions: 4500,
@@ -49,6 +73,17 @@ const BASE_METRICS: TechnologyBaseMetrics[] = [
     inquiryCount: 85,
     paidRatio: 18,
     changeVsPrevious: 23,
+  },
+  {
+    id: 'lg-p-pod',
+    sessions: 4300,
+    avgTimeOnPage: 3.6,
+    viewDepth: 70,
+    returnVisitRate: 44,
+    multiContentRate: 36,
+    inquiryCount: 78,
+    paidRatio: 20,
+    changeVsPrevious: 32,
   },
   {
     id: 'vehicle-vision',
@@ -72,6 +107,7 @@ const BASE_METRICS: TechnologyBaseMetrics[] = [
     paidRatio: 38,
     changeVsPrevious: 2,
   },
+  // Emerging
   {
     id: 'ivi',
     sessions: 2800,
@@ -84,17 +120,6 @@ const BASE_METRICS: TechnologyBaseMetrics[] = [
     changeVsPrevious: 15,
   },
   {
-    id: 'automotive-display',
-    sessions: 1800,
-    avgTimeOnPage: 1.8,
-    viewDepth: 42,
-    returnVisitRate: 18,
-    multiContentRate: 15,
-    inquiryCount: 12,
-    paidRatio: 58,
-    changeVsPrevious: -8,
-  },
-  {
     id: 'telematics',
     sessions: 1200,
     avgTimeOnPage: 1.5,
@@ -104,6 +129,18 @@ const BASE_METRICS: TechnologyBaseMetrics[] = [
     inquiryCount: 8,
     paidRatio: 15,
     changeVsPrevious: -12,
+  },
+  // Monitoring
+  {
+    id: 'automotive-display',
+    sessions: 1800,
+    avgTimeOnPage: 1.8,
+    viewDepth: 42,
+    returnVisitRate: 18,
+    multiContentRate: 15,
+    inquiryCount: 12,
+    paidRatio: 58,
+    changeVsPrevious: -8,
   },
 ];
 
@@ -168,31 +205,70 @@ export const TECHNOLOGY_STATES: TechnologyReviewState[] = BASE_METRICS.map((m) =
 // ─────────────────────────────────────────────────────────────
 
 export const CAMPAIGNS: Campaign[] = [
+  // 2026 핵심 캠페인
+  {
+    id: 'lg-on-board-2026',
+    name: 'LG on board 2026',
+    type: 'advertising',
+    period: { start: '2026-01-01', end: '2026-12-31' },
+  },
+  {
+    id: 'ai-on-board',
+    name: 'AI on Board',
+    type: 'content',
+    period: { start: '2026-01-01', end: '2026-06-30' },
+  },
+  {
+    id: 'experience-on-board',
+    name: 'Experience on Board',
+    type: 'content',
+    period: { start: '2026-01-01', end: '2026-12-31' },
+  },
+  // 이벤트
   {
     id: 'ces-2026',
     name: 'CES 2026',
     type: 'event',
     period: { start: '2026-01-07', end: '2026-01-10' },
   },
+  // 웨비나
   {
-    id: 'q4-display-campaign',
-    name: 'Q4 Display Campaign',
-    type: 'advertising',
-    period: { start: '2025-10-01', end: '2025-12-31' },
+    id: 'public-webinar-2026',
+    name: 'Public 웨비나 (연 6회)',
+    type: 'content',
+    period: { start: '2026-01-01', end: '2026-12-31' },
   },
   {
-    id: 'tech-webinar-series',
-    name: 'Tech Webinar Series',
+    id: 'private-webinar-2026',
+    name: 'Private 웨비나 (연 2회)',
     type: 'content',
-    period: { start: '2025-11-01', end: '2025-12-15' },
+    period: { start: '2026-03-01', end: '2026-09-30' },
   },
 ];
 
 export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
   {
+    campaignId: 'lg-on-board-2026',
+    influence: determineCampaignInfluence(85, 52),
+    summary: 'HPC·Transformable Display 전략과제 중심 MOFU 이동, 지속 효과 확인',
+    metrics: {
+      initialBefore: 58,
+      initialAfter: 42,
+      deepBefore: 42,
+      deepAfter: 58,
+      retention: 85,
+    },
+    technologyMovements: [
+      { technologyId: 'hpc', stageBefore: 'initial', stageAfter: 'deep', movement: 'advanced' },
+      { technologyId: 'transformable-display', stageBefore: 'initial', stageAfter: 'deep', movement: 'advanced' },
+      { technologyId: 'digital-cockpit', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
+      { technologyId: 'lg-p-pod', stageBefore: 'initial', stageAfter: 'deep', movement: 'advanced' },
+    ],
+  },
+  {
     campaignId: 'ces-2026',
     influence: determineCampaignInfluence(78, 45),
-    summary: 'Initial → Deep 이동 발생, 종료 후에도 +18% 유지',
+    summary: 'CES 전시 후 OEM 접촉 증가, 전략과제 노출 집중',
     metrics: {
       initialBefore: 65,
       initialAfter: 52,
@@ -201,73 +277,98 @@ export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
       retention: 78,
     },
     technologyMovements: [
+      { technologyId: 'hpc', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
+      { technologyId: 'transformable-display', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
       { technologyId: 'digital-cockpit', stageBefore: 'initial', stageAfter: 'deep', movement: 'advanced' },
       { technologyId: 'vehicle-vision', stageBefore: 'initial', stageAfter: 'deep', movement: 'advanced' },
-      { technologyId: 'adas', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
-      { technologyId: 'ivi', stageBefore: 'deep', stageAfter: 'initial', movement: 'declined' },
     ],
   },
   {
-    campaignId: 'q4-display-campaign',
-    influence: determineCampaignInfluence(42, 8),
-    summary: '광고 기간 중 상승, 종료 후 baseline 복귀',
+    campaignId: 'ai-on-board',
+    influence: determineCampaignInfluence(72, 38),
+    summary: 'AI 기반 솔루션 인지도 상승, LinkedIn ETR +45%',
     metrics: {
-      initialBefore: 70,
-      initialAfter: 68,
-      deepBefore: 30,
-      deepAfter: 32,
-      retention: 42,
-    },
-    technologyMovements: [
-      { technologyId: 'automotive-display', stageBefore: 'initial', stageAfter: 'initial', movement: 'maintained' },
-    ],
-  },
-  {
-    campaignId: 'tech-webinar-series',
-    influence: determineCampaignInfluence(82, 25),
-    summary: 'Deep Review 비중 +8%, 참석자 재방문율 65%',
-    metrics: {
-      initialBefore: 60,
+      initialBefore: 62,
       initialAfter: 55,
-      deepBefore: 40,
+      deepBefore: 38,
       deepAfter: 45,
-      retention: 82,
+      retention: 72,
     },
     technologyMovements: [
-      { technologyId: 'digital-cockpit', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
-      { technologyId: 'adas', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
+      { technologyId: 'hpc', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
+      { technologyId: 'adas', stageBefore: 'initial', stageAfter: 'deep', movement: 'advanced' },
+    ],
+  },
+  {
+    campaignId: 'public-webinar-2026',
+    influence: determineCampaignInfluence(88, 32),
+    summary: 'Industry Expert 대상 Thought Leadership 강화, 재방문율 72%',
+    metrics: {
+      initialBefore: 55,
+      initialAfter: 48,
+      deepBefore: 45,
+      deepAfter: 52,
+      retention: 88,
+    },
+    technologyMovements: [
+      { technologyId: 'hpc', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
+      { technologyId: 'transformable-display', stageBefore: 'deep', stageAfter: 'deep', movement: 'maintained' },
     ],
   },
 ];
 
 export const MEDIA_ANALYSES: MediaAnalysis[] = [
+  // LG on board 2026
   {
-    campaignId: 'ces-2026',
+    campaignId: 'lg-on-board-2026',
+    channel: 'linkedin_ads',
+    role: 'accelerator',
+    technologies: ['hpc', 'transformable-display', 'digital-cockpit'],
+    evidence: 'OEM 의사결정권자 대상 ETR 5.2%, Thought Leadership 강화',
+  },
+  {
+    campaignId: 'lg-on-board-2026',
     channel: 'google_ads',
     role: 'igniter',
-    technologies: ['ivi', 'adas', 'telematics'],
-    evidence: '첫 접촉 유입의 45%를 차지, 검토 시작 트리거 역할',
+    technologies: ['hpc', 'transformable-display'],
+    evidence: 'Always-On 브랜드 인지도 유지, CTR 2.8%',
   },
+  {
+    campaignId: 'lg-on-board-2026',
+    channel: 'youtube_ads',
+    role: 'supporter',
+    technologies: ['lg-p-pod', 'digital-cockpit'],
+    evidence: 'Experience on Board 영상 VVC 평균 시청률 72%',
+  },
+  // CES 2026
   {
     campaignId: 'ces-2026',
     channel: 'linkedin_ads',
     role: 'accelerator',
-    technologies: ['digital-cockpit', 'vehicle-vision'],
-    evidence: '재방문율 62%, 다중 콘텐츠 소비 비율 최고',
-  },
-  {
-    campaignId: 'ces-2026',
-    channel: 'youtube_ads',
-    role: 'supporter',
-    technologies: ['vehicle-vision', 'adas'],
-    evidence: '평균 시청 완료율 68%, 검토 유지 기여',
+    technologies: ['hpc', 'transformable-display', 'lg-p-pod'],
+    evidence: '전략과제 집중 노출, ABM 타겟 도달률 85%',
   },
   {
     campaignId: 'ces-2026',
     channel: 'social',
-    role: 'noise',
-    technologies: ['ivi'],
-    evidence: '높은 이탈률(78%), 단기 반응만 유발',
+    role: 'supporter',
+    technologies: ['digital-cockpit', 'vehicle-vision'],
+    evidence: 'Reddit 신규 채널 테스트, 기술 커뮤니티 반응 긍정적',
+  },
+  {
+    campaignId: 'ces-2026',
+    channel: 'google_ads',
+    role: 'igniter',
+    technologies: ['adas', 'ivi'],
+    evidence: '이벤트 기간 집중 노출, 첫 접촉 유입 52% 차지',
+  },
+  // AI on Board
+  {
+    campaignId: 'ai-on-board',
+    channel: 'linkedin_ads',
+    role: 'accelerator',
+    technologies: ['hpc', 'adas'],
+    evidence: 'AI 솔루션 Thought Leader Ads CTR 3.5%, FTR +28%',
   },
 ];
 

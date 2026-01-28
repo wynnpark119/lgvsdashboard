@@ -19,7 +19,40 @@ import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber } from '@/lib/utils';
 
 // MOFU/BOFU 단계 기술 데이터 (통합 퍼널: LinkedIn Engagement + LG.com + YouTube)
+// 순서: 전략과제 → Core → Emerging
 const MOFU_BOFU_TECHNOLOGIES = [
+  // 전략과제 (2026 수주 목표)
+  {
+    id: 'hpc',
+    name: 'HPC',
+    mofu: { 
+      linkedinEngagement: 4850, 
+      lgcomRevisits: 685, 
+      youtube50: 920,
+      totalEngagement: 6455
+    },
+    bofu: { inquiries: 42, engagementScore: 96 },
+    status: 'deep_review' as const,
+    trend: 'up' as const,
+    trendValue: 35,
+    insight: '전략과제 — LG on board + CES 시너지, OEM 문의 최다',
+  },
+  {
+    id: 'transformable-display',
+    name: 'Transformable Display',
+    mofu: { 
+      linkedinEngagement: 4280, 
+      lgcomRevisits: 620, 
+      youtube50: 850,
+      totalEngagement: 5750
+    },
+    bofu: { inquiries: 38, engagementScore: 94 },
+    status: 'deep_review' as const,
+    trend: 'up' as const,
+    trendValue: 28,
+    insight: '전략과제 — Technical Whitepaper 다운로드 증가, 문의 전환 양호',
+  },
+  // Core
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
@@ -27,13 +60,28 @@ const MOFU_BOFU_TECHNOLOGIES = [
       linkedinEngagement: 2850, 
       lgcomRevisits: 412, 
       youtube50: 680,
-      totalEngagement: 3942  // 가중 합산
+      totalEngagement: 3942
     },
     bofu: { inquiries: 28, engagementScore: 92 },
     status: 'deep_review' as const,
     trend: 'up' as const,
     trendValue: 18,
-    insight: 'LinkedIn Engagement 강함, 문의 전환 양호',
+    insight: 'Experience on Board 핵심 — LinkedIn Engagement 강함',
+  },
+  {
+    id: 'lg-p-pod',
+    name: 'LG P-pod',
+    mofu: { 
+      linkedinEngagement: 2650, 
+      lgcomRevisits: 385, 
+      youtube50: 620,
+      totalEngagement: 3655
+    },
+    bofu: { inquiries: 25, engagementScore: 88 },
+    status: 'deep_review' as const,
+    trend: 'up' as const,
+    trendValue: 32,
+    insight: 'CES 2026 신규 공개 — 문의 급증, Experience on Board 연계',
   },
   {
     id: 'vehicle-vision',
@@ -63,8 +111,9 @@ const MOFU_BOFU_TECHNOLOGIES = [
     status: 'nurturing' as const,
     trend: 'stable' as const,
     trendValue: 2,
-    insight: 'Engagement 유지 중, 문의 전환 강화 필요',
+    insight: 'AI on Board 캠페인 연계 — Engagement 유지 중',
   },
+  // Emerging
   {
     id: 'ivi',
     name: 'IVI',

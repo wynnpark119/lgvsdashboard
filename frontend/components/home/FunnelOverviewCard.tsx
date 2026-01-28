@@ -40,20 +40,23 @@ const STAGE_CONFIG = {
   },
 };
 
-// 채널별 기여도 데이터 (통합 퍼널)
+// 채널별 기여도 데이터 (2026 통합 퍼널)
 const TOP_DRIVERS = {
   tofu: [
-    { type: 'channel', name: 'LinkedIn 조회 (가중 0.6)', contribution: 54 },
-    { type: 'channel', name: 'LG.com 첫 방문 (가중 1.0)', contribution: 41 },
-    { type: 'channel', name: 'YouTube 조회 (가중 0.4)', contribution: 5 },
+    { type: 'channel', name: 'LinkedIn (Thought Leader Ads)', contribution: 48 },
+    { type: 'channel', name: 'LG.com 첫 방문 (SEO/DA)', contribution: 35 },
+    { type: 'channel', name: 'YouTube VVC', contribution: 10 },
+    { type: 'channel', name: 'Reddit (신규)', contribution: 7 },
   ],
   mofu: [
-    { type: 'channel', name: 'LinkedIn Engagement', contribution: 58 },
-    { type: 'channel', name: 'LG.com 재방문·체류', contribution: 34 },
-    { type: 'channel', name: 'YouTube 50%+ 시청', contribution: 8 },
+    { type: 'channel', name: 'LinkedIn ETR (Engagement)', contribution: 52 },
+    { type: 'channel', name: 'LG.com 재방문·Whitepaper', contribution: 32 },
+    { type: 'channel', name: 'Public 웨비나 참석', contribution: 10 },
+    { type: 'channel', name: 'YouTube 50%+ 시청', contribution: 6 },
   ],
   bofu: [
-    { type: 'content', name: 'LG.com 문의 폼 제출', contribution: 100 },
+    { type: 'content', name: 'LG.com 문의 폼 제출', contribution: 75 },
+    { type: 'content', name: 'LG Loop DB 수집', contribution: 25 },
   ],
 };
 
@@ -88,7 +91,7 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
   const tofuToMofu = ((stages[1].count / stages[0].count) * 100).toFixed(1);
   const mofuToBofu = ((stages[2].count / stages[1].count) * 100).toFixed(1);
 
-  // 전체 비즈니스 인사이트 (통합 퍼널 기준)
+  // 전체 비즈니스 인사이트 (2026 사업계획 기준)
   const generateOverallInsight = () => {
     const allGrowing = stages.every(s => s.change > 0);
     const mofuStrong = stages[1].change > 15;
@@ -97,23 +100,23 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
     if (allGrowing && mofuStrong) {
       return {
         status: 'positive' as const,
-        headline: '전체 채널 인지도 상승, Engagement 활발',
+        headline: 'LG on board 캠페인 효과 — 전략과제(HPC, Transformable Display) 관심 급증',
         details: [
-          `LinkedIn + LG.com + YouTube 통합 TOFU +${stages[0].change.toFixed(1)}% 성장`,
-          `MOFU +${stages[1].change.toFixed(1)}% — LinkedIn Engagement & 콘텐츠 소비 증가`,
-          bofuGrowing ? `문의 전환 +${stages[2].change.toFixed(1)}% — 실제 비즈니스 기회 확대` : null,
+          `전체 채널 TOFU +${stages[0].change.toFixed(1)}% — CES 2026 + LG on board 시너지`,
+          `MOFU +${stages[1].change.toFixed(1)}% — LinkedIn Thought Leadership & 웨비나 효과`,
+          bofuGrowing ? `문의 +${stages[2].change.toFixed(1)}% — OEM 대상 실제 비즈니스 기회 확대` : null,
         ].filter(Boolean) as string[],
-        action: '기술 조직에 검토 현황 공유, LinkedIn 콘텐츠 확대',
+        action: 'HPC/Transformable Display 심화 콘텐츠 확대, 기술 조직 협업 강화',
       };
     } else if (stages[0].paid > 50) {
       return {
         status: 'warning' as const,
         headline: '광고 의존도 높음 — Organic 채널 강화 필요',
         details: [
-          `전체 유입의 ${stages[0].paid}%가 Paid → LinkedIn Organic 콘텐츠 확대 필요`,
-          `광고 중단 시 인지도 급감 우려`,
+          `전체 유입의 ${stages[0].paid}%가 Paid → LinkedIn/Reddit Organic 확대 필요`,
+          `Always-On 광고 효율 점검, Thought Leadership 콘텐츠 강화`,
         ],
-        action: 'LinkedIn Organic 포스트 강화, SEO 콘텐츠 확대',
+        action: 'Expert Discussion 시리즈 확대, Technical Whitepaper 배포',
       };
     } else if (stages[2].change < 5) {
       return {
@@ -121,43 +124,43 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
         headline: '문의 전환 정체 — MOFU→BOFU 전환 강화 필요',
         details: [
           `문의 성장률 +${stages[2].change.toFixed(1)}%로 둔화`,
-          `MOFU→BOFU 전환율 ${mofuToBofu}% — 문의 유도 콘텐츠 강화 필요`,
+          `Private 웨비나 & OEM 타겟 콘텐츠로 전환율 개선 필요`,
         ],
-        action: 'CTA 강화, 문의 폼 접근성 개선, 데모 콘텐츠 추가',
+        action: 'LG Loop DB 활용, ABM 광고 강화, 문의 CTA 개선',
       };
     }
     return {
       status: 'neutral' as const,
-      headline: '전체 채널 인지도 안정 상태',
-      details: [`LinkedIn, LG.com, YouTube 전 채널 균형 유지 중`],
-      action: '현 콘텐츠 전략 유지, 주간 모니터링 지속',
+      headline: 'LG on board 캠페인 진행 중 — 전략과제 모니터링',
+      details: [`HPC, Transformable Display 중심 콘텐츠 전략 유지`],
+      action: 'Public 웨비나 참석률 모니터링, LinkedIn ETR 추적',
     };
   };
 
-  // 각 단계별 인사이트 (통합 퍼널 기준)
+  // 각 단계별 인사이트 (2026 사업계획 기준)
   const getStageInsight = (stageId: 'tofu' | 'mofu' | 'bofu') => {
     const stage = stages.find(s => s.id === stageId)!;
     
     if (stageId === 'tofu') {
       if (stage.change > 15) {
-        return { status: 'good', text: `전체 채널 인지도 +${stage.change.toFixed(1)}% — LinkedIn(54%) + LG.com(41%) + YouTube(5%) 합산` };
+        return { status: 'good', text: `CES 2026 + LG on board 효과 — HPC/Transformable Display 인지도 급증 +${stage.change.toFixed(1)}%` };
       }
       if (stage.paid > 50) {
-        return { status: 'warning', text: `광고 의존도 ${stage.paid}% — Organic 콘텐츠 확대 필요` };
+        return { status: 'warning', text: `광고 의존도 ${stage.paid}% — Reddit/LinkedIn Organic 확대 필요` };
       }
-      return { status: 'neutral', text: `LinkedIn·LG.com·YouTube 통합 인지도 유지 중` };
+      return { status: 'neutral', text: `전략과제 인지도 유지 — Always-On 광고 효과 모니터링` };
     }
     if (stageId === 'mofu') {
       if (stage.change > 10) {
-        return { status: 'good', text: `Engagement +${stage.change.toFixed(1)}% — LinkedIn 상호작용 & LG.com 재방문 증가` };
+        return { status: 'good', text: `LinkedIn ETR +${stage.change.toFixed(1)}% — Thought Leadership & Public 웨비나 효과` };
       }
-      return { status: 'neutral', text: `Engagement 안정 유지 — 웨비나/케이스스터디로 심화 유도` };
+      return { status: 'neutral', text: `Engagement 안정 — Expert Discussion 시리즈로 심화 유도` };
     }
     // BOFU
     if (stage.change > 10) {
-      return { status: 'good', text: `문의 +${stage.change.toFixed(1)}% — 실제 비즈니스 기회 증가` };
+      return { status: 'good', text: `OEM 문의 +${stage.change.toFixed(1)}% — HPC/Display 관련 실제 비즈니스 기회` };
     }
-    return { status: 'neutral', text: `문의 전환 안정 — CTA 강화 권장` };
+    return { status: 'neutral', text: `문의 전환 안정 — Private 웨비나 & ABM 강화 권장` };
   };
 
   const overallInsight = generateOverallInsight();

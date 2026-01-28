@@ -15,7 +15,30 @@ import { InsightHint } from '@/components/ui';
 import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn } from '@/lib/utils';
 
+// 2026 사업계획 반영 - 전략과제 + Core 기술 중심
 const PAID_ANALYSIS = [
+  {
+    technology: 'HPC',
+    organicRatio: 75,
+    paidRatio: 25,
+    dependency: 'low' as const,
+    effect: 'amplifier' as const,
+    tofuPaid: 30,
+    mofuPaid: 18,
+    bofuPaid: 8,
+    note: '전략과제 — CES + LG on board 광고가 인지도 급상승에 기여',
+  },
+  {
+    technology: 'Transformable Display',
+    organicRatio: 72,
+    paidRatio: 28,
+    dependency: 'low' as const,
+    effect: 'amplifier' as const,
+    tofuPaid: 35,
+    mofuPaid: 20,
+    bofuPaid: 10,
+    note: '전략과제 — LinkedIn Thought Leader Ads 효과 양호',
+  },
   {
     technology: 'Digital Cockpit',
     organicRatio: 82,
@@ -25,7 +48,18 @@ const PAID_ANALYSIS = [
     tofuPaid: 25,
     mofuPaid: 12,
     bofuPaid: 5,
-    note: '광고 없이도 자생적 성장',
+    note: 'Experience on Board 핵심 — 광고 없이도 자생적 성장',
+  },
+  {
+    technology: 'LG P-pod',
+    organicRatio: 70,
+    paidRatio: 30,
+    dependency: 'low' as const,
+    effect: 'amplifier' as const,
+    tofuPaid: 40,
+    mofuPaid: 22,
+    bofuPaid: 12,
+    note: 'CES 2026 신규 공개 — 광고가 초기 인지도 형성에 기여',
   },
   {
     technology: 'Vehicle Vision',
@@ -47,7 +81,7 @@ const PAID_ANALYSIS = [
     tofuPaid: 45,
     mofuPaid: 32,
     bofuPaid: 15,
-    note: '광고 기여 있으나 과의존 아님',
+    note: 'AI on Board 캠페인 연계 — 광고 기여 있으나 과의존 아님',
   },
   {
     technology: 'IVI',
@@ -58,7 +92,7 @@ const PAID_ANALYSIS = [
     tofuPaid: 70,
     mofuPaid: 55,
     bofuPaid: 40,
-    note: '광고 종료 시 급락 예상',
+    note: '광고 종료 시 급락 예상 — 콘텐츠 강화 필요',
   },
 ];
 

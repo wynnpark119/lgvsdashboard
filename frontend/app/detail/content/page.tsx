@@ -18,7 +18,62 @@ import { TECHNOLOGIES, getTechnologyById } from '@/types';
 import { cn, formatNumber } from '@/lib/utils';
 
 // 홈의 기술 목록과 연결된 콘텐츠 데이터
+// 순서: 전략과제 → Core → Emerging
 const CONTENT_DATA = [
+  // HPC 관련 콘텐츠 (전략과제)
+  {
+    id: 'hpc-whitepaper',
+    title: 'High-Performance Computing Platform Technical Whitepaper',
+    type: 'document' as const,
+    format: 'PDF Whitepaper',
+    technology: 'hpc',
+    metrics: { views: 5840, avgDwell: 12.5, completionRate: 78, downloads: 1856 },
+    trend: 85,
+    topOEMs: ['BMW', 'Mercedes', 'Volkswagen'],
+  },
+  {
+    id: 'hpc-expert-discussion',
+    title: 'HPC Expert Discussion: AI Computing in Vehicles',
+    type: 'webinar' as const,
+    format: 'Expert Discussion (35min)',
+    technology: 'hpc',
+    metrics: { views: 3420, avgDwell: 28.5, completionRate: 82, downloads: 0 },
+    trend: 72,
+    topOEMs: ['GM', 'Ford', 'Toyota'],
+  },
+  {
+    id: 'hpc-ces-demo',
+    title: 'CES 2026 HPC Demo 영상',
+    type: 'video' as const,
+    format: 'Demo Video (4min)',
+    technology: 'hpc',
+    metrics: { views: 12500, avgDwell: 3.5, completionRate: 85, downloads: 0 },
+    trend: 142,
+    topOEMs: ['CES 전시 방문자'],
+  },
+
+  // Transformable Display 관련 콘텐츠 (전략과제)
+  {
+    id: 'transformable-whitepaper',
+    title: 'Transformable Display Technology Overview',
+    type: 'document' as const,
+    format: 'PDF Whitepaper',
+    technology: 'transformable-display',
+    metrics: { views: 4920, avgDwell: 10.8, completionRate: 72, downloads: 1542 },
+    trend: 78,
+    topOEMs: ['Mercedes', 'Audi', 'Porsche'],
+  },
+  {
+    id: 'transformable-video',
+    title: 'Transformable Display: Form Factor Innovation',
+    type: 'video' as const,
+    format: 'Tech Explainer (5min)',
+    technology: 'transformable-display',
+    metrics: { views: 8650, avgDwell: 4.2, completionRate: 78, downloads: 0 },
+    trend: 95,
+    topOEMs: ['BMW', 'Lucid', 'Rivian'],
+  },
+
   // Digital Cockpit 관련 콘텐츠
   {
     id: 'cockpit-whitepaper',
@@ -49,6 +104,28 @@ const CONTENT_DATA = [
     metrics: { views: 8920, avgDwell: 2.8, completionRate: 75, downloads: 0 },
     trend: 128,
     topOEMs: ['전시 방문자'],
+  },
+
+  // LG P-pod 관련 콘텐츠
+  {
+    id: 'p-pod-landing',
+    title: 'LG P-pod: Total In-vehicle Experience',
+    type: 'document' as const,
+    format: 'Product Overview',
+    technology: 'lg-p-pod',
+    metrics: { views: 4580, avgDwell: 6.8, completionRate: 72, downloads: 1245 },
+    trend: 92,
+    topOEMs: ['Mercedes', 'BMW', 'Hyundai'],
+  },
+  {
+    id: 'p-pod-video',
+    title: 'LG P-pod CES 2026 Reveal',
+    type: 'video' as const,
+    format: 'Product Reveal (6min)',
+    technology: 'lg-p-pod',
+    metrics: { views: 9850, avgDwell: 5.2, completionRate: 82, downloads: 0 },
+    trend: 158,
+    topOEMs: ['CES 전시 방문자'],
   },
 
   // Vehicle Vision 관련 콘텐츠

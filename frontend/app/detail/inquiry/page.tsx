@@ -16,16 +16,18 @@ import {
 import { PageHeader } from '@/components/layout';
 import { cn, formatNumber } from '@/lib/utils';
 
-// 문의 데이터
+// 문의 데이터 (2026 전략과제 중심)
 const INQUIRIES = [
-  { id: 'inq-001', date: '2025-12-18', technology: 'Digital Cockpit', type: '기술문의', source: 'LG.com' },
-  { id: 'inq-002', date: '2025-12-17', technology: 'Vehicle Vision', type: '스펙요청', source: 'LinkedIn' },
-  { id: 'inq-003', date: '2025-12-16', technology: 'ADAS', type: '기술문의', source: 'LG.com' },
-  { id: 'inq-004', date: '2025-12-15', technology: 'Digital Cockpit', type: '데모요청', source: 'CES Event' },
-  { id: 'inq-005', date: '2025-12-14', technology: 'IVI', type: '일반문의', source: 'LG.com' },
-  { id: 'inq-006', date: '2025-12-13', technology: 'Digital Cockpit', type: '파트너십', source: 'LinkedIn' },
-  { id: 'inq-007', date: '2025-12-12', technology: 'Vehicle Vision', type: '기술문의', source: 'Google' },
-  { id: 'inq-008', date: '2025-12-11', technology: 'ADAS', type: '스펙요청', source: 'LG.com' },
+  { id: 'inq-001', date: '2026-01-15', technology: 'HPC', type: '기술문의', source: 'LG.com' },
+  { id: 'inq-002', date: '2026-01-14', technology: 'Transformable Display', type: '기술문의', source: 'LinkedIn' },
+  { id: 'inq-003', date: '2026-01-13', technology: 'HPC', type: '파트너십', source: 'CES 2026' },
+  { id: 'inq-004', date: '2026-01-12', technology: 'LG P-pod', type: '기술문의', source: 'LG.com' },
+  { id: 'inq-005', date: '2026-01-11', technology: 'Digital Cockpit', type: '기술문의', source: 'LG.com' },
+  { id: 'inq-006', date: '2026-01-10', technology: 'Transformable Display', type: '파트너십', source: 'LinkedIn' },
+  { id: 'inq-007', date: '2026-01-09', technology: 'HPC', type: '기술문의', source: 'LG.com' },
+  { id: 'inq-008', date: '2026-01-08', technology: 'LG P-pod', type: '일반문의', source: 'CES 2026' },
+  { id: 'inq-009', date: '2026-01-07', technology: 'Vehicle Vision', type: '기술문의', source: 'Google' },
+  { id: 'inq-010', date: '2026-01-06', technology: 'ADAS', type: '기술문의', source: 'LG.com' },
 ];
 
 // 뉴스레터 구독 데이터

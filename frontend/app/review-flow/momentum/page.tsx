@@ -22,37 +22,38 @@ const PERIOD_OPTIONS = [
   { id: '90d', label: '90일' },
 ];
 
+// 2026 사업계획 반영 - 전략과제 효과로 전체 지표 상승
 const MOMENTUM_METRICS = [
   {
     id: 'overall',
     label: 'Overall Intensity',
-    current: 5.8,
-    previous: 4.0,
-    change: 45,
+    current: 7.2,
+    previous: 5.8,
+    change: 24,
     direction: 'up' as const,
   },
   {
     id: 'initial-to-deep',
     label: 'TOFU → MOFU 전환율',
-    current: 22.1,
-    previous: 18.5,
-    change: 19.5,
+    current: 28.5,
+    previous: 22.1,
+    change: 29,
     direction: 'up' as const,
   },
   {
     id: 'retention',
-    label: '심화 검토 유지율',
-    current: 78,
-    previous: 72,
-    change: 8.3,
+    label: 'MOFU Engagement 유지율',
+    current: 82,
+    previous: 78,
+    change: 5.1,
     direction: 'up' as const,
   },
   {
     id: 'paid-dependency',
     label: 'Paid Dependency',
-    current: 35,
-    previous: 42,
-    change: -16.7,
+    current: 28,
+    previous: 35,
+    change: -20,
     direction: 'down' as const,
   },
 ];

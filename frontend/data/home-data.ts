@@ -83,7 +83,7 @@ export const DEMO_MOMENTUM: MomentumData = {
     value: dp.value,
     stage: dp.stage,
   })),
-  campaigns: CAMPAIGNS.filter((c) => c.id === 'ces-2026').map((c) => ({
+  campaigns: CAMPAIGNS.filter((c) => c.id === 'lg-on-board-2026' || c.id === 'ces-2026').map((c) => ({
     id: c.id,
     name: c.name,
     startDate: c.period.start,

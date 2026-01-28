@@ -97,14 +97,38 @@ export interface TechnologyMetrics {
 
 /**
  * Seed Technologies (기술 마스터 데이터)
+ * 순서: 전략과제 → Core → Emerging → Monitoring
  */
 export const TECHNOLOGIES: Technology[] = [
+  // 전략과제 (수주 목표)
+  {
+    id: 'hpc',
+    name: 'HPC',
+    nameKo: 'High-Performance Computing',
+    category: 'core',
+    description: '고성능 컴퓨팅 플랫폼 - 2026 전략과제',
+  },
+  {
+    id: 'transformable-display',
+    name: 'Transformable Display',
+    nameKo: '트랜스포머블 디스플레이',
+    category: 'core',
+    description: '형태 변환 가능 디스플레이 - 2026 전략과제',
+  },
+  // Core
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
     nameKo: '디지털 콕핏',
     category: 'core',
-    description: '차량용 통합 디스플레이 솔루션',
+    description: '차량용 통합 디스플레이 솔루션 (Experience on Board)',
+  },
+  {
+    id: 'lg-p-pod',
+    name: 'LG P-pod',
+    nameKo: 'LG P-pod',
+    category: 'core',
+    description: 'Labworks Series - Total In-vehicle Experience 솔루션',
   },
   {
     id: 'vehicle-vision',
@@ -120,6 +144,7 @@ export const TECHNOLOGIES: Technology[] = [
     category: 'core',
     description: 'Advanced Driver Assistance Systems',
   },
+  // Emerging
   {
     id: 'ivi',
     name: 'IVI',
@@ -134,6 +159,7 @@ export const TECHNOLOGIES: Technology[] = [
     category: 'emerging',
     description: '차량 통신 및 원격 진단',
   },
+  // Monitoring
   {
     id: 'automotive-display',
     name: 'Automotive Display',

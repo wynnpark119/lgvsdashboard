@@ -7,51 +7,76 @@ import { InsightHint, MiniFunnel } from '@/components/ui';
 import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber, formatChange } from '@/lib/utils';
 
+// 2026 사업계획 반영 - 전략과제 + Core 기술 중심
 const TECH_DATA = [
+  // 전략과제 (2026 수주 목표)
+  { 
+    id: 'hpc',
+    name: 'HPC', 
+    tofu: 4580, mofu: 685, bofu: 42, 
+    trend: 35, direction: 'up' as const,
+    engagementScore: 96, paidDep: 'low' as const,
+  },
+  { 
+    id: 'transformable-display',
+    name: 'Transformable Display', 
+    tofu: 3820, mofu: 620, bofu: 38, 
+    trend: 28, direction: 'up' as const,
+    engagementScore: 94, paidDep: 'low' as const,
+  },
+  // Core
   { 
     id: 'digital-cockpit',
     name: 'Digital Cockpit', 
-    tofu: 2341, mofu: 412, bofu: 98, 
+    tofu: 2341, mofu: 412, bofu: 28, 
     trend: 23, direction: 'up' as const,
-    understandingScore: 78, paidDep: 'low' as const,
+    engagementScore: 92, paidDep: 'low' as const,
+  },
+  { 
+    id: 'lg-p-pod',
+    name: 'LG P-pod', 
+    tofu: 2450, mofu: 385, bofu: 25, 
+    trend: 32, direction: 'up' as const,
+    engagementScore: 88, paidDep: 'low' as const,
   },
   { 
     id: 'vehicle-vision',
     name: 'Vehicle Vision', 
-    tofu: 1102, mofu: 203, bofu: 52, 
+    tofu: 1102, mofu: 203, bofu: 18, 
     trend: 18, direction: 'up' as const,
-    understandingScore: 72, paidDep: 'low' as const,
+    engagementScore: 85, paidDep: 'low' as const,
   },
   { 
     id: 'adas',
     name: 'ADAS', 
-    tofu: 1856, mofu: 287, bofu: 67, 
+    tofu: 1856, mofu: 287, bofu: 12, 
     trend: 2, direction: 'stable' as const,
-    understandingScore: 65, paidDep: 'medium' as const,
+    engagementScore: 68, paidDep: 'medium' as const,
   },
+  // Emerging
   { 
     id: 'ivi',
     name: 'IVI', 
-    tofu: 1523, mofu: 198, bofu: 41, 
-    trend: -5, direction: 'down' as const,
-    understandingScore: 42, paidDep: 'high' as const,
+    tofu: 1250, mofu: 98, bofu: 5, 
+    trend: -15, direction: 'down' as const,
+    engagementScore: 42, paidDep: 'high' as const,
   },
   { 
     id: 'telematics',
     name: 'Telematics', 
-    tofu: 1247, mofu: 156, bofu: 28, 
-    trend: -12, direction: 'down' as const,
-    understandingScore: 35, paidDep: 'medium' as const,
+    tofu: 1220, mofu: 56, bofu: 3, 
+    trend: -22, direction: 'down' as const,
+    engagementScore: 35, paidDep: 'medium' as const,
   },
 ];
 
-const UNDERSTANDING_CONFIG = {
-  high: { label: '이해도 높음', color: 'text-green-600', bgColor: 'bg-green-100' },
-  medium: { label: '이해도 중간', color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
-  low: { label: '이해도 낮음', color: 'text-gray-500', bgColor: 'bg-gray-100' },
+const ENGAGEMENT_CONFIG = {
+  high: { label: 'Engagement 높음', color: 'text-green-600', bgColor: 'bg-green-100' },
+  medium: { label: 'Engagement 중간', color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
+  low: { label: 'Engagement 낮음', color: 'text-gray-500', bgColor: 'bg-gray-100' },
 };
 
-function getUnderstandingLevel(score: number): 'high' | 'medium' | 'low' {
+function getEngagementLevel(score: number): 'high' | 'medium' | 'low' {
   if (score >= 70) return 'high';
   if (score >= 45) return 'medium';
   return 'low';
@@ -64,7 +89,7 @@ export default function TechnologyFlowPage() {
   const totalTofu = TECH_DATA.reduce((sum, t) => sum + t.tofu, 0);
   const totalMofu = TECH_DATA.reduce((sum, t) => sum + t.mofu, 0);
   const totalBofu = TECH_DATA.reduce((sum, t) => sum + t.bofu, 0);
-  const deepReviewCount = TECH_DATA.filter(t => getUnderstandingLevel(t.understandingScore) === 'high').length;
+  const deepEngagementCount = TECH_DATA.filter(t => getEngagementLevel(t.engagementScore) === 'high').length;
 
   return (
     <div className="min-h-screen">
@@ -89,13 +114,13 @@ export default function TechnologyFlowPage() {
               <div className="text-xs text-gray-400">탐색 단계</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
-              <div className="text-sm text-gray-500">전체 BOFU (심화 검토)</div>
+              <div className="text-sm text-gray-500">전체 BOFU (문의)</div>
               <div className="text-2xl font-bold text-green-600">{formatNumber(totalBofu)}</div>
-              <div className="text-xs text-gray-400">기술 이해 완료</div>
+              <div className="text-xs text-gray-400">문의 전환</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
-              <div className="text-sm text-gray-500">검토 완료 기술</div>
-              <div className="text-2xl font-bold text-green-600">{deepReviewCount}개</div>
+              <div className="text-sm text-gray-500">Engagement 높은 기술</div>
+              <div className="text-2xl font-bold text-green-600">{deepEngagementCount}개</div>
               <div className="text-xs text-gray-400">기술조직 공유 가능</div>
             </div>
           </section>
@@ -107,8 +132,8 @@ export default function TechnologyFlowPage() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">기술 목록</h3>
               <div className="space-y-3">
                 {TECH_DATA.map((tech) => {
-                  const understandingLevel = getUnderstandingLevel(tech.understandingScore);
-                  const understandingConfig = UNDERSTANDING_CONFIG[understandingLevel];
+                  const engagementLevel = getEngagementLevel(tech.engagementScore);
+                  const engagementConfig = ENGAGEMENT_CONFIG[engagementLevel];
                   const isSelected = selectedTech.id === tech.id;
 
                   return (
@@ -124,8 +149,8 @@ export default function TechnologyFlowPage() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-gray-900">{tech.name}</span>
-                        <span className={cn('text-sm font-bold', understandingConfig.color)}>
-                          {tech.understandingScore}
+                        <span className={cn('text-sm font-bold', engagementConfig.color)}>
+                          {tech.engagementScore}
                         </span>
                       </div>
                       <MiniFunnel tofu={tech.tofu} mofu={tech.mofu} bofu={tech.bofu} />
@@ -138,8 +163,8 @@ export default function TechnologyFlowPage() {
                           {tech.direction === 'down' && <ArrowDown size={12} className="inline" />}
                           {formatChange(tech.trend)}
                         </span>
-                        <span className={cn('px-1.5 py-0.5 rounded text-[10px]', understandingConfig.bgColor, understandingConfig.color)}>
-                          {understandingConfig.label}
+                        <span className={cn('px-1.5 py-0.5 rounded text-[10px]', engagementConfig.bgColor, engagementConfig.color)}>
+                          {engagementConfig.label}
                         </span>
                       </div>
                     </button>
@@ -157,9 +182,9 @@ export default function TechnologyFlowPage() {
                 </div>
                 <div className={cn(
                   'text-3xl font-bold',
-                  UNDERSTANDING_CONFIG[getUnderstandingLevel(selectedTech.understandingScore)].color
+                  ENGAGEMENT_CONFIG[getEngagementLevel(selectedTech.engagementScore)].color
                 )}>
-                  이해도 {selectedTech.understandingScore}
+                  Engagement {selectedTech.engagementScore}
                 </div>
               </div>
 
@@ -206,7 +231,7 @@ export default function TechnologyFlowPage() {
                 <div className="flex items-center gap-2 py-2 text-sm text-gray-600">
                   <ArrowDown size={16} />
                   <span className="font-medium">
-                    {((selectedTech.bofu / selectedTech.mofu) * 100).toFixed(1)}% 심화
+                    {((selectedTech.bofu / selectedTech.mofu) * 100).toFixed(1)}% 문의 전환
                   </span>
                 </div>
 
@@ -222,7 +247,7 @@ export default function TechnologyFlowPage() {
                 >
                   <div className="text-center">
                     <div className="text-2xl font-bold">{formatNumber(selectedTech.bofu)}</div>
-                    <div className="text-xs opacity-80">BOFU · 심화 검토</div>
+                    <div className="text-xs opacity-80">BOFU · 문의</div>
                   </div>
                 </div>
               </div>
@@ -252,12 +277,12 @@ export default function TechnologyFlowPage() {
                   </div>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <div className="text-sm text-gray-500 mb-1">검토 상태</div>
+                  <div className="text-sm text-gray-500 mb-1">Engagement 상태</div>
                   <div className={cn(
                     'text-xl font-bold',
-                    UNDERSTANDING_CONFIG[getUnderstandingLevel(selectedTech.understandingScore)].color
+                    ENGAGEMENT_CONFIG[getEngagementLevel(selectedTech.engagementScore)].color
                   )}>
-                    {UNDERSTANDING_CONFIG[getUnderstandingLevel(selectedTech.understandingScore)].label}
+                    {ENGAGEMENT_CONFIG[getEngagementLevel(selectedTech.engagementScore)].label}
                   </div>
                 </div>
               </div>
@@ -265,13 +290,13 @@ export default function TechnologyFlowPage() {
               {/* Insight */}
               <InsightHint
                 type="footer"
-                status={getUnderstandingLevel(selectedTech.understandingScore) === 'high' ? 'good' : 
-                        getUnderstandingLevel(selectedTech.understandingScore) === 'medium' ? 'warning' : 'neutral'}
+                status={getEngagementLevel(selectedTech.engagementScore) === 'high' ? 'good' : 
+                        getEngagementLevel(selectedTech.engagementScore) === 'medium' ? 'warning' : 'neutral'}
                 message={
-                  getUnderstandingLevel(selectedTech.understandingScore) === 'high'
-                    ? `${selectedTech.name}은 OEM 이해도 높음. 기술조직에 현황 공유 권장`
-                    : getUnderstandingLevel(selectedTech.understandingScore) === 'medium'
-                    ? `${selectedTech.name}은 이해도 향상 중. 심화 콘텐츠 노출 강화`
+                  getEngagementLevel(selectedTech.engagementScore) === 'high'
+                    ? `${selectedTech.name}은 OEM Engagement 높음. 기술조직에 현황 공유 권장`
+                    : getEngagementLevel(selectedTech.engagementScore) === 'medium'
+                    ? `${selectedTech.name}은 Engagement 향상 중. 심화 콘텐츠 노출 강화`
                     : `${selectedTech.name}은 아직 초기 단계. 인지도 확대 필요`
                 }
               />

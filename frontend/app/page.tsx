@@ -51,7 +51,7 @@ export default function HomePage() {
 
           {/* [D] Campaign / Paid Influence Context */}
           <section>
-            <CampaignInfluenceCard data={DEMO_CAMPAIGNS} />
+            <CampaignInfluenceCard data={DEMO_CAMPAIGNS.filter(c => !c.id.includes('webinar'))} />
           </section>
         </div>
       </div>

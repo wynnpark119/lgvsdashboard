@@ -7,23 +7,73 @@ import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber } from '@/lib/utils';
 
 // 기술별 상세 데이터 (통합 퍼널: LinkedIn + LG.com + YouTube 가중 합산)
+// 순서: 전략과제 → Core → Emerging
 const TECHNOLOGIES = [
+  // 전략과제 (2026 수주 목표)
+  {
+    id: 'hpc',
+    name: 'HPC',
+    stage: 'bofu' as const,
+    metrics: {
+      tofu: 12850,
+      mofu: 6455,
+      bofu: 42,
+      avgDwell: 4.8,
+      videoDepth: 82,
+      inquiries: 42,
+    },
+    channels: { linkedin: 58, lgcom: 30, youtube: 12 },
+    trend: { direction: 'up' as const, value: 35 },
+    paidDependency: 25,
+  },
+  {
+    id: 'transformable-display',
+    name: 'Transformable Display',
+    stage: 'bofu' as const,
+    metrics: {
+      tofu: 11420,
+      mofu: 5750,
+      bofu: 38,
+      avgDwell: 4.5,
+      videoDepth: 78,
+      inquiries: 38,
+    },
+    channels: { linkedin: 56, lgcom: 32, youtube: 12 },
+    trend: { direction: 'up' as const, value: 28 },
+    paidDependency: 28,
+  },
+  // Core
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
     stage: 'bofu' as const,
     metrics: {
-      tofu: 8420,        // 통합 가중 합산
-      mofu: 3942,        // 통합 Engagement
-      bofu: 28,          // 문의 건수
+      tofu: 8420,
+      mofu: 3942,
+      bofu: 28,
       avgDwell: 4.2,
       videoDepth: 72,
       inquiries: 28,
-      newsletter: 156,
     },
-    channels: { linkedin: 54, lgcom: 41, youtube: 5 },  // 채널별 기여도 (%)
+    channels: { linkedin: 54, lgcom: 41, youtube: 5 },
     trend: { direction: 'up' as const, value: 23 },
     paidDependency: 18,
+  },
+  {
+    id: 'lg-p-pod',
+    name: 'LG P-pod',
+    stage: 'bofu' as const,
+    metrics: {
+      tofu: 7850,
+      mofu: 3655,
+      bofu: 25,
+      avgDwell: 4.0,
+      videoDepth: 71,
+      inquiries: 25,
+    },
+    channels: { linkedin: 55, lgcom: 38, youtube: 7 },
+    trend: { direction: 'up' as const, value: 32 },
+    paidDependency: 20,
   },
   {
     id: 'vehicle-vision',
@@ -36,7 +86,6 @@ const TECHNOLOGIES = [
       avgDwell: 3.8,
       videoDepth: 68,
       inquiries: 18,
-      newsletter: 98,
     },
     channels: { linkedin: 59, lgcom: 21, youtube: 20 },
     trend: { direction: 'up' as const, value: 18 },
@@ -53,12 +102,12 @@ const TECHNOLOGIES = [
       avgDwell: 2.5,
       videoDepth: 55,
       inquiries: 12,
-      newsletter: 72,
     },
     channels: { linkedin: 61, lgcom: 27, youtube: 12 },
     trend: { direction: 'stable' as const, value: 2 },
     paidDependency: 38,
   },
+  // Emerging
   {
     id: 'ivi',
     name: 'IVI',
@@ -70,7 +119,6 @@ const TECHNOLOGIES = [
       avgDwell: 1.8,
       videoDepth: 42,
       inquiries: 5,
-      newsletter: 45,
     },
     channels: { linkedin: 59, lgcom: 37, youtube: 4 },
     trend: { direction: 'down' as const, value: -12 },
@@ -87,7 +135,6 @@ const TECHNOLOGIES = [
       avgDwell: 1.4,
       videoDepth: 35,
       inquiries: 3,
-      newsletter: 23,
     },
     channels: { linkedin: 60, lgcom: 38, youtube: 2 },
     trend: { direction: 'down' as const, value: -8 },
@@ -95,13 +142,13 @@ const TECHNOLOGIES = [
   },
 ];
 
-// 히트맵 데이터 (주차별 x 기술별)
+// 히트맵 데이터 (주차별 x 기술별) - 전략과제 포함
 const HEATMAP_DATA = [
-  { week: '11-W1', 'Digital Cockpit': 1800, 'Vehicle Vision': 850, 'ADAS': 1600, 'IVI': 1400, 'Telematics': 1100 },
-  { week: '11-W2', 'Digital Cockpit': 1920, 'Vehicle Vision': 920, 'ADAS': 1680, 'IVI': 1380, 'Telematics': 1150 },
-  { week: '11-W3', 'Digital Cockpit': 2100, 'Vehicle Vision': 980, 'ADAS': 1750, 'IVI': 1320, 'Telematics': 1180 },
-  { week: '11-W4', 'Digital Cockpit': 2250, 'Vehicle Vision': 1050, 'ADAS': 1820, 'IVI': 1280, 'Telematics': 1200 },
-  { week: '12-W1', 'Digital Cockpit': 2341, 'Vehicle Vision': 1102, 'ADAS': 1856, 'IVI': 1250, 'Telematics': 1220 },
+  { week: '11-W1', 'HPC': 2800, 'Transformable Display': 2450, 'Digital Cockpit': 1800, 'LG P-pod': 1650, 'Vehicle Vision': 850 },
+  { week: '11-W2', 'HPC': 3200, 'Transformable Display': 2780, 'Digital Cockpit': 1920, 'LG P-pod': 1820, 'Vehicle Vision': 920 },
+  { week: '11-W3', 'HPC': 3650, 'Transformable Display': 3100, 'Digital Cockpit': 2100, 'LG P-pod': 2050, 'Vehicle Vision': 980 },
+  { week: '11-W4', 'HPC': 4100, 'Transformable Display': 3450, 'Digital Cockpit': 2250, 'LG P-pod': 2280, 'Vehicle Vision': 1050 },
+  { week: '12-W1', 'HPC': 4580, 'Transformable Display': 3820, 'Digital Cockpit': 2341, 'LG P-pod': 2450, 'Vehicle Vision': 1102 },
 ];
 
 const STAGE_LABEL = {
@@ -110,7 +157,7 @@ const STAGE_LABEL = {
   bofu: { label: '깊은 관심', color: FUNNEL_STAGE_CONFIG.bofu.color },
 };
 
-const TECH_NAMES = ['Digital Cockpit', 'Vehicle Vision', 'ADAS', 'IVI', 'Telematics'];
+const TECH_NAMES = ['HPC', 'Transformable Display', 'Digital Cockpit', 'LG P-pod', 'Vehicle Vision'];
 
 // 히트맵 색상 계산
 function getHeatmapColor(value: number, max: number): string {

@@ -17,19 +17,61 @@ import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber, formatPercent } from '@/lib/utils';
 
 // TOFU 단계 기술 데이터 (통합 퍼널: LinkedIn + LG.com + YouTube 가중 합산)
+// 순서: 전략과제 → Core → Emerging
 const TOFU_TECHNOLOGIES = [
+  // 전략과제 (2026 수주 목표)
+  {
+    id: 'hpc',
+    name: 'HPC',
+    visits: 12850,           // 통합 가중 합산
+    channels: { linkedin: 7420, lgcom: 3856, youtube: 1574 },
+    avgDwell: 4.5,          // LG.com 기준 (분)
+    videoDepth: 82,         // YouTube 기준 (%)
+    consecutivePages: 3.8,
+    status: 'candidate' as const,
+    trend: 'up' as const,
+    trendValue: 35,
+    insight: '전략과제 — LinkedIn + LG.com 최고 관심, CES 2026 + LG on board 시너지',
+  },
+  {
+    id: 'transformable-display',
+    name: 'Transformable Display',
+    visits: 11420,
+    channels: { linkedin: 6580, lgcom: 3421, youtube: 1419 },
+    avgDwell: 4.2,
+    videoDepth: 78,
+    consecutivePages: 3.5,
+    status: 'candidate' as const,
+    trend: 'up' as const,
+    trendValue: 28,
+    insight: '전략과제 — YouTube 시청 깊이 높음, Technical Whitepaper 다운로드 증가',
+  },
+  // Core
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
-    visits: 8420,           // 통합 가중 합산
+    visits: 8420,
     channels: { linkedin: 4850, lgcom: 2341, youtube: 1229 },
-    avgDwell: 3.2,          // LG.com 기준 (분)
-    videoDepth: 68,         // YouTube 기준 (%)
+    avgDwell: 3.2,
+    videoDepth: 68,
     consecutivePages: 2.8,
     status: 'candidate' as const,
     trend: 'up' as const,
     trendValue: 23,
-    insight: 'LinkedIn + LG.com 모두 강한 관심, 검토 후보군 진입',
+    insight: 'Experience on Board 핵심 — LinkedIn + LG.com 강한 관심',
+  },
+  {
+    id: 'lg-p-pod',
+    name: 'LG P-pod',
+    visits: 7850,
+    channels: { linkedin: 4520, lgcom: 2180, youtube: 1150 },
+    avgDwell: 3.4,
+    videoDepth: 71,
+    consecutivePages: 3.0,
+    status: 'candidate' as const,
+    trend: 'up' as const,
+    trendValue: 32,
+    insight: 'CES 2026 신규 공개 — 관심 급증, Experience on Board 연계',
   },
   {
     id: 'vehicle-vision',
@@ -55,8 +97,9 @@ const TOFU_TECHNOLOGIES = [
     status: 'watching' as const,
     trend: 'stable' as const,
     trendValue: 2,
-    insight: 'LinkedIn 노출 높으나 LG.com 체류 짧음, 관심 수준 확인 필요',
+    insight: 'AI on Board 캠페인 연계 — LinkedIn 노출 높으나 체류 개선 필요',
   },
+  // Emerging
   {
     id: 'ivi',
     name: 'IVI',

@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink, Globe, Linkedin, Facebook } from 'lucide-react';
+import { ExternalLink, Globe, Linkedin, Facebook, MessageCircle, Users } from 'lucide-react';
 import {
   BarChart,
   Bar,
@@ -99,6 +99,34 @@ const CHANNELS = [
     },
     role: 'Educator',
     trend: 15,
+  },
+  {
+    id: 'reddit',
+    name: 'Reddit (신규)',
+    icon: MessageCircle,
+    metrics: {
+      visits: 3250,
+      avgDwell: 2.8,
+      pageDepth: 2.2,
+      deepInterestRate: 7.8,
+      inquiries: 4,
+    },
+    role: 'Attractor',
+    trend: 85,
+  },
+  {
+    id: 'remember',
+    name: '리멤버 (OEM/Media)',
+    icon: Users,
+    metrics: {
+      visits: 2180,
+      avgDwell: 1.8,
+      pageDepth: 1.6,
+      deepInterestRate: 9.2,
+      inquiries: 15,
+    },
+    role: 'Igniter',
+    trend: 45,
   },
 ];
 
