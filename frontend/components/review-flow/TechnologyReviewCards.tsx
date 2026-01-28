@@ -10,9 +10,9 @@ interface TechnologyReviewCardsProps {
 }
 
 const STAGE_CONFIG = {
-  initial: { label: 'Initial', color: 'bg-state-initial/10 text-state-initial' },
-  deep: { label: 'Deep', color: 'bg-state-deep/10 text-state-deep' },
-  reachable: { label: 'Reachable', color: 'bg-state-reachable/10 text-state-reachable' },
+  initial: { label: 'TOFU', color: 'bg-state-initial/10 text-state-initial' },
+  deep: { label: 'MOFU', color: 'bg-state-deep/10 text-state-deep' },
+  reachable: { label: 'BOFU', color: 'bg-state-reachable/10 text-state-reachable' },
 };
 
 const DIRECTION_CONFIG = {

@@ -12,29 +12,29 @@ interface TechnologySignalTableProps {
 const STAGE_CONFIG = {
   initial: { 
     label: 'TOFU', 
-    fullLabel: '기술 인지',
+    fullLabel: '첫 접촉',
     bgColor: 'bg-rose-100', 
     textColor: 'text-rose-700',
   },
   deep: { 
     label: 'MOFU', 
-    fullLabel: '심화 탐색',
+    fullLabel: 'Engagement',
     bgColor: 'bg-red-100', 
     textColor: 'text-red-700',
   },
   reachable: { 
     label: 'BOFU', 
-    fullLabel: '검토 완료',
+    fullLabel: '문의 전환',
     bgColor: 'bg-red-200', 
     textColor: 'text-red-800',
   },
 };
 
 const SIGNAL_CONFIG: Record<SignalType, { icon: typeof CheckCircle; color: string; label: string }> = {
-  green: { icon: CheckCircle, color: 'text-green-600', label: '검토 완료 · 이해도 高' },
+  green: { icon: CheckCircle, color: 'text-green-600', label: '문의 전환 · Engagement 高' },
   yellow: { icon: Clock, color: 'text-yellow-600', label: '추가 콘텐츠 노출' },
-  orange: { icon: AlertCircle, color: 'text-orange-600', label: '인지 유지 중' },
-  red: { icon: AlertCircle, color: 'text-red-600', label: '관심 이탈 위험' },
+  orange: { icon: AlertCircle, color: 'text-orange-600', label: '광고 의존 주의' },
+  red: { icon: AlertCircle, color: 'text-red-600', label: 'Engagement 하락' },
   gray: { icon: Minus, color: 'text-gray-500', label: '모니터링' },
 };
 

@@ -18,57 +18,82 @@ import { InsightHint } from '@/components/ui';
 import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber } from '@/lib/utils';
 
-// MOFU/BOFU 단계 기술 데이터
+// MOFU/BOFU 단계 기술 데이터 (통합 퍼널: LinkedIn Engagement + LG.com + YouTube)
 const MOFU_BOFU_TECHNOLOGIES = [
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
-    mofu: { revisits: 412, repeatContent: 8.2, webinarReg: 45 },
-    bofu: { inquiries: 28, specRequest: 12, understandingScore: 92 },
+    mofu: { 
+      linkedinEngagement: 2850, 
+      lgcomRevisits: 412, 
+      youtube50: 680,
+      totalEngagement: 3942  // 가중 합산
+    },
+    bofu: { inquiries: 28, engagementScore: 92 },
     status: 'deep_review' as const,
     trend: 'up' as const,
     trendValue: 18,
-    insight: '지속 검토 중, 기술 이해도 높음',
+    insight: 'LinkedIn Engagement 강함, 문의 전환 양호',
   },
   {
     id: 'vehicle-vision',
     name: 'Vehicle Vision',
-    mofu: { revisits: 203, repeatContent: 6.5, webinarReg: 32 },
-    bofu: { inquiries: 18, specRequest: 8, understandingScore: 85 },
+    mofu: { 
+      linkedinEngagement: 1820, 
+      lgcomRevisits: 203, 
+      youtube50: 520,
+      totalEngagement: 2543
+    },
+    bofu: { inquiries: 18, engagementScore: 85 },
     status: 'deep_review' as const,
     trend: 'up' as const,
     trendValue: 15,
-    insight: '심화 검토 진행 중, 이해도 양호',
+    insight: 'YouTube 시청 깊이 좋음, 문의 증가 중',
   },
   {
     id: 'adas',
     name: 'ADAS',
-    mofu: { revisits: 287, repeatContent: 4.2, webinarReg: 28 },
-    bofu: { inquiries: 12, specRequest: 4, understandingScore: 68 },
+    mofu: { 
+      linkedinEngagement: 1450, 
+      lgcomRevisits: 287, 
+      youtube50: 280,
+      totalEngagement: 2017
+    },
+    bofu: { inquiries: 12, engagementScore: 68 },
     status: 'nurturing' as const,
     trend: 'stable' as const,
     trendValue: 2,
-    insight: '검토 유지 중, 추가 콘텐츠 필요',
+    insight: 'Engagement 유지 중, 문의 전환 강화 필요',
   },
   {
     id: 'ivi',
     name: 'IVI',
-    mofu: { revisits: 98, repeatContent: 2.1, webinarReg: 8 },
-    bofu: { inquiries: 5, specRequest: 1, understandingScore: 42 },
+    mofu: { 
+      linkedinEngagement: 420, 
+      lgcomRevisits: 98, 
+      youtube50: 85,
+      totalEngagement: 603
+    },
+    bofu: { inquiries: 5, engagementScore: 42 },
     status: 'declining' as const,
     trend: 'down' as const,
     trendValue: -15,
-    insight: '관심 하락 중, 원인 분석 필요',
+    insight: 'Engagement 하락 중, 콘텐츠 점검 필요',
   },
   {
     id: 'telematics',
     name: 'Telematics',
-    mofu: { revisits: 56, repeatContent: 1.5, webinarReg: 5 },
-    bofu: { inquiries: 3, specRequest: 0, understandingScore: 35 },
+    mofu: { 
+      linkedinEngagement: 280, 
+      lgcomRevisits: 56, 
+      youtube50: 42,
+      totalEngagement: 378
+    },
+    bofu: { inquiries: 3, engagementScore: 35 },
     status: 'declining' as const,
     trend: 'down' as const,
     trendValue: -22,
-    insight: '검토 대상에서 이탈 중',
+    insight: '전체 채널 Engagement 약함',
   },
 ];
 
@@ -96,13 +121,13 @@ const STATUS_CONFIG = {
   },
 };
 
-const UNDERSTANDING_CONFIG = {
-  high: { label: '이해도 높음', color: 'text-green-600', bgColor: 'bg-green-100' },
-  medium: { label: '이해도 중간', color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
-  low: { label: '이해도 낮음', color: 'text-gray-500', bgColor: 'bg-gray-100' },
+const ENGAGEMENT_LEVEL_CONFIG = {
+  high: { label: 'Engagement 높음', color: 'text-green-600', bgColor: 'bg-green-100' },
+  medium: { label: 'Engagement 중간', color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
+  low: { label: 'Engagement 낮음', color: 'text-gray-500', bgColor: 'bg-gray-100' },
 };
 
-function getUnderstandingLevel(score: number): 'high' | 'medium' | 'low' {
+function getEngagementLevel(score: number): 'high' | 'medium' | 'low' {
   if (score >= 70) return 'high';
   if (score >= 45) return 'medium';
   return 'low';
@@ -114,14 +139,14 @@ export default function MOFUBOFUPage() {
   const nurturingCount = MOFU_BOFU_TECHNOLOGIES.filter(t => t.status === 'nurturing').length;
   const decliningCount = MOFU_BOFU_TECHNOLOGIES.filter(t => t.status === 'declining').length;
   
-  const totalMofuRevisits = MOFU_BOFU_TECHNOLOGIES.reduce((sum, t) => sum + t.mofu.revisits, 0);
+  const totalMofuEngagement = MOFU_BOFU_TECHNOLOGIES.reduce((sum, t) => sum + t.mofu.totalEngagement, 0);
   const totalBofuInquiries = MOFU_BOFU_TECHNOLOGIES.reduce((sum, t) => sum + t.bofu.inquiries, 0);
-  const totalSpecRequest = MOFU_BOFU_TECHNOLOGIES.reduce((sum, t) => sum + t.bofu.specRequest, 0);
+  const totalLinkedInEngagement = MOFU_BOFU_TECHNOLOGIES.reduce((sum, t) => sum + t.mofu.linkedinEngagement, 0);
 
-  // 이해도 점수 차트 데이터
-  const understandingScoreData = MOFU_BOFU_TECHNOLOGIES.map(t => ({
+  // Engagement 점수 차트 데이터
+  const engagementScoreData = MOFU_BOFU_TECHNOLOGIES.map(t => ({
     name: t.name.split(' ')[0],
-    score: t.bofu.understandingScore,
+    score: t.bofu.engagementScore,
     status: t.status,
   })).sort((a, b) => b.score - a.score);
 
@@ -150,11 +175,11 @@ export default function MOFUBOFUPage() {
                 🎯
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">MOFU·BOFU = 검토 심화 상태 판단</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">MOFU·BOFU = 통합 Engagement & 문의 전환</h3>
                 <p className="text-gray-600">
-                  "접촉 수"가 아니라 <strong>"OEM이 얼마나 깊이 이해하고 있는가"</strong>를 식별합니다.
+                  <strong>MOFU:</strong> LinkedIn Engagement + LG.com 재방문/체류 + YouTube 50%+ 시청 가중 합산
                   <br/>
-                  기술 조직과 공유해도 되는 검토 상태에 도달했는지 판단합니다.
+                  <strong>BOFU:</strong> LG.com 문의 폼 제출 (문의 전환)
                 </p>
               </div>
             </div>
@@ -183,23 +208,23 @@ export default function MOFUBOFUPage() {
             <div className="bg-white rounded-xl border p-4">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
                 <RefreshCw size={14} />
-                <span>MOFU 재방문</span>
+                <span>MOFU Engagement</span>
               </div>
-              <div className="text-2xl font-bold text-gray-900">{formatNumber(totalMofuRevisits)}</div>
-              <div className="text-xs text-gray-400">지속 검토 신호</div>
+              <div className="text-2xl font-bold text-gray-900">{formatNumber(totalMofuEngagement)}</div>
+              <div className="text-xs text-gray-400">통합 Engagement 합산</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
                 <Users size={14} />
-                <span>BOFU Inquiry</span>
+                <span>BOFU 문의</span>
               </div>
               <div className="text-2xl font-bold text-brand-primary">{totalBofuInquiries}</div>
-              <div className="text-xs text-gray-400">관심 표현</div>
+              <div className="text-xs text-gray-400">LG.com 문의 폼</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
-              <div className="text-sm text-gray-500">스펙 요청</div>
-              <div className="text-2xl font-bold text-green-600">{totalSpecRequest}</div>
-              <div className="text-xs text-gray-400">심화 검토 신호</div>
+              <div className="text-sm text-gray-500">LinkedIn Engagement</div>
+              <div className="text-2xl font-bold text-blue-600">{formatNumber(totalLinkedInEngagement)}</div>
+              <div className="text-xs text-gray-400">MOFU 주력 채널</div>
             </div>
           </section>
 
@@ -207,16 +232,16 @@ export default function MOFUBOFUPage() {
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Understanding Score Chart */}
             <div className="lg:col-span-2 bg-white rounded-xl border p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">기술별 이해도 점수</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">기술별 Engagement 점수</h3>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={understandingScoreData} layout="vertical">
+                <BarChart data={engagementScoreData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis type="number" domain={[0, 100]} />
                   <YAxis dataKey="name" type="category" width={100} fontSize={12} />
-                  <Tooltip formatter={(value: number) => [`${value}점`, '이해도']} />
+                  <Tooltip formatter={(value: number) => [`${value}점`, 'Engagement']} />
                   <Bar dataKey="score" radius={[0, 4, 4, 0]}>
-                    {understandingScoreData.map((entry, index) => {
-                      const level = getUnderstandingLevel(entry.score);
+                    {engagementScoreData.map((entry, index) => {
+                      const level = getEngagementLevel(entry.score);
                       const color = level === 'high' ? '#22c55e' : level === 'medium' ? '#f59e0b' : '#9ca3af';
                       return <Cell key={`cell-${index}`} fill={color} />;
                     })}
@@ -290,8 +315,8 @@ export default function MOFUBOFUPage() {
             <div className="space-y-4">
               {MOFU_BOFU_TECHNOLOGIES.map((tech) => {
                 const statusConfig = STATUS_CONFIG[tech.status];
-                const understandingLevel = getUnderstandingLevel(tech.bofu.understandingScore);
-                const understandingConfig = UNDERSTANDING_CONFIG[understandingLevel];
+                const engagementLevel = getEngagementLevel(tech.bofu.engagementScore);
+                const engagementConfig = ENGAGEMENT_LEVEL_CONFIG[engagementLevel];
 
                 return (
                   <div key={tech.id} className="border rounded-lg p-4">
@@ -323,35 +348,35 @@ export default function MOFUBOFUPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={cn('text-3xl font-bold', understandingConfig.color)}>
-                          {tech.bofu.understandingScore}
+                        <div className={cn('text-3xl font-bold', engagementConfig.color)}>
+                          {tech.bofu.engagementScore}
                         </div>
-                        <div className={cn('text-xs', understandingConfig.color)}>{understandingConfig.label}</div>
+                        <div className={cn('text-xs', engagementConfig.color)}>{engagementConfig.label}</div>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-6 gap-4 text-sm">
-                      {/* MOFU Metrics */}
+                      {/* MOFU Metrics (통합 채널) */}
                       <div className="bg-gray-50 rounded p-3">
-                        <div className="text-gray-500 text-xs mb-1">재방문</div>
-                        <div className="font-medium text-gray-900">{formatNumber(tech.mofu.revisits)}</div>
+                        <div className="text-gray-500 text-xs mb-1">LinkedIn</div>
+                        <div className="font-medium text-gray-900">{formatNumber(tech.mofu.linkedinEngagement)}</div>
                       </div>
                       <div className="bg-gray-50 rounded p-3">
-                        <div className="text-gray-500 text-xs mb-1">반복 콘텐츠</div>
-                        <div className="font-medium text-gray-900">{tech.mofu.repeatContent}</div>
+                        <div className="text-gray-500 text-xs mb-1">LG.com 재방문</div>
+                        <div className="font-medium text-gray-900">{formatNumber(tech.mofu.lgcomRevisits)}</div>
                       </div>
                       <div className="bg-gray-50 rounded p-3">
-                        <div className="text-gray-500 text-xs mb-1">웨비나 등록</div>
-                        <div className="font-medium text-gray-900">{tech.mofu.webinarReg}</div>
+                        <div className="text-gray-500 text-xs mb-1">YouTube 50%+</div>
+                        <div className="font-medium text-gray-900">{formatNumber(tech.mofu.youtube50)}</div>
                       </div>
                       {/* BOFU Metrics */}
                       <div className="bg-gray-50 rounded p-3">
-                        <div className="text-gray-500 text-xs mb-1">Inquiry</div>
+                        <div className="text-gray-500 text-xs mb-1">문의</div>
                         <div className="font-medium text-brand-primary">{tech.bofu.inquiries}</div>
                       </div>
                       <div className="bg-gray-50 rounded p-3">
-                        <div className="text-gray-500 text-xs mb-1">스펙 요청</div>
-                        <div className="font-medium text-green-600">{tech.bofu.specRequest}</div>
+                        <div className="text-gray-500 text-xs mb-1">통합 Engagement</div>
+                        <div className="font-medium text-green-600">{formatNumber(tech.mofu.totalEngagement)}</div>
                       </div>
                       <div className="bg-gray-50 rounded p-3">
                         <div className="text-gray-500 text-xs mb-1">액션</div>

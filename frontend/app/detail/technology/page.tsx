@@ -6,21 +6,22 @@ import { MiniFunnel } from '@/components/ui';
 import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber } from '@/lib/utils';
 
-// 기술별 상세 데이터
+// 기술별 상세 데이터 (통합 퍼널: LinkedIn + LG.com + YouTube 가중 합산)
 const TECHNOLOGIES = [
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
     stage: 'bofu' as const,
     metrics: {
-      tofu: 2341,
-      mofu: 412,
-      bofu: 98,
+      tofu: 8420,        // 통합 가중 합산
+      mofu: 3942,        // 통합 Engagement
+      bofu: 28,          // 문의 건수
       avgDwell: 4.2,
       videoDepth: 72,
       inquiries: 28,
       newsletter: 156,
     },
+    channels: { linkedin: 54, lgcom: 41, youtube: 5 },  // 채널별 기여도 (%)
     trend: { direction: 'up' as const, value: 23 },
     paidDependency: 18,
   },
@@ -29,14 +30,15 @@ const TECHNOLOGIES = [
     name: 'Vehicle Vision',
     stage: 'bofu' as const,
     metrics: {
-      tofu: 1102,
-      mofu: 203,
-      bofu: 52,
+      tofu: 5280,
+      mofu: 2543,
+      bofu: 18,
       avgDwell: 3.8,
       videoDepth: 68,
       inquiries: 18,
       newsletter: 98,
     },
+    channels: { linkedin: 59, lgcom: 21, youtube: 20 },
     trend: { direction: 'up' as const, value: 18 },
     paidDependency: 25,
   },
@@ -45,14 +47,15 @@ const TECHNOLOGIES = [
     name: 'ADAS',
     stage: 'mofu' as const,
     metrics: {
-      tofu: 1856,
-      mofu: 287,
-      bofu: 67,
+      tofu: 6850,
+      mofu: 2017,
+      bofu: 12,
       avgDwell: 2.5,
       videoDepth: 55,
       inquiries: 12,
       newsletter: 72,
     },
+    channels: { linkedin: 61, lgcom: 27, youtube: 12 },
     trend: { direction: 'stable' as const, value: 2 },
     paidDependency: 38,
   },
@@ -61,14 +64,15 @@ const TECHNOLOGIES = [
     name: 'IVI',
     stage: 'mofu' as const,
     metrics: {
-      tofu: 1523,
-      mofu: 198,
-      bofu: 41,
+      tofu: 4120,
+      mofu: 603,
+      bofu: 5,
       avgDwell: 1.8,
       videoDepth: 42,
-      inquiries: 8,
+      inquiries: 5,
       newsletter: 45,
     },
+    channels: { linkedin: 59, lgcom: 37, youtube: 4 },
     trend: { direction: 'down' as const, value: -12 },
     paidDependency: 62,
   },
@@ -77,14 +81,15 @@ const TECHNOLOGIES = [
     name: 'Telematics',
     stage: 'tofu' as const,
     metrics: {
-      tofu: 1247,
-      mofu: 156,
-      bofu: 28,
+      tofu: 3280,
+      mofu: 378,
+      bofu: 3,
       avgDwell: 1.4,
       videoDepth: 35,
-      inquiries: 5,
+      inquiries: 3,
       newsletter: 23,
     },
+    channels: { linkedin: 60, lgcom: 38, youtube: 2 },
     trend: { direction: 'down' as const, value: -8 },
     paidDependency: 45,
   },

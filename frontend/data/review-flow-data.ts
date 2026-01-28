@@ -58,16 +58,18 @@ export const DEMO_FLOW_NODES: FlowNode[] = TECHNOLOGY_STATES.map((state) => {
   };
 });
 
+// TOFU 신호 (통합 채널: LinkedIn + LG.com + YouTube)
 export const DEMO_INITIAL_SIGNALS: StageSignal[] = [
-  { name: '기술 콘텐츠 유입', level: 'high', description: '첫 접촉 발생' },
-  { name: '체류 시간', level: 'medium', description: '평균 1분 47초' },
-  { name: '영상 시청 깊이', level: 'medium', description: '50%+ 시청률 42%' },
+  { name: 'LinkedIn 조회', level: 'high', description: '285K 조회 (기여 54%)' },
+  { name: 'LG.com 첫 방문', level: 'high', description: '12.8K 방문 (기여 41%)' },
+  { name: 'YouTube 조회', level: 'medium', description: '42K 조회 (기여 5%)' },
 ];
 
+// MOFU 신호 (통합 Engagement)
 export const DEMO_DEEP_SIGNALS: StageSignal[] = [
-  { name: '재방문', level: 'medium', description: '30일 내 2회+ 28%' },
-  { name: '반복 콘텐츠 소비', level: 'medium', description: '3개+ 소비 22%' },
-  { name: '웨비나 / Inquiry', level: 'high', description: '479건 접촉' },
+  { name: 'LinkedIn Engagement', level: 'high', description: '8.4K 상호작용 (기여 58%)' },
+  { name: 'LG.com 재방문·체류', level: 'medium', description: '2.1K 재방문 (기여 34%)' },
+  { name: 'YouTube 50%+ 시청', level: 'medium', description: '18.5K 시청 (기여 8%)' },
 ];
 
 export const DEMO_FLOW_TREND: TrendDataPoint[] = MOMENTUM_DATA.dataPoints.map((dp) => ({

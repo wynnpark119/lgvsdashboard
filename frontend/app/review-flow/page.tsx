@@ -51,16 +51,16 @@ export default function ReviewFlowPage() {
             <div className="h-4 border-l" />
             <div className="flex items-center gap-4 text-sm">
               <div>
-                <span className="text-gray-500">TOFU:</span>{' '}
-                <span className="font-medium text-state-initial">{stageDistribution.initial.count}개</span>
+                <span className="text-gray-500">TOFU (통합 인지):</span>{' '}
+                <span className="font-medium text-state-initial">{stageDistribution.initial.count}개 기술</span>
               </div>
               <div>
-                <span className="text-gray-500">MOFU:</span>{' '}
-                <span className="font-medium text-state-deep">{stageDistribution.deep.count}개</span>
+                <span className="text-gray-500">MOFU (Engagement):</span>{' '}
+                <span className="font-medium text-state-deep">{stageDistribution.deep.count}개 기술</span>
               </div>
               <div>
-                <span className="text-gray-500">BOFU:</span>{' '}
-                <span className="font-medium text-state-reachable">{stageDistribution.reachable.count}개</span>
+                <span className="text-gray-500">BOFU (문의):</span>{' '}
+                <span className="font-medium text-state-reachable">{stageDistribution.reachable.count}개 기술</span>
               </div>
             </div>
             <div className="h-4 border-l" />

@@ -16,67 +16,72 @@ import { InsightHint } from '@/components/ui';
 import { FUNNEL_STAGE_CONFIG } from '@/types/funnel';
 import { cn, formatNumber, formatPercent } from '@/lib/utils';
 
-// TOFU 단계 기술 데이터
+// TOFU 단계 기술 데이터 (통합 퍼널: LinkedIn + LG.com + YouTube 가중 합산)
 const TOFU_TECHNOLOGIES = [
   {
     id: 'digital-cockpit',
     name: 'Digital Cockpit',
-    visits: 2341,
-    avgDwell: 3.2,          // 분
-    videoDepth: 68,         // %
+    visits: 8420,           // 통합 가중 합산
+    channels: { linkedin: 4850, lgcom: 2341, youtube: 1229 },
+    avgDwell: 3.2,          // LG.com 기준 (분)
+    videoDepth: 68,         // YouTube 기준 (%)
     consecutivePages: 2.8,
     status: 'candidate' as const,
     trend: 'up' as const,
     trendValue: 23,
-    insight: '이해 동반 접촉 발생, 검토 후보군 진입',
+    insight: 'LinkedIn + LG.com 모두 강한 관심, 검토 후보군 진입',
   },
   {
     id: 'vehicle-vision',
     name: 'Vehicle Vision',
-    visits: 1102,
+    visits: 5280,
+    channels: { linkedin: 3120, lgcom: 1102, youtube: 1058 },
     avgDwell: 2.8,
     videoDepth: 72,
     consecutivePages: 2.5,
     status: 'candidate' as const,
     trend: 'up' as const,
     trendValue: 18,
-    insight: '영상 시청 깊이 높음, 관심 확인',
+    insight: 'YouTube 시청 깊이 높음, LinkedIn Engagement 양호',
   },
   {
     id: 'adas',
     name: 'ADAS',
-    visits: 1856,
+    visits: 6850,
+    channels: { linkedin: 4200, lgcom: 1856, youtube: 794 },
     avgDwell: 1.9,
     videoDepth: 45,
     consecutivePages: 1.8,
     status: 'watching' as const,
     trend: 'stable' as const,
     trendValue: 2,
-    insight: '방문 많으나 체류 짧음, 관심 수준 확인 필요',
+    insight: 'LinkedIn 노출 높으나 LG.com 체류 짧음, 관심 수준 확인 필요',
   },
   {
     id: 'ivi',
     name: 'IVI',
-    visits: 1523,
+    visits: 4120,
+    channels: { linkedin: 2450, lgcom: 1523, youtube: 147 },
     avgDwell: 1.5,
     videoDepth: 38,
     consecutivePages: 1.4,
     status: 'noise' as const,
     trend: 'down' as const,
     trendValue: -12,
-    insight: '단순 노출 수준, 검토 후보군 미진입',
+    insight: 'LinkedIn 노출 대비 LG.com 전환 낮음, 콘텐츠 점검 필요',
   },
   {
     id: 'telematics',
     name: 'Telematics',
-    visits: 1247,
+    visits: 3280,
+    channels: { linkedin: 1980, lgcom: 1247, youtube: 53 },
     avgDwell: 1.2,
     videoDepth: 32,
     consecutivePages: 1.2,
     status: 'noise' as const,
     trend: 'down' as const,
     trendValue: -8,
-    insight: '관심 신호 약함',
+    insight: '전체 채널 관심 신호 약함',
   },
 ];
 
@@ -132,11 +137,11 @@ export default function TOFUPage() {
                 👁️
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">TOFU = 검토 후보군 진입 판단</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">TOFU = 전체 채널 첫 접촉 (통합 퍼널)</h3>
                 <p className="text-gray-600">
-                  단순 노출이 아니라 <strong>"이해를 동반한 접촉"</strong>이 발생했는지 확인합니다.
+                  <strong>LinkedIn 조회 × 0.6 + LG.com 방문 × 1.0 + YouTube 조회 × 0.4</strong> 가중 합산
                   <br/>
-                  기준: 체류 2분 이상, 영상 시청 50% 이상, 연속 2페이지 이상 조회
+                  LinkedIn이 주력 채널(54%), LG.com(41%), YouTube(5%)
                 </p>
               </div>
             </div>
@@ -145,24 +150,24 @@ export default function TOFUPage() {
           {/* Summary Cards */}
           <section className="grid grid-cols-5 gap-4">
             <div className="bg-white rounded-xl border p-4">
-              <div className="text-sm text-gray-500">전체 방문</div>
+              <div className="text-sm text-gray-500">통합 TOFU</div>
               <div className="text-2xl font-bold text-gray-900">{formatNumber(totalVisits)}</div>
-              <div className="text-xs text-gray-400">TOFU 유입</div>
+              <div className="text-xs text-gray-400">LinkedIn+LG.com+YouTube 가중합</div>
             </div>
             <div className="bg-green-50 rounded-xl border border-green-200 p-4">
               <div className="text-sm text-green-700">검토 후보군</div>
-              <div className="text-2xl font-bold text-green-600">{candidateCount}개</div>
-              <div className="text-xs text-green-600">{formatNumber(candidateVisits)} 방문</div>
+              <div className="text-2xl font-bold text-green-600">{candidateCount}개 기술</div>
+              <div className="text-xs text-green-600">{formatNumber(candidateVisits)} 가중합</div>
             </div>
             <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-4">
               <div className="text-sm text-yellow-700">관찰 필요</div>
-              <div className="text-2xl font-bold text-yellow-600">{watchingCount}개</div>
-              <div className="text-xs text-yellow-600">관심 수준 확인 필요</div>
+              <div className="text-2xl font-bold text-yellow-600">{watchingCount}개 기술</div>
+              <div className="text-xs text-yellow-600">채널 간 전환 확인 필요</div>
             </div>
             <div className="bg-gray-50 rounded-xl border p-4">
               <div className="text-sm text-gray-500">단순 노출</div>
-              <div className="text-2xl font-bold text-gray-500">{noiseCount}개</div>
-              <div className="text-xs text-gray-400">후보군 미진입</div>
+              <div className="text-2xl font-bold text-gray-500">{noiseCount}개 기술</div>
+              <div className="text-xs text-gray-400">Engagement 부족</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
               <div className="text-sm text-gray-500">후보군 비율</div>

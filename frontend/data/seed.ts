@@ -272,13 +272,60 @@ export const MEDIA_ANALYSES: MediaAnalysis[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────
-// Overall Status (전체 상태)
+// ─────────────────────────────────────────────────────────────
+// Channel Raw Data (채널별 원시 데이터)
+// ─────────────────────────────────────────────────────────────
+
+export const CHANNEL_RAW_DATA = {
+  lgcom: {
+    tofu: 12847,      // LG.com 첫 방문
+    mofu: 2156,       // 재방문 + 체류 2분+ + 영상 50%+
+    bofu: 71,         // 문의 건수
+  },
+  linkedin: {
+    impressions: 285000,  // 조회수
+    engagement: 8420,     // 좋아요 + 댓글 + 공유
+    clicks: 4230,         // LG.com 유입 클릭
+  },
+  youtube: {
+    views: 42000,         // 조회수
+    watchTime50: 18500,   // 50% 이상 시청
+  },
+};
+
+// 채널별 가중치 (통합 퍼널용)
+const CHANNEL_WEIGHTS = {
+  lgcom: 1.0,       // Owned - 기준
+  linkedin: 0.6,    // 주력 채널, 예산 비중 높음
+  youtube: 0.4,     // 콘텐츠 소비
+};
+
+// 통합 퍼널 계산
+// TOFU = LG.com × 1.0 + LinkedIn 조회 × 0.6 + YouTube 조회 × 0.4
+const INTEGRATED_TOFU = Math.round(
+  CHANNEL_RAW_DATA.lgcom.tofu * CHANNEL_WEIGHTS.lgcom +
+  (CHANNEL_RAW_DATA.linkedin.impressions / 10) * CHANNEL_WEIGHTS.linkedin +  // 10으로 나눠 스케일 조정
+  (CHANNEL_RAW_DATA.youtube.views / 10) * CHANNEL_WEIGHTS.youtube
+);
+
+// MOFU = LG.com MOFU + LinkedIn Engagement × 0.6 + YouTube 50%시청 × 0.4
+const INTEGRATED_MOFU = Math.round(
+  CHANNEL_RAW_DATA.lgcom.mofu * CHANNEL_WEIGHTS.lgcom +
+  CHANNEL_RAW_DATA.linkedin.engagement * CHANNEL_WEIGHTS.linkedin +
+  (CHANNEL_RAW_DATA.youtube.watchTime50 / 10) * CHANNEL_WEIGHTS.youtube
+);
+
+// BOFU = 문의 건수 (LG.com에서만 발생)
+const INTEGRATED_BOFU = CHANNEL_RAW_DATA.lgcom.bofu;
+
+// ─────────────────────────────────────────────────────────────
+// Overall Status (전체 상태 - 통합 퍼널)
 // ─────────────────────────────────────────────────────────────
 
 export const OVERALL_STATUS: OverallStatus = {
-  initial: { count: 12847, changeVsLastMonth: 23.4 },
-  deep: { count: 2156, changeVsLastMonth: 15.2 },
-  reachable: { count: 479, changeVsLastMonth: 8.1 },
+  initial: { count: INTEGRATED_TOFU, changeVsLastMonth: 18.7 },
+  deep: { count: INTEGRATED_MOFU, changeVsLastMonth: 22.4 },
+  reachable: { count: INTEGRATED_BOFU, changeVsLastMonth: 15.3 },
   currentState: {
     direction: 'up',
     fromStage: 'initial',
@@ -289,9 +336,9 @@ export const OVERALL_STATUS: OverallStatus = {
 };
 
 export const STAGE_DISTRIBUTION: StageDistribution = {
-  initial: { total: 12847, organicRatio: 65, paidRatio: 35 },
-  deep: { total: 2156, organicRatio: 82, paidRatio: 18 },
-  reachable: { total: 479, organicRatio: 94, paidRatio: 6 },
+  initial: { total: INTEGRATED_TOFU, organicRatio: 58, paidRatio: 42 },
+  deep: { total: INTEGRATED_MOFU, organicRatio: 75, paidRatio: 25 },
+  reachable: { total: INTEGRATED_BOFU, organicRatio: 89, paidRatio: 11 },
   interpretation: 'healthy',
 };
 

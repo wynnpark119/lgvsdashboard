@@ -6,7 +6,7 @@
 // 퍼널 단계
 export type FunnelStage = 'tofu' | 'mofu' | 'bofu';
 
-// 퍼널 단계 설정
+// 퍼널 단계 설정 (통합 퍼널: LinkedIn + LG.com + YouTube)
 export const FUNNEL_STAGE_CONFIG = {
   tofu: {
     label: 'TOFU',
@@ -16,7 +16,7 @@ export const FUNNEL_STAGE_CONFIG = {
     color: '#FDA4AF', // rose-300
     bgColor: 'bg-rose-100',
     textColor: 'text-rose-700',
-    description: '고객이 처음 접하게 되는 채널/콘텐츠',
+    description: 'LinkedIn 조회 + LG.com 방문 + YouTube 조회 (가중 합산)',
   },
   mofu: {
     label: 'MOFU',
@@ -26,17 +26,17 @@ export const FUNNEL_STAGE_CONFIG = {
     color: '#FCA5A5', // red-300
     bgColor: 'bg-red-100',
     textColor: 'text-red-700',
-    description: '제품/기술/안정성 등을 탐색·비교 기반 평가',
+    description: 'LinkedIn Engagement + LG.com 재방문/체류 + YouTube 50%+ 시청',
   },
   bofu: {
     label: 'BOFU',
-    labelKr: 'MQL',
+    labelKr: '문의',
     fullLabel: 'Bottom of Funnel',
     originalLabel: 'Reachable',
     color: '#EF4444', // red-500
     bgColor: 'bg-red-200',
     textColor: 'text-red-800',
-    description: 'CRM 연동이 강화된 Conversion 역할',
+    description: 'LG.com 문의 폼 제출',
   },
 } as const;
 

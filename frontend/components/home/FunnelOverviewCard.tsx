@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { TrendingUp, TrendingDown, Minus, Zap, FileText, Megaphone, ChevronDown, ChevronUp } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Zap, FileText, Megaphone, ChevronDown, ChevronUp, Globe, Linkedin, Youtube } from 'lucide-react';
 import type { OverallStatus, StageDistribution } from '@/types';
 import { cn, formatNumber, formatPercent } from '@/lib/utils';
 
@@ -15,7 +15,7 @@ const STAGE_CONFIG = {
     key: 'initial' as const,
     label: 'TOFU',
     fullLabel: 'Top of Funnel',
-    meaning: '첫 접촉 · 기술 인지',
+    meaning: '전체 채널 첫 접촉',
     color: '#f43f5e',
     bgColor: 'bg-rose-50',
     borderColor: 'border-rose-200',
@@ -24,7 +24,7 @@ const STAGE_CONFIG = {
     key: 'deep' as const,
     label: 'MOFU',
     fullLabel: 'Middle of Funnel',
-    meaning: '심화 탐색 · 콘텐츠 소비',
+    meaning: '심화 탐색 · Engagement',
     color: '#e11d48',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
@@ -33,29 +33,27 @@ const STAGE_CONFIG = {
     key: 'reachable' as const,
     label: 'BOFU',
     fullLabel: 'Bottom of Funnel',
-    meaning: '검토 완료 · 기술 이해도 高',
+    meaning: '문의 전환',
     color: '#be123c',
     bgColor: 'bg-red-100',
     borderColor: 'border-red-300',
   },
 };
 
-// 주요 드라이버 데이터
+// 채널별 기여도 데이터 (통합 퍼널)
 const TOP_DRIVERS = {
   tofu: [
-    { type: 'content', name: 'Digital Cockpit Overview Video', contribution: 28 },
-    { type: 'ads', name: 'Google Display - ADAS', contribution: 22 },
-    { type: 'content', name: 'Vehicle Vision Tech Brief', contribution: 18 },
+    { type: 'channel', name: 'LinkedIn 조회 (가중 0.6)', contribution: 54 },
+    { type: 'channel', name: 'LG.com 첫 방문 (가중 1.0)', contribution: 41 },
+    { type: 'channel', name: 'YouTube 조회 (가중 0.4)', contribution: 5 },
   ],
   mofu: [
-    { type: 'content', name: 'Tech Webinar: Next-Gen Cockpit', contribution: 35 },
-    { type: 'ads', name: 'LinkedIn - Decision Makers', contribution: 25 },
-    { type: 'content', name: 'Case Study: BMW Integration', contribution: 20 },
+    { type: 'channel', name: 'LinkedIn Engagement', contribution: 58 },
+    { type: 'channel', name: 'LG.com 재방문·체류', contribution: 34 },
+    { type: 'channel', name: 'YouTube 50%+ 시청', contribution: 8 },
   ],
   bofu: [
-    { type: 'offering', name: 'Technical Spec Sheet Download', contribution: 45 },
-    { type: 'content', name: 'Integration Guide', contribution: 30 },
-    { type: 'content', name: 'ROI Calculator', contribution: 15 },
+    { type: 'content', name: 'LG.com 문의 폼 제출', contribution: 100 },
   ],
 };
 
@@ -90,73 +88,76 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
   const tofuToMofu = ((stages[1].count / stages[0].count) * 100).toFixed(1);
   const mofuToBofu = ((stages[2].count / stages[1].count) * 100).toFixed(1);
 
-  // 전체 비즈니스 인사이트
+  // 전체 비즈니스 인사이트 (통합 퍼널 기준)
   const generateOverallInsight = () => {
     const allGrowing = stages.every(s => s.change > 0);
-    const bofuHealthy = stages[2].organic >= 80;
     const mofuStrong = stages[1].change > 15;
+    const bofuGrowing = stages[2].change > 10;
     
-    if (allGrowing && bofuHealthy) {
+    if (allGrowing && mofuStrong) {
       return {
         status: 'positive' as const,
-        headline: '기술 검토 심화 중, 인지도 전 구간 상승',
+        headline: '전체 채널 인지도 상승, Engagement 활발',
         details: [
-          `BOFU ${stages[2].organic}%가 자발적 유입 → OEM이 스스로 찾아 깊이 검토하는 상태`,
-          `TOFU→MOFU 전환율 ${tofuToMofu}% — 콘텐츠 engagement 양호`,
-          mofuStrong ? `MOFU +${stages[1].change.toFixed(1)}% — 심화 콘텐츠 소비 활발` : null,
+          `LinkedIn + LG.com + YouTube 통합 TOFU +${stages[0].change.toFixed(1)}% 성장`,
+          `MOFU +${stages[1].change.toFixed(1)}% — LinkedIn Engagement & 콘텐츠 소비 증가`,
+          bofuGrowing ? `문의 전환 +${stages[2].change.toFixed(1)}% — 실제 비즈니스 기회 확대` : null,
         ].filter(Boolean) as string[],
-        action: '기술 조직에 검토 현황 공유, 심화 콘텐츠(스펙/케이스스터디) 확대',
+        action: '기술 조직에 검토 현황 공유, LinkedIn 콘텐츠 확대',
       };
     } else if (stages[0].paid > 50) {
       return {
         status: 'warning' as const,
-        headline: 'TOFU 광고 의존도 높음 — 자연 인지 확대 필요',
+        headline: '광고 의존도 높음 — Organic 채널 강화 필요',
         details: [
-          `TOFU의 ${stages[0].paid}%가 Paid 유입 → 광고 중단 시 인지도 급감 우려`,
-          `Organic 콘텐츠 SEO/검색 노출 확대 필요`,
+          `전체 유입의 ${stages[0].paid}%가 Paid → LinkedIn Organic 콘텐츠 확대 필요`,
+          `광고 중단 시 인지도 급감 우려`,
         ],
-        action: 'Organic 콘텐츠 강화, 기술 블로그/아티클 확대',
+        action: 'LinkedIn Organic 포스트 강화, SEO 콘텐츠 확대',
       };
     } else if (stages[2].change < 5) {
       return {
         status: 'caution' as const,
-        headline: 'BOFU 성장 정체 — 심화 검토 전환 필요',
+        headline: '문의 전환 정체 — MOFU→BOFU 전환 강화 필요',
         details: [
-          `BOFU 성장률 +${stages[2].change.toFixed(1)}%로 둔화`,
-          `MOFU→BOFU 전환율 ${mofuToBofu}% — 검토 심화 콘텐츠 부족 가능성`,
+          `문의 성장률 +${stages[2].change.toFixed(1)}%로 둔화`,
+          `MOFU→BOFU 전환율 ${mofuToBofu}% — 문의 유도 콘텐츠 강화 필요`,
         ],
-        action: '상세 스펙/Integration Guide/기술 비교표 콘텐츠 강화',
+        action: 'CTA 강화, 문의 폼 접근성 개선, 데모 콘텐츠 추가',
       };
     }
     return {
       status: 'neutral' as const,
-      headline: '기술 인지도 안정 상태',
-      details: [`전 구간 균형 있는 검토 유지 중`],
+      headline: '전체 채널 인지도 안정 상태',
+      details: [`LinkedIn, LG.com, YouTube 전 채널 균형 유지 중`],
       action: '현 콘텐츠 전략 유지, 주간 모니터링 지속',
     };
   };
 
-  // 각 단계별 인사이트
+  // 각 단계별 인사이트 (통합 퍼널 기준)
   const getStageInsight = (stageId: 'tofu' | 'mofu' | 'bofu') => {
     const stage = stages.find(s => s.id === stageId)!;
     
     if (stageId === 'tofu') {
-      if (stage.paid > 50) {
-        return { status: 'warning', text: `광고 의존도 ${stage.paid}% — Organic 콘텐츠 노출 확대 필요` };
+      if (stage.change > 15) {
+        return { status: 'good', text: `전체 채널 인지도 +${stage.change.toFixed(1)}% — LinkedIn(54%) + LG.com(41%) + YouTube(5%) 합산` };
       }
-      return { status: 'good', text: `Organic ${stage.organic}% — 자연 검색/유입 중심의 건강한 인지 확산` };
+      if (stage.paid > 50) {
+        return { status: 'warning', text: `광고 의존도 ${stage.paid}% — Organic 콘텐츠 확대 필요` };
+      }
+      return { status: 'neutral', text: `LinkedIn·LG.com·YouTube 통합 인지도 유지 중` };
     }
     if (stageId === 'mofu') {
       if (stage.change > 10) {
-        return { status: 'good', text: `+${stage.change.toFixed(1)}% 성장 — 심화 콘텐츠 소비 활발` };
+        return { status: 'good', text: `Engagement +${stage.change.toFixed(1)}% — LinkedIn 상호작용 & LG.com 재방문 증가` };
       }
-      return { status: 'neutral', text: `안정적 탐색 유지 — 웨비나/케이스스터디로 검토 심화 유도` };
+      return { status: 'neutral', text: `Engagement 안정 유지 — 웨비나/케이스스터디로 심화 유도` };
     }
     // BOFU
-    if (stage.organic >= 80) {
-      return { status: 'good', text: `Organic ${stage.organic}% — OEM이 자발적으로 깊이 검토 중, 기술 이해도 높음` };
+    if (stage.change > 10) {
+      return { status: 'good', text: `문의 +${stage.change.toFixed(1)}% — 실제 비즈니스 기회 증가` };
     }
-    return { status: 'neutral', text: `검토 품질 점검 필요 — 자발적 검토 비중 확대 권장` };
+    return { status: 'neutral', text: `문의 전환 안정 — CTA 강화 권장` };
   };
 
   const overallInsight = generateOverallInsight();
@@ -167,7 +168,7 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">주목 현황</h2>
-          <p className="text-sm text-gray-500">OEM의 VS 기술 검토 단계별 현황 · {statusData.period} 기준</p>
+          <p className="text-sm text-gray-500">LinkedIn + LG.com + YouTube 통합 퍼널 · {statusData.period} 기준</p>
         </div>
         <div className="flex items-center gap-2 text-xs">
           <span className="px-2 py-1 rounded bg-gray-100 text-gray-600">
@@ -294,17 +295,27 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
                 <div className="bg-white p-4 border-t">
                   <div className="text-xs text-gray-500 mb-2">주요 드라이버 (유입 기여도)</div>
                   <div className="space-y-2">
-                    {TOP_DRIVERS[stage.id].map((driver, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded flex items-center justify-center bg-gray-100">
-                          {driver.type === 'content' && <FileText size={12} className="text-blue-600" />}
-                          {driver.type === 'ads' && <Megaphone size={12} className="text-orange-600" />}
-                          {driver.type === 'offering' && <Zap size={12} className="text-purple-600" />}
+                    {TOP_DRIVERS[stage.id].map((driver, idx) => {
+                      // 채널별 아이콘 결정
+                      const getDriverIcon = () => {
+                        if (driver.name.includes('LinkedIn')) return <Linkedin size={12} className="text-blue-600" />;
+                        if (driver.name.includes('LG.com')) return <Globe size={12} className="text-green-600" />;
+                        if (driver.name.includes('YouTube')) return <Youtube size={12} className="text-red-600" />;
+                        if (driver.type === 'content') return <FileText size={12} className="text-blue-600" />;
+                        if (driver.type === 'ads') return <Megaphone size={12} className="text-orange-600" />;
+                        return <Zap size={12} className="text-purple-600" />;
+                      };
+                      
+                      return (
+                        <div key={idx} className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded flex items-center justify-center bg-gray-100">
+                            {getDriverIcon()}
+                          </div>
+                          <div className="flex-1 text-sm text-gray-700">{driver.name}</div>
+                          <div className="text-sm font-semibold text-gray-900">{driver.contribution}%</div>
                         </div>
-                        <div className="flex-1 text-sm text-gray-700">{driver.name}</div>
-                        <div className="text-sm font-semibold text-gray-900">{driver.contribution}%</div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
