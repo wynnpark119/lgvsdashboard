@@ -208,7 +208,6 @@ export default function TechnologyDetailPage() {
                     <th className="text-right py-3 px-4 font-medium text-gray-500">체류(분)</th>
                     <th className="text-right py-3 px-4 font-medium text-gray-500">영상(%)</th>
                     <th className="text-right py-3 px-4 font-medium text-gray-500">문의</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-500">뉴스레터</th>
                     <th className="text-center py-3 px-4 font-medium text-gray-500">추세</th>
                     <th className="text-right py-3 px-4 font-medium text-gray-500">Paid%</th>
                     <th className="text-center py-3 px-4 font-medium text-gray-500">Funnel</th>
@@ -234,7 +233,6 @@ export default function TechnologyDetailPage() {
                         <td className="py-3 px-4 text-right text-gray-900">{tech.metrics.avgDwell}</td>
                         <td className="py-3 px-4 text-right text-gray-900">{tech.metrics.videoDepth}%</td>
                         <td className="py-3 px-4 text-right text-brand-primary font-medium">{tech.metrics.inquiries}</td>
-                        <td className="py-3 px-4 text-right text-blue-600 font-medium">{tech.metrics.newsletter}</td>
                         <td className="py-3 px-4 text-center">
                           <span className={cn(
                             'inline-flex items-center gap-1 font-medium',
@@ -274,7 +272,6 @@ export default function TechnologyDetailPage() {
             <h3 className="text-sm font-medium text-gray-700 mb-2">데이터 참고사항</h3>
             <ul className="text-xs text-gray-500 space-y-1">
               <li>• Paid% 50% 이상 시 광고 의존도 높음 (주의 필요)</li>
-              <li>• 뉴스레터 = 해당 기술 관련 뉴스레터 구독자 수</li>
               <li>• 데이터는 익일 갱신</li>
             </ul>
           </section>

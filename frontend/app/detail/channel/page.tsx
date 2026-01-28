@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink, Globe, Linkedin } from 'lucide-react';
+import { ExternalLink, Globe, Linkedin, Facebook } from 'lucide-react';
 import {
   BarChart,
   Bar,
@@ -26,7 +26,6 @@ const CHANNELS = [
       pageDepth: 3.2,
       deepInterestRate: 12.4,
       inquiries: 45,
-      newsletter: 234,
     },
     role: 'Converter',
     trend: 23,
@@ -41,7 +40,6 @@ const CHANNELS = [
       pageDepth: 1.8,
       deepInterestRate: 8.2,
       inquiries: 28,
-      newsletter: 156,
     },
     role: 'Attractor',
     trend: 18,
@@ -56,10 +54,23 @@ const CHANNELS = [
       pageDepth: 1.5,
       deepInterestRate: 5.8,
       inquiries: 12,
-      newsletter: 67,
     },
     role: 'Igniter',
     trend: 8,
+  },
+  {
+    id: 'meta',
+    name: 'Meta (Facebook/Instagram)',
+    icon: Facebook,
+    metrics: {
+      visits: 9870,
+      avgDwell: 1.2,
+      pageDepth: 1.4,
+      deepInterestRate: 4.3,
+      inquiries: 6,
+    },
+    role: 'Igniter',
+    trend: 32,
   },
   {
     id: 'google-organic',
@@ -71,7 +82,6 @@ const CHANNELS = [
       pageDepth: 3.8,
       deepInterestRate: 15.2,
       inquiries: 32,
-      newsletter: 189,
     },
     role: 'Converter',
     trend: 12,
@@ -86,7 +96,6 @@ const CHANNELS = [
       pageDepth: 2.1,
       deepInterestRate: 6.5,
       inquiries: 8,
-      newsletter: 45,
     },
     role: 'Educator',
     trend: 15,
@@ -209,7 +218,7 @@ export default function ChannelDetailPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-6 gap-4 text-sm">
+                    <div className="grid grid-cols-5 gap-4 text-sm">
                       <div className="bg-gray-50 rounded p-2 text-center">
                         <div className="text-gray-500 text-xs">방문</div>
                         <div className="font-medium">{formatNumber(channel.metrics.visits)}</div>
@@ -229,10 +238,6 @@ export default function ChannelDetailPage() {
                       <div className="bg-gray-50 rounded p-2 text-center">
                         <div className="text-gray-500 text-xs">문의</div>
                         <div className="font-medium text-brand-primary">{channel.metrics.inquiries}</div>
-                      </div>
-                      <div className="bg-gray-50 rounded p-2 text-center">
-                        <div className="text-gray-500 text-xs">뉴스레터</div>
-                        <div className="font-medium text-blue-600">{channel.metrics.newsletter}</div>
                       </div>
                     </div>
                   </div>

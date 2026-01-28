@@ -172,36 +172,6 @@ export default function InquiryDetailPage() {
               </div>
             </div>
 
-            {/* 기술별 뉴스레터 구독자 */}
-            <div className="bg-white rounded-xl border p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">기술별 뉴스레터 구독자</h2>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={NEWSLETTER_BY_TECH} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis type="number" />
-                  <YAxis dataKey="technology" type="category" width={100} fontSize={12} />
-                  <Tooltip formatter={(value: number) => [formatNumber(value), '구독자']} />
-                  <Bar dataKey="subscribers" radius={[0, 4, 4, 0]}>
-                    {NEWSLETTER_BY_TECH.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={entry.growth >= 0 ? '#3b82f6' : '#9ca3af'} 
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-              <div className="flex justify-center gap-4 mt-2 text-xs">
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 rounded bg-blue-500" />
-                  <span className="text-gray-500">성장 중</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 rounded bg-gray-400" />
-                  <span className="text-gray-500">감소 중</span>
-                </div>
-              </div>
-            </div>
           </section>
 
           {/* Technology Distribution */}

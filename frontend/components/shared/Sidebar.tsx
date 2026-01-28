@@ -81,7 +81,7 @@ export default function Sidebar() {
                 className="w-full flex items-center justify-between p-2.5 rounded-lg transition-colors hover:bg-gray-100"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-md flex items-center justify-center bg-gray-100 text-gray-500">
+                  <div className="w-7 h-7 rounded-md flex items-center justify-center bg-brand-primary/10 text-brand-primary">
                   
                     <section.icon size={14} />
                   </div>
@@ -134,7 +134,10 @@ export default function Sidebar() {
                             {item.label}
                           </span>
                         </div>
-                        <span className="text-[10px] text-gray-400 ml-3.5 mt-0.5">
+                        <span className={cn(
+                          'text-[10px] ml-3.5 mt-0.5',
+                          isActive ? 'text-brand-primary/70' : 'text-gray-400'
+                        )}>
                           {item.labelKo}
                         </span>
                       </Link>
@@ -148,7 +151,7 @@ export default function Sidebar() {
 
         {/* Footer */}
         <div className="p-3 border-t bg-gray-50 flex-shrink-0">
-          <div className="text-[10px] text-gray-400 text-center">
+          <div className="text-[10px] text-gray-500 text-center">
             {DECISION_FLOW.flow}
           </div>
         </div>
