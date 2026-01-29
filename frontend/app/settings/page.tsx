@@ -5,9 +5,8 @@ import {
   Settings,
   Tag,
   Megaphone,
-  FileText,
-  Globe,
   Link2,
+  Globe,
   Plus,
   Edit2,
   Trash2,
@@ -15,27 +14,29 @@ import {
   ChevronRight,
   ExternalLink,
   Check,
+  X,
 } from 'lucide-react';
 import {
   TECHNOLOGY_SETTINGS,
   CAMPAIGN_SETTINGS,
-  URL_PATTERN_MAPPINGS,
+  CONTENT_URLS,
   CHANNEL_SETTINGS,
-  SOCIAL_POSTS,
+  getCampaignsByTechnology,
+  getContentsByTechnology,
+  getContentsByCampaign,
+  getIndependentContents,
   type Technology,
-  type CampaignSetting,
-  type CampaignContent,
-  type SocialPost,
+  type Campaign,
+  type ContentUrl,
 } from '@/data/settings';
 
-type TabType = 'technologies' | 'campaigns' | 'urls' | 'channels' | 'social';
+type TabType = 'technologies' | 'campaigns' | 'contents' | 'channels';
 
 const TABS: { id: TabType; label: string; icon: React.ElementType }[] = [
   { id: 'technologies', label: '기술 키워드', icon: Tag },
   { id: 'campaigns', label: '캠페인', icon: Megaphone },
-  { id: 'urls', label: 'URL 패턴', icon: Link2 },
+  { id: 'contents', label: '콘텐츠 URL', icon: Link2 },
   { id: 'channels', label: '채널 설정', icon: Globe },
-  { id: 'social', label: '소셜 게시물', icon: FileText },
 ];
 
 const CATEGORY_LABELS: Record<Technology['category'], { label: string; color: string }> = {
@@ -45,25 +46,43 @@ const CATEGORY_LABELS: Record<Technology['category'], { label: string; color: st
   monitoring: { label: 'Monitoring', color: 'bg-gray-100 text-gray-600' },
 };
 
-const CAMPAIGN_TYPE_LABELS: Record<CampaignSetting['type'], { label: string; color: string }> = {
+const CAMPAIGN_TYPE_LABELS: Record<Campaign['type'], { label: string; color: string }> = {
   advertising: { label: '광고', color: 'bg-purple-100 text-purple-700' },
   content: { label: '콘텐츠', color: 'bg-green-100 text-green-700' },
   event: { label: '이벤트', color: 'bg-orange-100 text-orange-700' },
   webinar: { label: '웨비나', color: 'bg-cyan-100 text-cyan-700' },
 };
 
+const CONTENT_TYPE_LABELS: Record<ContentUrl['contentType'], string> = {
+  landing: '랜딩페이지',
+  article: '아티클',
+  video: '영상',
+  whitepaper: '백서',
+  'social-post': '소셜포스트',
+  webinar: '웨비나',
+};
+
+const FUNNEL_STAGE_LABELS: Record<ContentUrl['funnelStage'], { label: string; color: string }> = {
+  tofu: { label: 'TOFU', color: 'bg-blue-100 text-blue-700' },
+  mofu: { label: 'MOFU', color: 'bg-yellow-100 text-yellow-700' },
+  bofu: { label: 'BOFU', color: 'bg-green-100 text-green-700' },
+};
+
+const CHANNEL_LABELS: Record<ContentUrl['channel'], { label: string; icon: string }> = {
+  lgcom: { label: 'LG.com', icon: '🌐' },
+  linkedin: { label: 'LinkedIn', icon: '💼' },
+  youtube: { label: 'YouTube', icon: '📺' },
+};
+
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('technologies');
-  const [expandedCampaigns, setExpandedCampaigns] = useState<Set<string>>(new Set());
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
-  const toggleCampaignExpand = (campaignId: string) => {
-    setExpandedCampaigns((prev) => {
+  const toggleExpand = (id: string) => {
+    setExpandedItems((prev) => {
       const next = new Set(prev);
-      if (next.has(campaignId)) {
-        next.delete(campaignId);
-      } else {
-        next.add(campaignId);
-      }
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -78,7 +97,7 @@ export default function SettingsPage() {
             <h1 className="text-2xl font-bold text-gray-900">세팅</h1>
           </div>
           <p className="text-gray-500">
-            대시보드 데이터 태깅 및 매핑 관리
+            기술 키워드, 캠페인, 콘텐츠 URL 태깅 관리
           </p>
         </header>
 
@@ -106,18 +125,25 @@ export default function SettingsPage() {
         {/* Tab Content */}
         <div className="bg-white rounded-lg border border-gray-200">
           {activeTab === 'technologies' && (
-            <TechnologiesTab technologies={TECHNOLOGY_SETTINGS} />
+            <TechnologiesTab
+              technologies={TECHNOLOGY_SETTINGS}
+              expandedItems={expandedItems}
+              onToggleExpand={toggleExpand}
+            />
           )}
           {activeTab === 'campaigns' && (
             <CampaignsTab
               campaigns={CAMPAIGN_SETTINGS}
-              expandedCampaigns={expandedCampaigns}
-              onToggleExpand={toggleCampaignExpand}
+              expandedItems={expandedItems}
+              onToggleExpand={toggleExpand}
             />
           )}
-          {activeTab === 'urls' && <UrlPatternsTab mappings={URL_PATTERN_MAPPINGS} />}
-          {activeTab === 'channels' && <ChannelsTab channels={CHANNEL_SETTINGS} />}
-          {activeTab === 'social' && <SocialPostsTab posts={SOCIAL_POSTS} />}
+          {activeTab === 'contents' && (
+            <ContentsTab contents={CONTENT_URLS} />
+          )}
+          {activeTab === 'channels' && (
+            <ChannelsTab channels={CHANNEL_SETTINGS} />
+          )}
         </div>
       </div>
     </div>
@@ -128,7 +154,15 @@ export default function SettingsPage() {
 // Technologies Tab
 // ─────────────────────────────────────────────────────────────
 
-function TechnologiesTab({ technologies }: { technologies: Technology[] }) {
+function TechnologiesTab({
+  technologies,
+  expandedItems,
+  onToggleExpand,
+}: {
+  technologies: Technology[];
+  expandedItems: Set<string>;
+  onToggleExpand: (id: string) => void;
+}) {
   const grouped = technologies.reduce(
     (acc, tech) => {
       if (!acc[tech.category]) acc[tech.category] = [];
@@ -146,7 +180,7 @@ function TechnologiesTab({ technologies }: { technologies: Technology[] }) {
         <div>
           <h2 className="text-lg font-semibold text-gray-900">기술 키워드 관리</h2>
           <p className="text-sm text-gray-500 mt-1">
-            모니터링 대상 기술 및 URL 패턴 매핑
+            기술 등록 및 연결된 캠페인/콘텐츠 확인
           </p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800">
@@ -164,83 +198,49 @@ function TechnologiesTab({ technologies }: { technologies: Technology[] }) {
           return (
             <div key={category}>
               <div className="flex items-center gap-2 mb-3">
-                <span
-                  className={`px-2 py-1 rounded text-xs font-medium ${categoryConfig.color}`}
-                >
+                <span className={`px-2 py-1 rounded text-xs font-medium ${categoryConfig.color}`}>
                   {categoryConfig.label}
                 </span>
                 <span className="text-sm text-gray-400">({techs.length})</span>
               </div>
 
-              <div className="border rounded-lg overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                        기술명
-                      </th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                        URL 패턴
-                      </th>
-                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                        연관 캠페인
-                      </th>
-                      <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                        우선순위
-                      </th>
-                      <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                        상태
-                      </th>
-                      <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                        관리
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {techs.map((tech) => (
-                      <tr key={tech.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3">
+              <div className="space-y-2">
+                {techs.map((tech) => {
+                  const isExpanded = expandedItems.has(`tech-${tech.id}`);
+                  const campaigns = getCampaignsByTechnology(tech.id);
+                  const contents = getContentsByTechnology(tech.id);
+
+                  return (
+                    <div key={tech.id} className="border rounded-lg overflow-hidden">
+                      {/* Tech Header */}
+                      <div
+                        className="flex items-center justify-between px-4 py-3 bg-gray-50 cursor-pointer hover:bg-gray-100"
+                        onClick={() => onToggleExpand(`tech-${tech.id}`)}
+                      >
+                        <div className="flex items-center gap-3">
+                          {isExpanded ? (
+                            <ChevronDown className="w-4 h-4 text-gray-500" />
+                          ) : (
+                            <ChevronRight className="w-4 h-4 text-gray-500" />
+                          )}
                           <div>
-                            <div className="font-medium text-gray-900">{tech.name}</div>
-                            <div className="text-xs text-gray-500">{tech.nameKo}</div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex flex-wrap gap-1">
-                            {tech.urlPatterns?.slice(0, 2).map((pattern, i) => (
-                              <code
-                                key={i}
-                                className="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600"
-                              >
-                                {pattern}
-                              </code>
-                            ))}
-                            {(tech.urlPatterns?.length || 0) > 2 && (
-                              <span className="text-xs text-gray-400">
-                                +{(tech.urlPatterns?.length || 0) - 2}
-                              </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-gray-900">{tech.name}</span>
+                              <span className="text-sm text-gray-500">({tech.nameKo})</span>
+                            </div>
+                            {tech.description && (
+                              <div className="text-xs text-gray-500 mt-0.5">{tech.description}</div>
                             )}
                           </div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex flex-wrap gap-1">
-                            {tech.relatedCampaigns?.slice(0, 2).map((campaignId) => (
-                              <span
-                                key={campaignId}
-                                className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded"
-                              >
-                                {campaignId}
-                              </span>
-                            ))}
-                            {(tech.relatedCampaigns?.length || 0) > 2 && (
-                              <span className="text-xs text-gray-400">
-                                +{(tech.relatedCampaigns?.length || 0) - 2}
-                              </span>
-                            )}
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <div className="text-right text-sm">
+                            <span className="text-gray-500">캠페인 {campaigns.length}</span>
+                            <span className="text-gray-300 mx-2">|</span>
+                            <span className="text-gray-500">콘텐츠 {contents.length}</span>
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <div className="flex justify-center gap-0.5">
+                          <div className="flex items-center gap-1">
                             {[1, 2, 3, 4, 5].map((star) => (
                               <div
                                 key={star}
@@ -250,33 +250,79 @@ function TechnologiesTab({ technologies }: { technologies: Technology[] }) {
                               />
                             ))}
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
-                              tech.active
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-gray-100 text-gray-500'
-                            }`}
-                          >
-                            {tech.active ? <Check className="w-3 h-3" /> : null}
-                            {tech.active ? '활성' : '비활성'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <button className="p-1 text-gray-400 hover:text-gray-600">
+                          <div className="flex items-center gap-2">
+                            <button
+                              className="p-1 text-gray-400 hover:text-gray-600"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <Edit2 className="w-4 h-4" />
                             </button>
-                            <button className="p-1 text-gray-400 hover:text-red-500">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
                           </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      </div>
+
+                      {/* Tech Details */}
+                      {isExpanded && (
+                        <div className="border-t px-4 py-4 bg-white">
+                          <div className="grid grid-cols-2 gap-6">
+                            {/* 연결된 캠페인 */}
+                            <div>
+                              <h4 className="text-sm font-medium text-gray-700 mb-2">연결된 캠페인</h4>
+                              {campaigns.length > 0 ? (
+                                <div className="space-y-1">
+                                  {campaigns.map((campaign) => {
+                                    const typeConfig = CAMPAIGN_TYPE_LABELS[campaign.type];
+                                    return (
+                                      <div
+                                        key={campaign.id}
+                                        className="flex items-center gap-2 text-sm py-1"
+                                      >
+                                        <span className={`px-1.5 py-0.5 rounded text-xs ${typeConfig.color}`}>
+                                          {typeConfig.label}
+                                        </span>
+                                        <span className="text-gray-700">{campaign.name}</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-gray-400">연결된 캠페인 없음</p>
+                              )}
+                            </div>
+
+                            {/* 연결된 콘텐츠 */}
+                            <div>
+                              <h4 className="text-sm font-medium text-gray-700 mb-2">연결된 콘텐츠</h4>
+                              {contents.length > 0 ? (
+                                <div className="space-y-1">
+                                  {contents.slice(0, 5).map((content) => {
+                                    const channelConfig = CHANNEL_LABELS[content.channel];
+                                    return (
+                                      <div
+                                        key={content.id}
+                                        className="flex items-center gap-2 text-sm py-1"
+                                      >
+                                        <span>{channelConfig.icon}</span>
+                                        <span className="text-gray-700 truncate max-w-[200px]">
+                                          {content.title}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                  {contents.length > 5 && (
+                                    <p className="text-xs text-gray-400">+{contents.length - 5}개 더</p>
+                                  )}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-gray-400">연결된 콘텐츠 없음</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
@@ -292,11 +338,11 @@ function TechnologiesTab({ technologies }: { technologies: Technology[] }) {
 
 function CampaignsTab({
   campaigns,
-  expandedCampaigns,
+  expandedItems,
   onToggleExpand,
 }: {
-  campaigns: CampaignSetting[];
-  expandedCampaigns: Set<string>;
+  campaigns: Campaign[];
+  expandedItems: Set<string>;
   onToggleExpand: (id: string) => void;
 }) {
   return (
@@ -305,7 +351,7 @@ function CampaignsTab({
         <div>
           <h2 className="text-lg font-semibold text-gray-900">캠페인 관리</h2>
           <p className="text-sm text-gray-500 mt-1">
-            캠페인 등록 및 하위 콘텐츠 연결
+            캠페인 등록, 연관 기술 및 콘텐츠 관리
           </p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800">
@@ -314,20 +360,18 @@ function CampaignsTab({
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {campaigns.map((campaign) => {
-          const isExpanded = expandedCampaigns.has(campaign.id);
+          const isExpanded = expandedItems.has(`campaign-${campaign.id}`);
+          const contents = getContentsByCampaign(campaign.id);
           const typeConfig = CAMPAIGN_TYPE_LABELS[campaign.type];
 
           return (
-            <div
-              key={campaign.id}
-              className="border rounded-lg overflow-hidden"
-            >
+            <div key={campaign.id} className="border rounded-lg overflow-hidden">
               {/* Campaign Header */}
               <div
                 className="flex items-center justify-between px-4 py-3 bg-gray-50 cursor-pointer hover:bg-gray-100"
-                onClick={() => onToggleExpand(campaign.id)}
+                onClick={() => onToggleExpand(`campaign-${campaign.id}`)}
               >
                 <div className="flex items-center gap-3">
                   {isExpanded ? (
@@ -337,12 +381,8 @@ function CampaignsTab({
                   )}
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900">
-                        {campaign.name}
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-medium ${typeConfig.color}`}
-                      >
+                      <span className="font-medium text-gray-900">{campaign.name}</span>
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${typeConfig.color}`}>
                         {typeConfig.label}
                       </span>
                     </div>
@@ -353,54 +393,97 @@ function CampaignsTab({
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="text-sm text-gray-900">
-                      콘텐츠 {campaign.contents.length}개
-                    </div>
-                    <div className="flex gap-1 mt-0.5">
-                      {campaign.technologies.slice(0, 3).map((techId) => (
-                        <span
-                          key={techId}
-                          className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded"
-                        >
-                          {techId}
-                        </span>
-                      ))}
-                      {campaign.technologies.length > 3 && (
-                        <span className="text-xs text-gray-400">
-                          +{campaign.technologies.length - 3}
-                        </span>
-                      )}
-                    </div>
+                  {/* 연관 기술 */}
+                  <div className="flex gap-1">
+                    {campaign.technologies.slice(0, 3).map((techId) => (
+                      <span
+                        key={techId}
+                        className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded"
+                      >
+                        {techId}
+                      </span>
+                    ))}
+                    {campaign.technologies.length > 3 && (
+                      <span className="text-xs text-gray-400">
+                        +{campaign.technologies.length - 3}
+                      </span>
+                    )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="p-1 text-gray-400 hover:text-gray-600"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                  <span className="text-sm text-gray-500">콘텐츠 {contents.length}</span>
+                  <button
+                    className="p-1 text-gray-400 hover:text-gray-600"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
               {/* Campaign Contents */}
               {isExpanded && (
-                <div className="border-t">
-                  <div className="px-4 py-3 bg-white">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-gray-700">
-                        연결된 콘텐츠
-                      </span>
-                      <button className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700">
-                        <Plus className="w-3 h-3" />
-                        콘텐츠 추가
-                      </button>
-                    </div>
-
-                    {/* Contents by Channel */}
-                    <ContentsByChannel contents={campaign.contents} />
+                <div className="border-t px-4 py-4 bg-white">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm font-medium text-gray-700">연결된 콘텐츠</span>
+                    <button className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700">
+                      <Plus className="w-3 h-3" />
+                      콘텐츠 연결
+                    </button>
                   </div>
+
+                  {contents.length > 0 ? (
+                    <div className="space-y-2">
+                      {contents.map((content) => {
+                        const channelConfig = CHANNEL_LABELS[content.channel];
+                        const funnelConfig = FUNNEL_STAGE_LABELS[content.funnelStage];
+                        return (
+                          <div
+                            key={content.id}
+                            className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded text-sm"
+                          >
+                            <div className="flex items-center gap-3">
+                              <span>{channelConfig.icon}</span>
+                              <span className="text-gray-900">{content.title}</span>
+                              <span className="text-xs text-gray-400">
+                                {CONTENT_TYPE_LABELS[content.contentType]}
+                              </span>
+                              <span className={`text-xs font-medium px-1.5 py-0.5 rounded ${funnelConfig.color}`}>
+                                {funnelConfig.label}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {/* 연관 기술 표시 */}
+                              <div className="flex gap-1">
+                                {content.technologies.map((techId) => (
+                                  <span
+                                    key={techId}
+                                    className="text-xs bg-gray-200 text-gray-600 px-1 py-0.5 rounded"
+                                  >
+                                    {techId}
+                                  </span>
+                                ))}
+                              </div>
+                              {content.url && (
+                                <a
+                                  href={content.url.startsWith('http') ? content.url : `https://lg.com${content.url}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-gray-400 hover:text-blue-500"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              )}
+                              <button className="p-1 text-gray-400 hover:text-red-500">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400 py-2">연결된 콘텐츠가 없습니다</p>
+                  )}
                 </div>
               )}
             </div>
@@ -411,59 +494,94 @@ function CampaignsTab({
   );
 }
 
-function ContentsByChannel({ contents }: { contents: CampaignContent[] }) {
-  const grouped = contents.reduce(
-    (acc, content) => {
-      if (!acc[content.channel]) acc[content.channel] = [];
-      acc[content.channel].push(content);
-      return acc;
-    },
-    {} as Record<string, CampaignContent[]>
-  );
+// ─────────────────────────────────────────────────────────────
+// Contents Tab
+// ─────────────────────────────────────────────────────────────
 
-  const channelLabels: Record<string, { label: string; icon: string }> = {
-    lgcom: { label: 'LG.com', icon: '🌐' },
-    linkedin: { label: 'LinkedIn', icon: '💼' },
-    youtube: { label: 'YouTube', icon: '📺' },
-    newsletter: { label: 'Newsletter', icon: '📧' },
-    webinar: { label: 'Webinar', icon: '🎥' },
-  };
+function ContentsTab({ contents }: { contents: ContentUrl[] }) {
+  const independentContents = getIndependentContents();
+  const campaignContents = contents.filter((c) => c.campaigns.length > 0);
 
   return (
-    <div className="space-y-4">
-      {Object.entries(grouped).map(([channel, channelContents]) => {
-        const channelConfig = channelLabels[channel] || { label: channel, icon: '📄' };
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">콘텐츠 URL 관리</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            콘텐츠 URL 등록 및 기술/캠페인 태깅
+          </p>
+        </div>
+        <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800">
+          <Plus className="w-4 h-4" />
+          콘텐츠 추가
+        </button>
+      </div>
 
-        return (
-          <div key={channel}>
-            <div className="flex items-center gap-2 mb-2">
-              <span>{channelConfig.icon}</span>
-              <span className="text-sm font-medium text-gray-700">
-                {channelConfig.label}
-              </span>
-              <span className="text-xs text-gray-400">
-                ({channelContents.length})
-              </span>
-            </div>
-            <div className="space-y-1 pl-6">
-              {channelContents.map((content) => (
-                <div
-                  key={content.id}
-                  className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded text-sm"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-gray-900">{content.title}</span>
-                    <span className="text-xs bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
-                      {content.technology}
-                    </span>
-                  </div>
+      {/* 캠페인 소속 콘텐츠 */}
+      <div className="mb-8">
+        <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+          <Megaphone className="w-4 h-4" />
+          캠페인 소속 콘텐츠
+          <span className="text-gray-400">({campaignContents.length})</span>
+        </h3>
+        <ContentTable contents={campaignContents} showCampaigns />
+      </div>
+
+      {/* 독립 콘텐츠 */}
+      <div>
+        <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+          <Link2 className="w-4 h-4" />
+          독립 콘텐츠 (캠페인 미소속)
+          <span className="text-gray-400">({independentContents.length})</span>
+        </h3>
+        <ContentTable contents={independentContents} showCampaigns={false} />
+      </div>
+    </div>
+  );
+}
+
+function ContentTable({
+  contents,
+  showCampaigns,
+}: {
+  contents: ContentUrl[];
+  showCampaigns: boolean;
+}) {
+  if (contents.length === 0) {
+    return <p className="text-sm text-gray-400 py-4">콘텐츠가 없습니다</p>;
+  }
+
+  return (
+    <div className="border rounded-lg overflow-hidden">
+      <table className="w-full">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">채널</th>
+            <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">제목</th>
+            <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">유형</th>
+            <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">퍼널</th>
+            <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">연관 기술</th>
+            {showCampaigns && (
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">캠페인</th>
+            )}
+            <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">관리</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100">
+          {contents.map((content) => {
+            const channelConfig = CHANNEL_LABELS[content.channel];
+            const funnelConfig = FUNNEL_STAGE_LABELS[content.funnelStage];
+            return (
+              <tr key={content.id} className="hover:bg-gray-50">
+                <td className="px-4 py-3">
+                  <span className="text-lg">{channelConfig.icon}</span>
+                </td>
+                <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400">
-                      {content.publishDate}
-                    </span>
+                    <span className="text-sm text-gray-900">{content.title}</span>
                     {content.url && (
                       <a
-                        href={content.url}
+                        href={content.url.startsWith('http') ? content.url : `https://lg.com${content.url}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-gray-400 hover:text-blue-500"
@@ -471,104 +589,51 @@ function ContentsByChannel({ contents }: { contents: CampaignContent[] }) {
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
-                    <button className="p-1 text-gray-400 hover:text-gray-600">
-                      <Edit2 className="w-3 h-3" />
-                    </button>
-                    <button className="p-1 text-gray-400 hover:text-red-500">
-                      <Trash2 className="w-3 h-3" />
-                    </button>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// URL Patterns Tab
-// ─────────────────────────────────────────────────────────────
-
-function UrlPatternsTab({
-  mappings,
-}: {
-  mappings: typeof URL_PATTERN_MAPPINGS;
-}) {
-  const contentTypeLabels: Record<string, string> = {
-    product: '제품',
-    campaign: '캠페인',
-    event: '이벤트',
-    resource: '리소스',
-    article: '아티클',
-  };
-
-  return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">URL 패턴 매핑</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            LG.com URL을 기술/캠페인에 자동 매핑
-          </p>
-        </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800">
-          <Plus className="w-4 h-4" />
-          패턴 추가
-        </button>
-      </div>
-
-      <div className="border rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                URL 패턴
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                매핑 대상
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                유형
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                설명
-              </th>
-              <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                관리
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {mappings.map((mapping) => (
-              <tr key={mapping.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">
-                  <code className="text-sm bg-gray-100 px-2 py-0.5 rounded text-gray-700">
-                    {mapping.pattern}
-                  </code>
+                  <div className="text-xs text-gray-400 mt-0.5 truncate max-w-[250px]">
+                    {content.url}
+                  </div>
                 </td>
                 <td className="px-4 py-3">
-                  {mapping.technologyId && (
-                    <span className="text-sm bg-blue-50 text-blue-600 px-2 py-0.5 rounded">
-                      기술: {mapping.technologyId}
-                    </span>
-                  )}
-                  {mapping.campaignId && (
-                    <span className="text-sm bg-purple-50 text-purple-600 px-2 py-0.5 rounded">
-                      캠페인: {mapping.campaignId}
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  <span className="text-sm text-gray-600">
-                    {contentTypeLabels[mapping.contentType]}
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                    {CONTENT_TYPE_LABELS[content.contentType]}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-500">
-                  {mapping.description}
+                <td className="px-4 py-3 text-center">
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded ${funnelConfig.color}`}>
+                    {funnelConfig.label}
+                  </span>
                 </td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-wrap gap-1">
+                    {content.technologies.length > 0 ? (
+                      content.technologies.map((techId) => (
+                        <span
+                          key={techId}
+                          className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded"
+                        >
+                          {techId}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">전체</span>
+                    )}
+                  </div>
+                </td>
+                {showCampaigns && (
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-1">
+                      {content.campaigns.map((campaignId) => (
+                        <span
+                          key={campaignId}
+                          className="text-xs bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded"
+                        >
+                          {campaignId}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                )}
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
                     <button className="p-1 text-gray-400 hover:text-gray-600">
@@ -580,10 +645,10 @@ function UrlPatternsTab({
                   </div>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -615,24 +680,12 @@ function ChannelsTab({ channels }: { channels: typeof CHANNEL_SETTINGS }) {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                채널
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                유형
-              </th>
-              <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                가중치
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                수집 지표
-              </th>
-              <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                상태
-              </th>
-              <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                관리
-              </th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">채널</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">유형</th>
+              <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">가중치</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">수집 지표</th>
+              <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">상태</th>
+              <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">관리</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -642,16 +695,12 @@ function ChannelsTab({ channels }: { channels: typeof CHANNEL_SETTINGS }) {
                 <tr key={channel.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
                     <div>
-                      <div className="font-medium text-gray-900">
-                        {channel.name}
-                      </div>
+                      <div className="font-medium text-gray-900">{channel.name}</div>
                       <div className="text-xs text-gray-500">{channel.nameKo}</div>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-medium ${typeConfig.color}`}
-                    >
+                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${typeConfig.color}`}>
                       {typeConfig.label}
                     </span>
                   </td>
@@ -671,18 +720,14 @@ function ChannelsTab({ channels }: { channels: typeof CHANNEL_SETTINGS }) {
                         </code>
                       ))}
                       {channel.metrics.length > 4 && (
-                        <span className="text-xs text-gray-400">
-                          +{channel.metrics.length - 4}
-                        </span>
+                        <span className="text-xs text-gray-400">+{channel.metrics.length - 4}</span>
                       )}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
-                        channel.active
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-500'
+                        channel.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
                       }`}
                     >
                       {channel.active ? <Check className="w-3 h-3" /> : null}
@@ -697,138 +742,6 @@ function ChannelsTab({ channels }: { channels: typeof CHANNEL_SETTINGS }) {
                 </tr>
               );
             })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// Social Posts Tab
-// ─────────────────────────────────────────────────────────────
-
-function SocialPostsTab({ posts }: { posts: SocialPost[] }) {
-  const channelIcons: Record<string, string> = {
-    linkedin: '💼',
-    youtube: '📺',
-    reddit: '🔴',
-  };
-
-  return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">소셜 게시물 관리</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            게시물별 기술/캠페인 태깅
-          </p>
-        </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800">
-          <Plus className="w-4 h-4" />
-          게시물 추가
-        </button>
-      </div>
-
-      <div className="border rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                채널
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                제목
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                연관 기술
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                연관 캠페인
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                게시일
-              </th>
-              <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                성과
-              </th>
-              <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase">
-                관리
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {posts.map((post) => (
-              <tr key={post.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">
-                  <span className="text-lg">{channelIcons[post.channel]}</span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-900">{post.title}</span>
-                    {post.url && (
-                      <a
-                        href={post.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-blue-500"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap gap-1">
-                    {post.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap gap-1">
-                    {post.campaigns.map((campaign) => (
-                      <span
-                        key={campaign}
-                        className="text-xs bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded"
-                      >
-                        {campaign}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-500">
-                  {post.publishDate}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  {post.metrics && (
-                    <div className="text-xs text-gray-500">
-                      {post.metrics.impressions && (
-                        <span>{post.metrics.impressions.toLocaleString()} 노출</span>
-                      )}
-                      {post.metrics.views && (
-                        <span>{post.metrics.views.toLocaleString()} 조회</span>
-                      )}
-                    </div>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <button className="p-1 text-gray-400 hover:text-gray-600">
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button className="p-1 text-gray-400 hover:text-red-500">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
           </tbody>
         </table>
       </div>
