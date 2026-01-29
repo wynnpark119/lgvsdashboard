@@ -3,6 +3,7 @@ import {
   TrendingUp,
   Zap,
   FileSearch,
+  Settings,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -156,6 +157,25 @@ export const NAVIGATION_CONFIG: NavSection[] = [
         label: 'Content',
         labelKo: '콘텐츠',
         href: '/detail/content',
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // Settings
+  // ─────────────────────────────────────────────────────────────
+  {
+    id: 'settings',
+    label: 'Settings',
+    labelKo: '세팅',
+    icon: Settings,
+    phase: '설정',
+    items: [
+      {
+        id: 'settings-main',
+        label: 'Data Tagging',
+        labelKo: '데이터 태깅',
+        href: '/settings',
       },
     ],
   },

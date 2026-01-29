@@ -1,6 +1,13 @@
 /**
  * Seed Data
  * 통합 시드 데이터 - 모든 페이지에서 일관된 데이터 사용
+ * 
+ * ⚠️ 마스터 데이터는 settings.ts에서 관리
+ * - 기술 키워드: TECHNOLOGY_SETTINGS
+ * - 캠페인: CAMPAIGN_SETTINGS  
+ * - 채널 가중치: CHANNEL_SETTINGS
+ * - URL 패턴: URL_PATTERN_MAPPINGS
+ * - 소셜 게시물: SOCIAL_POSTS
  */
 
 import {
@@ -21,6 +28,12 @@ import {
   determineCampaignInfluence,
   generateActionHint,
 } from '@/lib/calculations';
+import {
+  TECHNOLOGY_SETTINGS,
+  CAMPAIGN_SETTINGS,
+  CHANNEL_SETTINGS,
+  getChannelWeight,
+} from './settings';
 
 // ─────────────────────────────────────────────────────────────
 // Base Metrics (기본 지표 - 계산의 원천)
@@ -201,50 +214,22 @@ export const TECHNOLOGY_STATES: TechnologyReviewState[] = BASE_METRICS.map((m) =
 });
 
 // ─────────────────────────────────────────────────────────────
-// Campaigns (캠페인)
+// Campaigns (캠페인) - settings.ts의 CAMPAIGN_SETTINGS에서 파생
 // ─────────────────────────────────────────────────────────────
 
-export const CAMPAIGNS: Campaign[] = [
-  // 2026 핵심 캠페인
-  {
-    id: 'lg-on-board-2026',
-    name: 'LG on board 2026',
-    type: 'advertising',
-    period: { start: '2026-01-01', end: '2026-12-31' },
-  },
-  {
-    id: 'ai-on-board',
-    name: 'AI on Board',
-    type: 'content',
-    period: { start: '2026-01-01', end: '2026-06-30' },
-  },
-  {
-    id: 'experience-on-board',
-    name: 'Experience on Board',
-    type: 'content',
-    period: { start: '2026-01-01', end: '2026-12-31' },
-  },
-  // 이벤트
-  {
-    id: 'ces-2026',
-    name: 'CES 2026',
-    type: 'event',
-    period: { start: '2026-01-07', end: '2026-01-10' },
-  },
-  // 웨비나
-  {
-    id: 'public-webinar-2026',
-    name: 'Public 웨비나 (연 6회)',
-    type: 'content',
-    period: { start: '2026-01-01', end: '2026-12-31' },
-  },
-  {
-    id: 'private-webinar-2026',
-    name: 'Private 웨비나 (연 2회)',
-    type: 'content',
-    period: { start: '2026-03-01', end: '2026-09-30' },
-  },
-];
+// 캠페인 타입 매핑
+const mapCampaignType = (type: string): 'event' | 'advertising' | 'content' => {
+  if (type === 'event') return 'event';
+  if (type === 'advertising') return 'advertising';
+  return 'content'; // webinar도 content로 매핑
+};
+
+export const CAMPAIGNS: Campaign[] = CAMPAIGN_SETTINGS.filter(c => c.active).map(c => ({
+  id: c.id,
+  name: c.name,
+  type: mapCampaignType(c.type),
+  period: c.period,
+}));
 
 export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
   {
@@ -394,11 +379,11 @@ export const CHANNEL_RAW_DATA = {
   },
 };
 
-// 채널별 가중치 (통합 퍼널용)
+// 채널별 가중치 (settings.ts에서 가져옴)
 const CHANNEL_WEIGHTS = {
-  lgcom: 1.0,       // Owned - 기준
-  linkedin: 0.6,    // 주력 채널, 예산 비중 높음
-  youtube: 0.4,     // 콘텐츠 소비
+  lgcom: getChannelWeight('lgcom'),       // Owned - 기준
+  linkedin: getChannelWeight('linkedin'), // 주력 채널, 예산 비중 높음
+  youtube: getChannelWeight('youtube'),   // 콘텐츠 소비
 };
 
 // 통합 퍼널 계산
