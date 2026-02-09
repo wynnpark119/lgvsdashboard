@@ -48,6 +48,27 @@ export const COLORS = {
     gray: '#6b7280',
   },
 
+  // Tech On Board Campaign
+  techOnBoard: {
+    theme: '#2563eb',        // blue-600 - Campaign Theme
+    teasing: '#f97316',      // orange-500 - Issue Seeding
+    narrative: '#8b5cf6',    // violet-500 - Narrative Immersion
+    coreTech: '#10b981',     // emerald-500 - Core Tech Pillars
+    landing: '#3b82f6',      // blue-500 - Judgment Formation
+    authority: '#6366f1',    // indigo-500 - Authority Validation
+  },
+
+  // Campaign Layers
+  layers: {
+    theme: '#2563eb',
+    teasing: '#f97316',
+    'narrative-film': '#8b5cf6',
+    'core-pillar': '#10b981',
+    landing: '#3b82f6',
+    distribution: '#6366f1',
+    authority: '#4f46e5',
+  },
+
   // Background
   background: {
     page: '#f8fafc',

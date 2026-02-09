@@ -26,6 +26,9 @@ export type {
   CampaignInfluence,
   MediaChannel,
   MediaRole,
+  CampaignLayer,
+  NarrativeRole,
+  CampaignHierarchy,
   Campaign,
   CampaignImpact,
   MediaAnalysis,
@@ -37,6 +40,8 @@ export {
   CAMPAIGN_INFLUENCE_CONFIG,
   MEDIA_ROLE_CONFIG,
   MEDIA_CHANNEL_LABELS,
+  CHANNEL_NARRATIVE_ROLES,
+  CAMPAIGN_LAYER_LABELS,
 } from './campaign';
 
 // Metrics Types
@@ -53,6 +58,8 @@ export type {
   MomentumData,
   DataLimitation,
   DetailContext,
+  NarrativeFlowMetrics,
+  LayerHandoffMetrics,
 } from './metrics';
 
 // Funnel Types

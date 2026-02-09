@@ -103,7 +103,7 @@ export const TECHNOLOGIES: Technology[] = [
   // 전략과제 (수주 목표)
   {
     id: 'hpc',
-    name: 'HPC',
+    name: 'HPC (High-Performance Computing)',
     nameKo: 'High-Performance Computing',
     category: 'core',
     description: '고성능 컴퓨팅 플랫폼 - 2026 전략과제',

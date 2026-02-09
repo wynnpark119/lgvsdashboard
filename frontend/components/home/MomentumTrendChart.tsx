@@ -43,13 +43,13 @@ export default function MomentumTrendChart({ data }: MomentumTrendChartProps) {
     if (retained && changeVsBaseline >= 30) {
       return {
         status: 'positive' as const,
-        headline: `캠페인 효과 지속 — 기술 인지도 Baseline 대비 +${changeVsBaseline}% 유지`,
+        headline: `Tech On Board 캠페인 효과 지속 — 기술 인지도 Baseline 대비 +${changeVsBaseline}% 유지`,
         details: [
-          `${campaign?.name} 기간 중 관심도 ${peakMultiple}배 상승 (${preIntensity.toFixed(1)} → ${peakIntensity.toFixed(1)})`,
-          `캠페인 종료 후에도 ${postIntensity.toFixed(1)} 수준 유지 — 실제 기술 관심 형성`,
-          `유사 캠페인 포맷 반복 집행 시 동일 효과 기대 가능`,
+          `캠페인 기간 중 관심도 ${peakMultiple}배 상승 (${preIntensity.toFixed(1)} → ${peakIntensity.toFixed(1)})`,
+          `캠페인 종료 후에도 ${postIntensity.toFixed(1)} 수준 유지 — Narrative Flow를 통한 실제 기술 관심 형성`,
+          `Issue Seeding → Narrative Film → Core Tech Pillars 구조가 효과적으로 작동`,
         ],
-        action: '성공 캠페인 포맷 문서화, 다음 분기 반복 집행 검토',
+        action: 'Narrative-driven 캠페인 포맷 문서화, 다음 분기 반복 집행 검토',
       };
     } else if (changeVsBaseline > 0) {
       return {
@@ -59,7 +59,7 @@ export default function MomentumTrendChart({ data }: MomentumTrendChartProps) {
           `피크 대비 하락했으나 Baseline보다는 높은 수준`,
           `추가 콘텐츠 노출 없이 시간 경과 시 Baseline 복귀 가능성`,
         ],
-        action: '후속 콘텐츠로 인지도 유지, 심화 콘텐츠 노출 강화',
+        action: 'Core Tech Pillar 후속 콘텐츠로 인지도 유지, Authority Content 강화',
       };
     } else {
       return {

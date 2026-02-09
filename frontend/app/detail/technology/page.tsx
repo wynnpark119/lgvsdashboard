@@ -142,13 +142,13 @@ const TECHNOLOGIES = [
   },
 ];
 
-// 히트맵 데이터 (주차별 x 기술별) - 전략과제 포함
+// 히트맵 데이터 (주차별 x 기술별) - 모든 기술 포함
 const HEATMAP_DATA = [
-  { week: '11-W1', 'HPC': 2800, 'Transformable Display': 2450, 'Digital Cockpit': 1800, 'LG P-pod': 1650, 'Vehicle Vision': 850 },
-  { week: '11-W2', 'HPC': 3200, 'Transformable Display': 2780, 'Digital Cockpit': 1920, 'LG P-pod': 1820, 'Vehicle Vision': 920 },
-  { week: '11-W3', 'HPC': 3650, 'Transformable Display': 3100, 'Digital Cockpit': 2100, 'LG P-pod': 2050, 'Vehicle Vision': 980 },
-  { week: '11-W4', 'HPC': 4100, 'Transformable Display': 3450, 'Digital Cockpit': 2250, 'LG P-pod': 2280, 'Vehicle Vision': 1050 },
-  { week: '12-W1', 'HPC': 4580, 'Transformable Display': 3820, 'Digital Cockpit': 2341, 'LG P-pod': 2450, 'Vehicle Vision': 1102 },
+  { week: 'W1', 'HPC': 2800, 'Display': 2450, 'Cockpit': 1800, 'P-pod': 1650, 'Vision': 850, 'ADAS': 720, 'IVI': 580, 'Display2': 420, 'Telematics': 280 },
+  { week: 'W2', 'HPC': 3200, 'Display': 2780, 'Cockpit': 1920, 'P-pod': 1820, 'Vision': 920, 'ADAS': 780, 'IVI': 620, 'Display2': 390, 'Telematics': 250 },
+  { week: 'W3', 'HPC': 3650, 'Display': 3100, 'Cockpit': 2100, 'P-pod': 2050, 'Vision': 980, 'ADAS': 850, 'IVI': 680, 'Display2': 360, 'Telematics': 220 },
+  { week: 'W4', 'HPC': 4100, 'Display': 3450, 'Cockpit': 2250, 'P-pod': 2280, 'Vision': 1050, 'ADAS': 920, 'IVI': 720, 'Display2': 340, 'Telematics': 200 },
+  { week: 'W5', 'HPC': 4580, 'Display': 3820, 'Cockpit': 2341, 'P-pod': 2450, 'Vision': 1102, 'ADAS': 980, 'IVI': 750, 'Display2': 310, 'Telematics': 180 },
 ];
 
 const STAGE_LABEL = {
@@ -157,7 +157,7 @@ const STAGE_LABEL = {
   bofu: { label: '깊은 관심', color: FUNNEL_STAGE_CONFIG.bofu.color },
 };
 
-const TECH_NAMES = ['HPC', 'Transformable Display', 'Digital Cockpit', 'LG P-pod', 'Vehicle Vision'];
+const TECH_NAMES = ['HPC', 'Display', 'Cockpit', 'P-pod', 'Vision', 'ADAS', 'IVI', 'Display2', 'Telematics'];
 
 // 히트맵 색상 계산
 function getHeatmapColor(value: number, max: number): string {
@@ -180,13 +180,13 @@ export default function TechnologyDetailPage() {
       {/* Header */}
       <PageHeader
         title="기술별 상세"
-        description=""
+        description="기술별 퍼널 단계 및 성과 지표"
       />
 
       {/* Period Info */}
       <div className="bg-gray-50 border-b px-6 py-2">
         <div className="max-w-[1600px] mx-auto">
-          <span className="text-xs text-gray-500">2024.10 - 2025.01 (90일) 데이터</span>
+          <span className="text-xs text-gray-500">2026-02 기준</span>
         </div>
       </div>
 
@@ -199,25 +199,25 @@ export default function TechnologyDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr>
-                    <th className="text-left py-2 px-3 font-medium text-gray-500 w-24">주차</th>
+                    <th className="text-left py-2 px-2 font-medium text-gray-500 w-16"></th>
                     {TECH_NAMES.map(tech => (
-                      <th key={tech} className="text-center py-2 px-3 font-medium text-gray-500">{tech}</th>
+                      <th key={tech} className="text-center py-2 px-2 font-medium text-gray-500 text-xs">{tech}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {HEATMAP_DATA.map((row) => (
                     <tr key={row.week}>
-                      <td className="py-2 px-3 font-medium text-gray-700">{row.week}</td>
+                      <td className="py-1 px-2 font-medium text-gray-700 text-xs">{row.week}</td>
                       {TECH_NAMES.map(tech => {
                         const value = row[tech as keyof typeof row] as number;
                         return (
-                          <td key={tech} className="py-2 px-3">
+                          <td key={tech} className="py-1 px-1">
                             <div className={cn(
-                              'text-center py-3 px-2 rounded font-medium',
+                              'text-center py-2 px-1 rounded text-xs font-medium',
                               getHeatmapColor(value, maxValue)
                             )}>
-                              {formatNumber(value)}
+                              {(value / 1000).toFixed(1)}K
                             </div>
                           </td>
                         );
@@ -318,7 +318,7 @@ export default function TechnologyDetailPage() {
           <section className="bg-gray-50 border rounded-xl p-4">
             <h3 className="text-sm font-medium text-gray-700 mb-2">데이터 참고사항</h3>
             <ul className="text-xs text-gray-500 space-y-1">
-              <li>• Paid% 50% 이상 시 광고 의존도 높음 (주의 필요)</li>
+              <li>• Paid% 50% 이상 시 광고 의존도 높음</li>
               <li>• 데이터는 익일 갱신</li>
             </ul>
           </section>

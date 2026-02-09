@@ -20,6 +20,8 @@ import {
   type StageDistribution,
   type MomentumData,
   type TrendDataPoint,
+  type NarrativeFlowMetrics,
+  type LayerHandoffMetrics,
 } from '@/types';
 import {
   determinePaidDependency,
@@ -224,18 +226,144 @@ const mapCampaignType = (type: string): 'event' | 'advertising' | 'content' => {
   return 'content'; // webinar도 content로 매핑
 };
 
-export const CAMPAIGNS: Campaign[] = CAMPAIGN_SETTINGS.filter(c => c.active).map(c => ({
+// Tech On Board 캠페인 계층 구조 (2026 활성 캠페인)
+const TECH_ON_BOARD_CAMPAIGNS: Campaign[] = [
+  {
+    id: 'tech-on-board-2026',
+    name: 'Tech On Board',
+    type: 'content',
+    period: { start: '2026-01-01', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: true,
+    hierarchy: {
+      layer: 'theme',
+      narrativeRole: 'narrative-immersion',
+      sequenceOrder: 0,
+    }
+  },
+  {
+    id: 'tech-on-board-teasing',
+    name: 'Reddit AI-Defined Vehicle Discussion',
+    type: 'advertising',
+    period: { start: '2025-12-15', end: '2026-01-05' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'teasing',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'issue-seeding',
+      sequenceOrder: 1,
+    }
+  },
+  {
+    id: 'tech-on-board-film',
+    name: 'Tech On Board Campaign Film',
+    type: 'content',
+    period: { start: '2026-01-06', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'narrative-film',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'narrative-immersion',
+      sequenceOrder: 2,
+    }
+  },
+  {
+    id: 'tech-on-board-hpc',
+    name: 'HPC (High-Performance Computing) Film',
+    type: 'content',
+    period: { start: '2026-01-20', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'core-pillar',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'narrative-immersion',
+      sequenceOrder: 3,
+      coreTechPillar: 'hpc',
+    }
+  },
+  {
+    id: 'tech-on-board-transformable',
+    name: 'Transformable Display Film',
+    type: 'content',
+    period: { start: '2026-01-20', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'core-pillar',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'narrative-immersion',
+      sequenceOrder: 3,
+      coreTechPillar: 'transformable-display',
+    }
+  },
+  {
+    id: 'tech-on-board-landing',
+    name: 'LG.com Tech On Board Hub',
+    type: 'content',
+    period: { start: '2026-01-06', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'landing',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'judgment-formation',
+      sequenceOrder: 4,
+    }
+  },
+  {
+    id: 'tech-on-board-linkedin-newsletter',
+    name: 'LinkedIn Newsletter (GEO/AIO)',
+    type: 'content',
+    period: { start: '2026-01-15', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'distribution',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'authority-validation',
+      sequenceOrder: 5,
+    }
+  },
+  {
+    id: 'tech-on-board-linkedin-expert',
+    name: 'LinkedIn Expert Answers & TLA',
+    type: 'content',
+    period: { start: '2026-02-01', end: '2026-06-30' },
+    status: 'active',
+    isActiveCampaign: false,
+    hierarchy: {
+      layer: 'authority',
+      parentCampaignId: 'tech-on-board-2026',
+      narrativeRole: 'authority-validation',
+      sequenceOrder: 6,
+    }
+  },
+];
+
+// 기존 캠페인들 (히스토리)
+const LEGACY_CAMPAIGNS: Campaign[] = CAMPAIGN_SETTINGS.filter(c => c.active).map(c => ({
   id: c.id,
   name: c.name,
   type: mapCampaignType(c.type),
   period: c.period,
+  status: 'completed' as const,
+  isActiveCampaign: false,
 }));
+
+// 전체 캠페인 목록 (Tech On Board + 히스토리)
+export const CAMPAIGNS: Campaign[] = [
+  ...TECH_ON_BOARD_CAMPAIGNS,
+  ...LEGACY_CAMPAIGNS,
+];
 
 export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
   {
     campaignId: 'lg-on-board-2026',
     influence: determineCampaignInfluence(85, 52),
-    summary: 'HPC·Transformable Display 전략과제 중심 MOFU 이동, 지속 효과 확인',
+    summary: 'HPC (High-Performance Computing)·Transformable Display 전략과제 MOFU 증가',
     metrics: {
       initialBefore: 58,
       initialAfter: 42,
@@ -253,7 +381,7 @@ export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
   {
     campaignId: 'ces-2026',
     influence: determineCampaignInfluence(78, 45),
-    summary: 'CES 전시 후 OEM 접촉 증가, 전략과제 노출 집중',
+    summary: 'CES 전시 후 OEM 접촉 증가',
     metrics: {
       initialBefore: 65,
       initialAfter: 52,
@@ -271,7 +399,7 @@ export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
   {
     campaignId: 'ai-on-board',
     influence: determineCampaignInfluence(72, 38),
-    summary: 'AI 기반 솔루션 인지도 상승, LinkedIn ETR +45%',
+    summary: 'AI 솔루션 인지도 상승',
     metrics: {
       initialBefore: 62,
       initialAfter: 55,
@@ -287,7 +415,7 @@ export const CAMPAIGN_IMPACTS: CampaignImpact[] = [
   {
     campaignId: 'public-webinar-2026',
     influence: determineCampaignInfluence(88, 32),
-    summary: 'Industry Expert 대상 Thought Leadership 강화, 재방문율 72%',
+    summary: 'Expert 대상 Thought Leadership, 재방문율 72%',
     metrics: {
       initialBefore: 55,
       initialAfter: 48,
@@ -358,6 +486,118 @@ export const MEDIA_ANALYSES: MediaAnalysis[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────
+// Narrative Flow Data (Tech On Board 캠페인 여정 추적)
+// ─────────────────────────────────────────────────────────────
+
+export const NARRATIVE_FLOW_DATA: NarrativeFlowMetrics[] = [
+  {
+    sequence: [
+      { layer: 'teasing', channel: 'reddit', timestamp: '2026-01-02', engagementDepth: 65 },
+      { layer: 'narrative-film', channel: 'youtube_ads', timestamp: '2026-01-08', engagementDepth: 78 },
+      { layer: 'core-pillar', channel: 'youtube_ads', timestamp: '2026-01-22', engagementDepth: 82 },
+      { layer: 'landing', channel: 'lg_com', timestamp: '2026-01-25', engagementDepth: 70 },
+    ],
+    completionRate: 80,
+  },
+  {
+    sequence: [
+      { layer: 'teasing', channel: 'reddit', timestamp: '2026-01-03', engagementDepth: 58 },
+      { layer: 'narrative-film', channel: 'youtube_ads', timestamp: '2026-01-10', engagementDepth: 72 },
+    ],
+    completionRate: 40,
+    dropoffLayer: 'narrative-film',
+  },
+  {
+    sequence: [
+      { layer: 'narrative-film', channel: 'youtube_ads', timestamp: '2026-01-12', engagementDepth: 85 },
+      { layer: 'core-pillar', channel: 'youtube_ads', timestamp: '2026-01-18', engagementDepth: 88 },
+      { layer: 'landing', channel: 'lg_com', timestamp: '2026-01-20', engagementDepth: 75 },
+      { layer: 'distribution', channel: 'linkedin_ads', timestamp: '2026-02-05', engagementDepth: 68 },
+    ],
+    completionRate: 100,
+  },
+];
+
+export const LAYER_HANDOFF_DATA: LayerHandoffMetrics[] = [
+  {
+    fromLayer: 'teasing',
+    toLayer: 'narrative-film',
+    handoffRate: 42,
+    avgTimeToNext: 3.5,
+    engagementQuality: 'high',
+  },
+  {
+    fromLayer: 'narrative-film',
+    toLayer: 'core-pillar',
+    handoffRate: 58,
+    avgTimeToNext: 7.2,
+    engagementQuality: 'high',
+  },
+  {
+    fromLayer: 'core-pillar',
+    toLayer: 'landing',
+    handoffRate: 35,
+    avgTimeToNext: 2.8,
+    engagementQuality: 'medium',
+  },
+  {
+    fromLayer: 'landing',
+    toLayer: 'distribution',
+    handoffRate: 28,
+    avgTimeToNext: 12.5,
+    engagementQuality: 'medium',
+  },
+  {
+    fromLayer: 'distribution',
+    toLayer: 'authority',
+    handoffRate: 18,
+    avgTimeToNext: 8.3,
+    engagementQuality: 'low',
+  },
+];
+
+// ─────────────────────────────────────────────────────────────
+// Core Tech Pillar Performance (HPC vs Transformable Display)
+// ─────────────────────────────────────────────────────────────
+
+export const CORE_TECH_PILLAR_PERFORMANCE = {
+  hpc: {
+    pillarName: 'HPC (High-Performance Computing)',
+    campaignAssets: [
+      { id: 'tech-on-board-hpc', type: 'film' as const, views: 125000, watchTime: 78, depthSignal: 'high' as const },
+      { id: 'hpc-landing-page', type: 'page' as const, sessions: 8500, avgTime: 4.2, revisitRate: 52 },
+      { id: 'hpc-linkedin-posts', type: 'posts' as const, impressions: 450000, engagement: 3.8 },
+    ],
+    depthSignals: {
+      watchTime: 78,
+      revisitRate: 52,
+      longReads: 65,
+    },
+    authoritySignals: {
+      expertContentEngagement: 4.2,
+      oemInquiries: 12,
+    },
+  },
+  'transformable-display': {
+    pillarName: 'Transformable Display',
+    campaignAssets: [
+      { id: 'tech-on-board-transformable', type: 'film' as const, views: 98000, watchTime: 72, depthSignal: 'high' as const },
+      { id: 'transformable-landing-page', type: 'page' as const, sessions: 7200, avgTime: 3.8, revisitRate: 48 },
+      { id: 'transformable-linkedin-posts', type: 'posts' as const, impressions: 380000, engagement: 3.5 },
+    ],
+    depthSignals: {
+      watchTime: 72,
+      revisitRate: 48,
+      longReads: 58,
+    },
+    authoritySignals: {
+      expertContentEngagement: 3.8,
+      oemInquiries: 9,
+    },
+  },
+};
+
+// ─────────────────────────────────────────────────────────────
 // ─────────────────────────────────────────────────────────────
 // Channel Raw Data (채널별 원시 데이터)
 // ─────────────────────────────────────────────────────────────
@@ -418,7 +658,7 @@ export const OVERALL_STATUS: OverallStatus = {
     toStage: 'deep',
     paidInfluence: 'with_paid',
   },
-  period: '2025-12',
+  period: '2026-02',
 };
 
 export const STAGE_DISTRIBUTION: StageDistribution = {

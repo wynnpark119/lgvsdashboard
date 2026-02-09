@@ -1,6 +1,5 @@
 import {
   LayoutDashboard,
-  TrendingUp,
   Zap,
   FileSearch,
   Settings,
@@ -45,87 +44,50 @@ export const NAVIGATION_CONFIG: NavSection[] = [
   },
 
   // ─────────────────────────────────────────────────────────────
-  // Phase 2: Progress (기술별 관심 현황)
-  // ─────────────────────────────────────────────────────────────
-  {
-    id: 'progress',
-    label: 'Progress',
-    labelKo: '기술별 관심 현황',
-    icon: TrendingUp,
-    phase: '현황',
-    items: [
-      {
-        id: 'overview',
-        label: 'Overview',
-        labelKo: '전체 현황',
-        href: '/review-flow',
-      },
-      {
-        id: 'tofu',
-        label: 'First Touch',
-        labelKo: '처음 접촉',
-        href: '/review-flow/tofu',
-      },
-      {
-        id: 'mofu-bofu',
-        label: 'Deep Interest',
-        labelKo: '깊은 관심',
-        href: '/review-flow/mofu-bofu',
-      },
-      {
-        id: 'by-technology',
-        label: 'By Technology',
-        labelKo: '기술별 비교',
-        href: '/review-flow/technology',
-      },
-      {
-        id: 'trend',
-        label: 'Trend',
-        labelKo: '추세',
-        href: '/review-flow/momentum',
-      },
-    ],
-  },
-
-  // ─────────────────────────────────────────────────────────────
-  // Phase 3: Campaign Impact
+  // Phase 2: Tech On Board Campaign
   // ─────────────────────────────────────────────────────────────
   {
     id: 'campaign-impact',
     label: 'Campaign',
-    labelKo: '캠페인/광고 영향',
+    labelKo: '캠페인 분석',
     icon: Zap,
     phase: '원인',
     items: [
       {
-        id: 'event-impact',
-        label: 'Impact Analysis',
-        labelKo: '영향 분석',
+        id: 'campaign-overview',
+        label: 'Campaign Architecture',
+        labelKo: '캠페인 구조',
         href: '/campaign-impact',
       },
       {
-        id: 'paid-influence',
-        label: 'Paid Media',
-        labelKo: '광고 영향',
-        href: '/campaign-impact/paid',
+        id: 'narrative-flow',
+        label: 'Narrative Flow',
+        labelKo: 'Narrative 흐름',
+        href: '/campaign-impact/narrative-flow',
       },
       {
-        id: 'content-contribution',
-        label: 'Content',
-        labelKo: '콘텐츠 영향',
-        href: '/campaign-impact/content',
+        id: 'core-pillar-performance',
+        label: 'Core Tech Pillars',
+        labelKo: 'Core Tech 성과',
+        href: '/campaign-impact/core-pillars',
       },
       {
-        id: 'campaign-list',
-        label: 'Campaign List',
-        labelKo: '캠페인 목록',
+        id: 'channel-roles',
+        label: 'Channel Roles',
+        labelKo: '채널 역할',
+        href: '/campaign-impact/channel-roles',
+      },
+      {
+        id: 'campaign-history',
+        label: 'Campaign History',
+        labelKo: '캠페인 히스토리',
         href: '/campaign',
       },
     ],
   },
 
   // ─────────────────────────────────────────────────────────────
-  // Phase 4: Detail / Evidence
+  // Phase 3: Detail / Evidence
   // ─────────────────────────────────────────────────────────────
   {
     id: 'evidence',
@@ -184,11 +146,10 @@ export const NAVIGATION_CONFIG: NavSection[] = [
 export const DECISION_FLOW = {
   phases: [
     { id: 'overview', label: '요약', href: '/' },
-    { id: 'progress', label: '현황', href: '/review-flow' },
     { id: 'cause', label: '원인', href: '/campaign-impact' },
     { id: 'evidence', label: '상세', href: '/detail/technology' },
   ],
-  flow: 'Overview → Progress → Campaign → Detail',
+  flow: 'Overview → Campaign → Detail',
 };
 
 export function isPathActive(itemHref: string, currentPath: string): boolean {

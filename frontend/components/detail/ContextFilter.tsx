@@ -12,7 +12,6 @@ interface ContextFilterProps {
 }
 
 const SOURCE_CONFIG = {
-  'review-flow': { label: 'Review Flow', color: 'text-purple-600', bgColor: 'bg-purple-50', href: '/review-flow' },
   'campaign-impact': { label: 'Campaign Impact', color: 'text-yellow-600', bgColor: 'bg-yellow-50', href: '/campaign-impact' },
 };
 

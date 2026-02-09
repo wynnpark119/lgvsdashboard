@@ -10,6 +10,9 @@ import {
   OVERALL_STATUS,
   STAGE_DISTRIBUTION,
   MOMENTUM_DATA,
+  NARRATIVE_FLOW_DATA,
+  LAYER_HANDOFF_DATA,
+  CORE_TECH_PILLAR_PERFORMANCE,
 } from './seed';
 import { TECHNOLOGIES, getTechnologyById } from '@/types';
 import type {
@@ -18,7 +21,10 @@ import type {
   MomentumData,
   CampaignInfluence,
   SignalType,
+  Campaign,
+  LayerHandoffMetrics,
 } from '@/types';
+import { getActiveCampaign, getChildCampaigns } from '@/lib/campaign-helpers';
 
 // ─────────────────────────────────────────────────────────────
 // Types for Home page
@@ -111,3 +117,22 @@ export const DEMO_CAMPAIGNS: CampaignContext[] = CAMPAIGNS.map((campaign) => {
     },
   };
 });
+
+// ─────────────────────────────────────────────────────────────
+// Tech On Board Campaign Data (활성 캠페인)
+// ─────────────────────────────────────────────────────────────
+
+// 현재 활성 캠페인 (Tech On Board)
+export const DEMO_TECH_ON_BOARD_CAMPAIGN: Campaign = getActiveCampaign(CAMPAIGNS)!;
+
+// 활성 캠페인의 하위 레이어들만
+export const DEMO_TECH_ON_BOARD_LAYERS: Campaign[] = getChildCampaigns(
+  CAMPAIGNS, 
+  DEMO_TECH_ON_BOARD_CAMPAIGN.id
+);
+
+// Narrative Flow 데이터
+export const DEMO_NARRATIVE_FLOW: LayerHandoffMetrics[] = LAYER_HANDOFF_DATA;
+
+// Core Tech Pillars 데이터
+export const DEMO_CORE_TECH_PILLARS = CORE_TECH_PILLAR_PERFORMANCE;

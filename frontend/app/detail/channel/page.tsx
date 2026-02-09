@@ -156,13 +156,13 @@ export default function ChannelDetailPage() {
       {/* Header */}
       <PageHeader
         title="채널별 상세"
-        description=""
+        description="채널별 역할 및 전환 성과"
       />
 
       {/* Period Info */}
       <div className="bg-gray-50 border-b px-6 py-2">
         <div className="max-w-[1600px] mx-auto">
-          <span className="text-xs text-gray-500">2024.10 - 2025.01 (90일) 데이터</span>
+          <span className="text-xs text-gray-500">2026-02 기준</span>
         </div>
       </div>
 

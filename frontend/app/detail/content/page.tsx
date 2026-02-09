@@ -43,7 +43,7 @@ const CONTENT_DATA = [
   },
   {
     id: 'hpc-ces-demo',
-    title: 'CES 2026 HPC Demo 영상',
+    title: 'HPC (High-Performance Computing) Tech On Board Film',
     type: 'video' as const,
     format: 'Demo Video (4min)',
     technology: 'hpc',
@@ -97,7 +97,7 @@ const CONTENT_DATA = [
   },
   {
     id: 'cockpit-demo',
-    title: 'CES 2026 Cockpit Demo 영상',
+    title: 'Digital Cockpit Tech On Board Film',
     type: 'video' as const,
     format: 'Demo Video (3min)',
     technology: 'digital-cockpit',
@@ -119,7 +119,7 @@ const CONTENT_DATA = [
   },
   {
     id: 'p-pod-video',
-    title: 'LG P-pod CES 2026 Reveal',
+    title: 'LG P-pod Tech On Board Reveal',
     type: 'video' as const,
     format: 'Product Reveal (6min)',
     technology: 'lg-p-pod',
@@ -276,13 +276,13 @@ export default function ContentDetailPage() {
       {/* Header */}
       <PageHeader
         title="콘텐츠 상세"
-        description=""
+        description="콘텐츠 소비 현황 및 Engagement 분석"
       />
 
       {/* Period Info */}
       <div className="bg-gray-50 border-b px-6 py-2">
         <div className="max-w-[1600px] mx-auto">
-          <span className="text-xs text-gray-500">2024.10 - 2025.01 (90일) 데이터</span>
+          <span className="text-xs text-gray-500">2026-02 기준</span>
         </div>
       </div>
 
@@ -412,7 +412,7 @@ export default function ContentDetailPage() {
           {/* By Technology Section */}
           <section className="bg-white rounded-xl border p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">기술별 콘텐츠 현황</h2>
-            <p className="text-sm text-gray-500 mb-4">홈에서 주목받는 기술별로 어떤 콘텐츠가 소비되고 있는가</p>
+            <p className="text-sm text-gray-500 mb-4">각 기술별 콘텐츠 소비 현황</p>
             
             <div className="space-y-6">
               {contentByTech.map((tech) => (
@@ -487,18 +487,6 @@ export default function ContentDetailPage() {
                               </div>
                             </div>
                           </div>
-                          {content.topOEMs.length > 0 && (
-                            <div className="mt-2 pt-2 border-t border-gray-200">
-                              <div className="text-xs text-gray-400">주요 관심:</div>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {content.topOEMs.map((oem) => (
-                                  <span key={oem} className="text-xs px-1.5 py-0.5 bg-white rounded border">
-                                    {oem}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
                         </div>
                       );
                     })}

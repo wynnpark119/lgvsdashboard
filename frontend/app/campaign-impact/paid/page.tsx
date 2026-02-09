@@ -26,7 +26,7 @@ const PAID_ANALYSIS = [
     tofuPaid: 30,
     mofuPaid: 18,
     bofuPaid: 8,
-    note: '전략과제 — CES + LG on board 광고가 인지도 급상승에 기여',
+    note: '전략과제 — Tech On Board 캠페인 광고가 인지도 급상승에 기여',
   },
   {
     technology: 'Transformable Display',
@@ -37,7 +37,7 @@ const PAID_ANALYSIS = [
     tofuPaid: 35,
     mofuPaid: 20,
     bofuPaid: 10,
-    note: '전략과제 — LinkedIn Thought Leader Ads 효과 양호',
+    note: '전략과제 — LinkedIn Ads 양호',
   },
   {
     technology: 'Digital Cockpit',
@@ -59,7 +59,7 @@ const PAID_ANALYSIS = [
     tofuPaid: 40,
     mofuPaid: 22,
     bofuPaid: 12,
-    note: 'CES 2026 신규 공개 — 광고가 초기 인지도 형성에 기여',
+    note: 'Tech On Board 캠페인 신규 공개 — 광고가 초기 인지도 형성에 기여',
   },
   {
     technology: 'Vehicle Vision',
@@ -92,7 +92,7 @@ const PAID_ANALYSIS = [
     tofuPaid: 70,
     mofuPaid: 55,
     bofuPaid: 40,
-    note: '광고 종료 시 급락 예상 — 콘텐츠 강화 필요',
+    note: '광고 의존도 높음',
   },
 ];
 
@@ -171,7 +171,7 @@ export default function PaidInfluencePage() {
               )}>
                 {highDependencyCount}개
               </div>
-              <div className="text-xs text-gray-400">주의 필요</div>
+              <div className="text-xs text-gray-400">주의</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
               <div className="text-sm text-gray-500">건강도</div>
@@ -209,8 +209,8 @@ export default function PaidInfluencePage() {
                 status={funnelPaidData[2].avgPaid < 20 ? 'good' : 'warning'}
                 message={
                   funnelPaidData[2].avgPaid < 20
-                    ? `BOFU(심화 검토)의 Paid 비율이 ${funnelPaidData[2].avgPaid}%로 낮음. 자생적 검토 중`
-                    : `BOFU(심화 검토)도 광고 의존도가 높음. 콘텐츠 전략 점검 필요`
+                    ? `BOFU Paid 비율 ${funnelPaidData[2].avgPaid}%`
+                    : `BOFU 광고 의존도 높음`
                 }
               />
             </div>

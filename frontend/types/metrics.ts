@@ -121,3 +121,31 @@ export interface DetailContext {
   purpose: string;
   relatedCampaign?: string;
 }
+
+/**
+ * Narrative Flow Metrics (Narrative 흐름 추적)
+ * 사용자가 캠페인 레이어를 따라 이동하는 여정
+ */
+export interface NarrativeFlowMetrics {
+  userId?: string;  // Anonymous tracking
+  sequence: {
+    layer: string;  // CampaignLayer
+    channel: string;  // MediaChannel
+    timestamp: string;
+    engagementDepth: number;  // 0-100
+  }[];
+  completionRate: number;  // 전체 Flow 완료율 (%)
+  dropoffLayer?: string;  // 이탈한 레이어
+}
+
+/**
+ * Layer Handoff Metrics (레이어 간 전환 지표)
+ * 한 레이어에서 다음 레이어로 넘어가는 비율
+ */
+export interface LayerHandoffMetrics {
+  fromLayer: string;  // CampaignLayer
+  toLayer: string;  // CampaignLayer
+  handoffRate: number;  // 전환율 (%)
+  avgTimeToNext: number;  // 다음 레이어까지 평균 시간 (days)
+  engagementQuality: 'high' | 'medium' | 'low';
+}

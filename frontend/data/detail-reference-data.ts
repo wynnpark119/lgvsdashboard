@@ -10,7 +10,7 @@ import { getTechnologyById } from '@/types';
 // Types
 // ─────────────────────────────────────────────────────────────
 
-export type SourceMenu = 'review-flow' | 'campaign-impact';
+export type SourceMenu = 'campaign-impact';
 export type Channel = 'lg_com' | 'linkedin' | 'youtube' | 'google_ads';
 export type ChangeDirection = 'up' | 'down' | 'stable';
 
@@ -68,9 +68,9 @@ export const DEMO_CONTEXT: DetailContext = {
     name: techInfo?.name || 'Digital Cockpit',
   },
   period: { start: '2025-12-01', end: '2026-01-23' },
-  source: 'review-flow',
-  purpose: 'Deep Review 유지 상태 검증',
-  relatedCampaign: CAMPAIGNS[0]?.name || 'CES 2026',
+  source: 'campaign-impact',
+  purpose: 'Tech On Board 캠페인 효과 검증',
+  relatedCampaign: CAMPAIGNS[0]?.name || 'Tech On Board',
 };
 
 export const DEMO_CHANNEL_METRICS: ChannelMetrics[] = [

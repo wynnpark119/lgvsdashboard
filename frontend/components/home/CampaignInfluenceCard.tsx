@@ -36,7 +36,7 @@ const CAMPAIGN_YOY = {
 const CAMPAIGN_DRIVERS = {
   'lg-on-board-2026': [
     { type: 'ads', name: 'LinkedIn Thought Leader Ads (ETR 5.2%)', contribution: 35 },
-    { type: 'content', name: 'HPC/Transformable Display 랜딩페이지', contribution: 28 },
+    { type: 'content', name: 'HPC (High-Performance Computing)/Transformable Display 랜딩페이지', contribution: 28 },
     { type: 'ads', name: 'Google SA/DA Always-On', contribution: 22 },
     { type: 'content', name: 'Technical Whitepaper 다운로드', contribution: 15 },
   ],

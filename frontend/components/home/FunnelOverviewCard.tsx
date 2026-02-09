@@ -100,40 +100,40 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
     if (allGrowing && mofuStrong) {
       return {
         status: 'positive' as const,
-        headline: 'LG on board 캠페인 효과 — 전략과제(HPC, Transformable Display) 관심 급증',
+        headline: 'Tech On Board 캠페인 — 전략과제 관심 증가',
         details: [
-          `전체 채널 TOFU +${stages[0].change.toFixed(1)}% — CES 2026 + LG on board 시너지`,
-          `MOFU +${stages[1].change.toFixed(1)}% — LinkedIn Thought Leadership & 웨비나 효과`,
-          bofuGrowing ? `문의 +${stages[2].change.toFixed(1)}% — OEM 대상 실제 비즈니스 기회 확대` : null,
+          `첫 접촉 +${stages[0].change.toFixed(1)}%`,
+          `심화 탐색 +${stages[1].change.toFixed(1)}%`,
+          bofuGrowing ? `문의 +${stages[2].change.toFixed(1)}%` : null,
         ].filter(Boolean) as string[],
-        action: 'HPC/Transformable Display 심화 콘텐츠 확대, 기술 조직 협업 강화',
+        action: 'Core Tech 콘텐츠 확대',
       };
     } else if (stages[0].paid > 50) {
       return {
         status: 'warning' as const,
-        headline: '광고 의존도 높음 — Organic 채널 강화 필요',
+        headline: '광고 의존도 높음',
         details: [
-          `전체 유입의 ${stages[0].paid}%가 Paid → LinkedIn/Reddit Organic 확대 필요`,
-          `Always-On 광고 효율 점검, Thought Leadership 콘텐츠 강화`,
+          `Paid 비중 ${stages[0].paid}%`,
+          `Organic 채널 강화 검토`,
         ],
-        action: 'Expert Discussion 시리즈 확대, Technical Whitepaper 배포',
+        action: 'Thought Leadership 콘텐츠 확대',
       };
     } else if (stages[2].change < 5) {
       return {
         status: 'caution' as const,
-        headline: '문의 전환 정체 — MOFU→BOFU 전환 강화 필요',
+        headline: '문의 전환 정체',
         details: [
-          `문의 성장률 +${stages[2].change.toFixed(1)}%로 둔화`,
-          `Private 웨비나 & OEM 타겟 콘텐츠로 전환율 개선 필요`,
+          `문의 성장률 +${stages[2].change.toFixed(1)}%`,
+          `MOFU→BOFU 전환 개선 필요`,
         ],
-        action: 'LG Loop DB 활용, ABM 광고 강화, 문의 CTA 개선',
+        action: '타겟 콘텐츠 강화',
       };
     }
     return {
       status: 'neutral' as const,
-      headline: 'LG on board 캠페인 진행 중 — 전략과제 모니터링',
-      details: [`HPC, Transformable Display 중심 콘텐츠 전략 유지`],
-      action: 'Public 웨비나 참석률 모니터링, LinkedIn ETR 추적',
+      headline: 'Tech On Board 캠페인 진행 중',
+      details: [`HPC (High-Performance Computing), Transformable Display 중심 전략 유지`],
+      action: 'Narrative Flow 모니터링',
     };
   };
 
@@ -143,24 +143,24 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
     
     if (stageId === 'tofu') {
       if (stage.change > 15) {
-        return { status: 'good', text: `CES 2026 + LG on board 효과 — HPC/Transformable Display 인지도 급증 +${stage.change.toFixed(1)}%` };
+        return { status: 'good', text: `캠페인 효과로 +${stage.change.toFixed(1)}% 증가` };
       }
       if (stage.paid > 50) {
-        return { status: 'warning', text: `광고 의존도 ${stage.paid}% — Reddit/LinkedIn Organic 확대 필요` };
+        return { status: 'warning', text: `Paid 비중 ${stage.paid}%` };
       }
-      return { status: 'neutral', text: `전략과제 인지도 유지 — Always-On 광고 효과 모니터링` };
+      return { status: 'neutral', text: `인지도 안정` };
     }
     if (stageId === 'mofu') {
       if (stage.change > 10) {
-        return { status: 'good', text: `LinkedIn ETR +${stage.change.toFixed(1)}% — Thought Leadership & Public 웨비나 효과` };
+        return { status: 'good', text: `심화 콘텐츠 효과 +${stage.change.toFixed(1)}%` };
       }
-      return { status: 'neutral', text: `Engagement 안정 — Expert Discussion 시리즈로 심화 유도` };
+      return { status: 'neutral', text: `Engagement 안정` };
     }
     // BOFU
     if (stage.change > 10) {
-      return { status: 'good', text: `OEM 문의 +${stage.change.toFixed(1)}% — HPC/Display 관련 실제 비즈니스 기회` };
+      return { status: 'good', text: `문의 +${stage.change.toFixed(1)}% 증가` };
     }
-    return { status: 'neutral', text: `문의 전환 안정 — Private 웨비나 & ABM 강화 권장` };
+    return { status: 'neutral', text: `문의 전환 안정` };
   };
 
   const overallInsight = generateOverallInsight();
@@ -170,7 +170,7 @@ export default function FunnelOverviewCard({ statusData, distributionData }: Fun
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">주목 현황</h2>
+          <h2 className="text-lg font-semibold text-gray-900">캠페인 하이라이트</h2>
           <p className="text-sm text-gray-500">LinkedIn + LG.com + YouTube 통합 퍼널 · {statusData.period} 기준</p>
         </div>
         <div className="flex items-center gap-2 text-xs">

@@ -47,50 +47,6 @@ export default function TechnologySignalTable({ data }: TechnologySignalTablePro
   
   const hotTechs = data.filter(t => t.trendDirection === 'up');
   const deepReviewTechs = data.filter(t => t.stage === 'reachable' || t.stage === 'deep');
-  const atRisk = data.filter(t => t.trendDirection === 'down');
-
-  // 비즈니스 인사이트
-  const generateInsight = () => {
-    if (deepReviewTechs.length > 0) {
-      const bofuTechs = data.filter(t => t.stage === 'reachable');
-      if (bofuTechs.length > 0) {
-        return {
-          status: 'action' as const,
-          headline: `${bofuTechs.map(t => t.name).join(', ')} — OEM 기술 이해도 높음`,
-          detail: `${bofuTechs.length}개 기술이 심화 검토 완료 단계. 기술 조직에 현황 공유 권장`,
-          recommendation: '기술 조직에 검토 현황 공유, 심화 콘텐츠(Integration Guide) 제공',
-        };
-      }
-      return {
-        status: 'opportunity' as const,
-        headline: `${deepReviewTechs.map(t => t.name).join(', ')} — 심화 탐색 중`,
-        detail: `OEM이 상세 콘텐츠를 소비하며 기술 검토 중`,
-        recommendation: '케이스스터디, 기술 비교표 콘텐츠 노출 확대',
-      };
-    } else if (hotTechs.length > 0) {
-      return {
-        status: 'opportunity' as const,
-        headline: `${hotTechs.map(t => t.name).join(', ')} — 인지도 상승 중`,
-        detail: `관심 단계에서 빠르게 성장 중. 심화 콘텐츠로 전환 유도 필요`,
-        recommendation: '웨비나/상세 스펙 콘텐츠로 MOFU 전환 유도',
-      };
-    } else if (atRisk.length > 0) {
-      return {
-        status: 'warning' as const,
-        headline: `${atRisk.map(t => t.name).join(', ')} — 관심 하락 감지`,
-        detail: `검토 강도 감소 중. 콘텐츠 재점검 또는 경쟁사 동향 확인 필요`,
-        recommendation: '콘텐츠 품질 점검, 차별화 메시지 강화',
-      };
-    }
-    return {
-      status: 'stable' as const,
-      headline: '전체 기술 안정적 인지 유지',
-      detail: '급격한 변화 없이 균형 있는 검토 진행 중',
-      recommendation: '현 콘텐츠 전략 유지, 주간 모니터링',
-    };
-  };
-
-  const insight = generateInsight();
 
   return (
     <div className="bg-white rounded-xl border p-6">
@@ -191,45 +147,6 @@ export default function TechnologySignalTable({ data }: TechnologySignalTablePro
         </table>
       </div>
 
-      {/* 비즈니스 인사이트 */}
-      <div className={cn(
-        'rounded-xl p-4 border',
-        insight.status === 'action' && 'bg-green-50 border-green-200',
-        insight.status === 'opportunity' && 'bg-blue-50 border-blue-200',
-        insight.status === 'warning' && 'bg-yellow-50 border-yellow-200',
-        insight.status === 'stable' && 'bg-gray-50 border-gray-200',
-      )}>
-        <div className={cn(
-          'font-semibold mb-1',
-          insight.status === 'action' && 'text-green-800',
-          insight.status === 'opportunity' && 'text-blue-800',
-          insight.status === 'warning' && 'text-yellow-800',
-          insight.status === 'stable' && 'text-gray-700',
-        )}>
-          {insight.status === 'action' && '✅ '}
-          {insight.status === 'opportunity' && '📈 '}
-          {insight.status === 'warning' && '⚠️ '}
-          {insight.headline}
-        </div>
-        <div className={cn(
-          'text-sm mb-2',
-          insight.status === 'action' && 'text-green-700',
-          insight.status === 'opportunity' && 'text-blue-700',
-          insight.status === 'warning' && 'text-yellow-700',
-          insight.status === 'stable' && 'text-gray-600',
-        )}>
-          {insight.detail}
-        </div>
-        <div className={cn(
-          'text-sm font-medium',
-          insight.status === 'action' && 'text-green-800',
-          insight.status === 'opportunity' && 'text-blue-800',
-          insight.status === 'warning' && 'text-yellow-800',
-          insight.status === 'stable' && 'text-gray-700',
-        )}>
-          → {insight.recommendation}
-        </div>
-      </div>
     </div>
   );
 }

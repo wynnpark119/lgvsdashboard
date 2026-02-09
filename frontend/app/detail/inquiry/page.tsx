@@ -20,12 +20,12 @@ import { cn, formatNumber } from '@/lib/utils';
 const INQUIRIES = [
   { id: 'inq-001', date: '2026-01-15', technology: 'HPC', type: '기술문의', source: 'LG.com' },
   { id: 'inq-002', date: '2026-01-14', technology: 'Transformable Display', type: '기술문의', source: 'LinkedIn' },
-  { id: 'inq-003', date: '2026-01-13', technology: 'HPC', type: '파트너십', source: 'CES 2026' },
+  { id: 'inq-003', date: '2026-01-13', technology: 'HPC', type: '파트너십', source: 'Tech On Board' },
   { id: 'inq-004', date: '2026-01-12', technology: 'LG P-pod', type: '기술문의', source: 'LG.com' },
   { id: 'inq-005', date: '2026-01-11', technology: 'Digital Cockpit', type: '기술문의', source: 'LG.com' },
   { id: 'inq-006', date: '2026-01-10', technology: 'Transformable Display', type: '파트너십', source: 'LinkedIn' },
   { id: 'inq-007', date: '2026-01-09', technology: 'HPC', type: '기술문의', source: 'LG.com' },
-  { id: 'inq-008', date: '2026-01-08', technology: 'LG P-pod', type: '일반문의', source: 'CES 2026' },
+  { id: 'inq-008', date: '2026-01-08', technology: 'LG P-pod', type: '일반문의', source: 'Tech On Board' },
   { id: 'inq-009', date: '2026-01-07', technology: 'Vehicle Vision', type: '기술문의', source: 'Google' },
   { id: 'inq-010', date: '2026-01-06', technology: 'ADAS', type: '기술문의', source: 'LG.com' },
 ];
@@ -82,13 +82,13 @@ export default function InquiryDetailPage() {
       {/* Header */}
       <PageHeader
         title="문의 & 뉴스레터"
-        description=""
+        description="기술별 문의 분포 및 뉴스레터 구독 현황"
       />
 
       {/* Period Info */}
       <div className="bg-gray-50 border-b px-6 py-2">
         <div className="max-w-[1600px] mx-auto">
-          <span className="text-xs text-gray-500">2024.10 - 2025.01 (90일) 데이터</span>
+          <span className="text-xs text-gray-500">2026-02 기준</span>
         </div>
       </div>
 

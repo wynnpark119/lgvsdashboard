@@ -34,11 +34,11 @@ const CONTENT_CAMPAIGNS = [
       attendanceRate: 69.4,
     },
     impact: 'amplifier' as const,
-    summary: 'MOFU Engagement 강화, Expert Discussion 형태',
+    summary: 'MOFU Engagement 증가',
   },
   {
-    id: 'ces-2026-video',
-    name: 'CES 2026 Demo Videos',
+    id: 'tech-on-board-video',
+    name: 'Tech On Board Campaign Videos',
     type: 'video',
     period: { start: '2026-01-07', end: '2026-01-20' },
     description: 'HPC, Transformable Display, LG P-pod 데모 영상',
@@ -79,7 +79,7 @@ const CONTENT_CAMPAIGNS = [
       shares: 542,
     },
     impact: 'supporter' as const,
-    summary: 'TOFU 유지에 기여, 전환 효과는 보통',
+    summary: 'TOFU 유지',
   },
 ];
 
@@ -194,11 +194,11 @@ export default function ContentCampaignPage() {
 
           {/* Interpretation */}
           <section className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-            <h3 className="font-medium text-blue-900 mb-2">콘텐츠 캠페인 해석</h3>
+            <h3 className="font-medium text-blue-900 mb-2">콘텐츠 캠페인 요약</h3>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• 웨비나와 백서 캠페인이 MOFU 심화 검토 전환에 직접 기여</li>
-              <li>• 영상 콘텐츠는 검토 유지(Retention)에 효과적이나 전환 효과는 제한적</li>
-              <li>• 콘텐츠 유형별로 퍼널 기여 역할이 다름 → 용도에 맞게 활용 필요</li>
+              <li>• 웨비나/백서: MOFU 전환 기여</li>
+              <li>• 영상: Retention 효과</li>
+              <li>• 콘텐츠 유형별 퍼널 역할 상이</li>
             </ul>
           </section>
         </div>

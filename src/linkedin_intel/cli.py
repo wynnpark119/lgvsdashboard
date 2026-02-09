@@ -156,7 +156,22 @@ def dashboard(port: int = typer.Option(None, "--port", "-p")):
         console.print(f"[red]✗ 대시보드 파일 없음[/]")
         raise typer.Exit(1)
     console.print(f"[blue]🚀 대시보드: http://localhost:{port}[/]")
-    subprocess.run(["streamlit", "run", str(dashboard_path), "--server.port", str(port), "--server.headless", "true"])
+    # 가상환경에서 geo를 직접 실행할 때 PATH에 .venv/bin 이 없을 수 있어
+    # 'streamlit' 실행 파일을 못 찾는 경우가 있다. 동일 파이썬 인터프리터로
+    # 모듈 실행하면 환경에 상관없이 안정적으로 동작한다.
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "streamlit",
+            "run",
+            str(dashboard_path),
+            "--server.port",
+            str(port),
+            "--server.headless",
+            "true",
+        ]
+    )
 
 
 @app.command("version")

@@ -1,83 +1,59 @@
 'use client';
 
-import { useState } from 'react';
 import {
-  ImpactSummary,
-  CampaignFlowMapping,
-  BeforeAfterShift,
-  MediaRoleInterpretation,
-} from '@/components/campaign-impact';
+  CampaignOverview,
+} from '@/components/home';
 import { PageHeader } from '@/components/layout';
 import {
-  DEMO_CAMPAIGNS,
-  DEMO_TECHNOLOGY_MOVEMENTS,
-  DEMO_MEDIA_ANALYSIS,
-  DEMO_FLOW_TIMELINE,
-  IMPACT_CONFIG,
-} from '@/data/campaign-impact-data';
-import { cn } from '@/lib/utils';
+  DEMO_TECH_ON_BOARD_CAMPAIGN,
+  DEMO_TECH_ON_BOARD_LAYERS,
+} from '@/data/home-data';
 
 export default function CampaignImpactPage() {
-  const [selectedCampaignId, setSelectedCampaignId] = useState<string>(DEMO_CAMPAIGNS[0].id);
-
-  const selectedCampaign = DEMO_CAMPAIGNS.find((c) => c.id === selectedCampaignId) || DEMO_CAMPAIGNS[0];
-  const impactConfig = IMPACT_CONFIG[selectedCampaign.impact];
-
   return (
     <div className="min-h-screen">
       {/* Header */}
       <PageHeader
-        title="영향 분석"
-        description=""
+        title="Tech On Board Campaign Impact"
+        description="현재 활성 캠페인의 레이어별 영향 분석"
+        actions={
+          <div className="flex items-center gap-3">
+            <div className="text-sm text-gray-500">2026-02 기준</div>
+            <div className="text-xs px-2 py-1 rounded bg-green-100 text-green-700 font-medium">
+              ACTIVE CAMPAIGN
+            </div>
+          </div>
+        }
       />
-
-      {/* Selected Campaign Banner */}
-      <div className="bg-gray-50 border-b px-6 py-3">
-        <div className="max-w-[1600px] mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">분석 대상:</span>
-            <span className="font-medium text-gray-900">{selectedCampaign.name}</span>
-            <span className={cn('text-xs px-2 py-1 rounded font-medium', impactConfig.bgColor, impactConfig.color)}>
-              {impactConfig.label}
-            </span>
-            <span className="text-sm text-gray-500">{selectedCampaign.summary}</span>
-          </div>
-          <div className="text-sm text-gray-500">
-            유지율: <span className={cn('font-medium', selectedCampaign.metrics.retention >= 70 ? 'text-green-600' : 'text-yellow-600')}>
-              {selectedCampaign.metrics.retention}%
-            </span>
-          </div>
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="max-w-[1600px] mx-auto px-6 py-6">
         <div className="space-y-6">
-          {/* [A] Impact Summary */}
+          {/* Campaign Architecture */}
           <section>
-            <ImpactSummary
-              campaigns={DEMO_CAMPAIGNS}
-              selectedCampaign={selectedCampaignId}
-              onSelectCampaign={setSelectedCampaignId}
+            <CampaignOverview 
+              activeCampaign={DEMO_TECH_ON_BOARD_CAMPAIGN}
+              subCampaigns={DEMO_TECH_ON_BOARD_LAYERS}
             />
           </section>
 
-          {/* [B] Campaign-to-Flow Mapping */}
-          <section>
-            <CampaignFlowMapping
-              campaign={selectedCampaign}
-              timeline={DEMO_FLOW_TIMELINE}
-              movements={DEMO_TECHNOLOGY_MOVEMENTS}
-            />
-          </section>
-
-          {/* [C] Before/After + [D] Media Role */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <BeforeAfterShift
-              campaign={selectedCampaign}
-              movements={DEMO_TECHNOLOGY_MOVEMENTS}
-            />
-            <MediaRoleInterpretation mediaAnalysis={DEMO_MEDIA_ANALYSIS} />
+          {/* Navigation to Detail Pages */}
+          <section className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <h3 className="font-medium text-blue-900 mb-3">캠페인 상세 분석</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <a href="/campaign-impact/narrative-flow" className="p-4 bg-white rounded-lg border hover:border-blue-300 transition-colors">
+                <div className="font-medium text-gray-900 mb-1">Narrative Flow</div>
+                <div className="text-sm text-gray-600">레이어 간 전환 추적</div>
+              </a>
+              <a href="/campaign-impact/core-pillars" className="p-4 bg-white rounded-lg border hover:border-blue-300 transition-colors">
+                <div className="font-medium text-gray-900 mb-1">Core Tech Pillars</div>
+                <div className="text-sm text-gray-600">HPC vs Display 비교</div>
+              </a>
+              <a href="/campaign-impact/channel-roles" className="p-4 bg-white rounded-lg border hover:border-blue-300 transition-colors">
+                <div className="font-medium text-gray-900 mb-1">Channel Roles</div>
+                <div className="text-sm text-gray-600">채널별 역할 분석</div>
+              </a>
+            </div>
           </section>
         </div>
       </div>

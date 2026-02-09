@@ -10,16 +10,19 @@ import {
   TECHNOLOGY_STATES,
   MOMENTUM_DATA,
 } from './seed';
-import { getTechnologyById } from '@/types';
+import { 
+  getTechnologyById,
+  type MediaChannel,
+  type MediaRole,
+  type CampaignType,
+  type CampaignInfluence,
+} from '@/types';
 
 // ─────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────
 
-export type ImpactType = 'amplifier' | 'distorter' | 'neutral';
-export type CampaignType = 'event' | 'advertising' | 'content';
-export type MediaRole = 'igniter' | 'accelerator' | 'supporter' | 'noise';
-export type MediaChannel = 'google_ads' | 'linkedin_ads' | 'youtube_ads' | 'social' | 'video' | 'lg_com';
+export type ImpactType = CampaignInfluence;
 export type Movement = 'advanced' | 'maintained' | 'declined';
 export type Stage = 'initial' | 'deep';
 
@@ -163,6 +166,7 @@ export const CHANNEL_LABELS: Record<MediaChannel, string> = {
   google_ads: 'Google Ads',
   linkedin_ads: 'LinkedIn Ads',
   youtube_ads: 'YouTube Ads',
+  reddit: 'Reddit',
   social: 'Social Media',
   video: 'Video Content',
   lg_com: 'LG.com',

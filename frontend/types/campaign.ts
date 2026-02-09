@@ -14,12 +14,42 @@ export type MediaChannel =
   | 'google_ads' 
   | 'linkedin_ads' 
   | 'youtube_ads' 
+  | 'reddit'
   | 'social' 
   | 'video'
   | 'lg_com';
 
 // Media Role (미디어 역할)
 export type MediaRole = 'igniter' | 'accelerator' | 'supporter' | 'noise';
+
+// Campaign Layer (Tech On Board 캠페인 계층)
+export type CampaignLayer = 
+  | 'theme'           // Tech On Board (Parent)
+  | 'teasing'         // Reddit Ads/AMA
+  | 'narrative-film'  // Campaign Film
+  | 'core-pillar'     // HPC/Transformable Display Films
+  | 'landing'         // LG.com Tech On Board Page
+  | 'distribution'    // LinkedIn Newsletter/Posts
+  | 'authority';      // LinkedIn Expert/TLA
+
+// Narrative Role (채널의 Narrative 역할)
+export type NarrativeRole = 
+  | 'issue-seeding'        // Reddit - 이슈 발굴
+  | 'narrative-immersion'  // YouTube - Narrative 전달
+  | 'judgment-formation'   // LG.com - 판단 형성
+  | 'authority-validation'; // LinkedIn - 권위 검증
+
+/**
+ * Campaign Hierarchy (캠페인 계층 구조)
+ * Tech On Board 같은 계층형 캠페인에만 사용
+ */
+export interface CampaignHierarchy {
+  layer: CampaignLayer;
+  parentCampaignId?: string;  // 부모 캠페인 ID (Tech On Board)
+  narrativeRole: NarrativeRole;
+  sequenceOrder: number;      // Flow 순서
+  coreTechPillar?: 'hpc' | 'transformable-display';  // Core Tech Pillar 구분
+}
 
 /**
  * Campaign (캠페인 정의)
@@ -32,6 +62,9 @@ export interface Campaign {
     start: string;  // YYYY-MM-DD
     end: string;
   };
+  hierarchy?: CampaignHierarchy;  // Tech On Board 같은 계층형 캠페인용
+  status?: 'active' | 'completed' | 'planned';  // 캠페인 상태
+  isActiveCampaign?: boolean;  // 현재 활성 캠페인 여부 (Home에 표시)
 }
 
 /**
@@ -168,7 +201,67 @@ export const MEDIA_CHANNEL_LABELS: Record<MediaChannel, string> = {
   google_ads: 'Google Ads',
   linkedin_ads: 'LinkedIn Ads',
   youtube_ads: 'YouTube Ads',
+  reddit: 'Reddit',
   social: 'Social Media',
   video: 'Video Content',
   lg_com: 'LG.com',
+};
+
+/**
+ * 채널의 Narrative Role 매핑
+ * 채널을 성과 엔드포인트가 아닌 Narrative Carrier로 재해석
+ */
+export const CHANNEL_NARRATIVE_ROLES: Record<MediaChannel, {
+  role: NarrativeRole;
+  label: string;
+  description: string;
+}> = {
+  reddit: {
+    role: 'issue-seeding',
+    label: 'Issue Seeding',
+    description: 'AI-Defined Vehicle 이슈 발굴 및 증폭'
+  },
+  youtube_ads: {
+    role: 'narrative-immersion',
+    label: 'Narrative Immersion',
+    description: 'Tech On Board 철학 전달'
+  },
+  video: {
+    role: 'narrative-immersion',
+    label: 'Narrative Immersion',
+    description: '기술 스토리 전달'
+  },
+  lg_com: {
+    role: 'judgment-formation',
+    label: 'Judgment Formation',
+    description: '기술 이해 및 판단 형성'
+  },
+  linkedin_ads: {
+    role: 'authority-validation',
+    label: 'Authority & Validation',
+    description: '전문성 검증 및 신뢰 구축'
+  },
+  social: {
+    role: 'authority-validation',
+    label: 'Authority & Validation',
+    description: '소셜 신뢰 구축'
+  },
+  google_ads: {
+    role: 'issue-seeding',
+    label: 'Issue Seeding',
+    description: '검색 의도 발굴'
+  },
+};
+
+/**
+ * Campaign Layer 레이블
+ */
+export const CAMPAIGN_LAYER_LABELS: Record<CampaignLayer, string> = {
+  theme: 'Campaign Theme',
+  teasing: 'Teasing',
+  'narrative-film': 'Narrative Film',
+  'core-pillar': 'Core Tech Pillar',
+  landing: 'Landing Hub',
+  distribution: 'Distribution',
+  authority: 'Authority Content',
 };
