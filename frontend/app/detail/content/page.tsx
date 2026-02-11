@@ -27,7 +27,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'PDF Whitepaper',
     technology: 'hpc',
-    metrics: { views: 5840, avgDwell: 12.5, completionRate: 78, downloads: 1856 },
+    metrics: { views: 5840, avgDwell: 12.5, engagementScore: 78, downloads: 1856 },
     trend: 85,
     topOEMs: ['BMW', 'Mercedes', 'Volkswagen'],
   },
@@ -37,7 +37,7 @@ const CONTENT_DATA = [
     type: 'webinar' as const,
     format: 'Expert Discussion (35min)',
     technology: 'hpc',
-    metrics: { views: 3420, avgDwell: 28.5, completionRate: 82, downloads: 0 },
+    metrics: { views: 3420, avgDwell: 28.5, engagementScore: 82, downloads: 0 },
     trend: 72,
     topOEMs: ['GM', 'Ford', 'Toyota'],
   },
@@ -47,7 +47,7 @@ const CONTENT_DATA = [
     type: 'video' as const,
     format: 'Demo Video (4min)',
     technology: 'hpc',
-    metrics: { views: 12500, avgDwell: 3.5, completionRate: 85, downloads: 0 },
+    metrics: { views: 12500, avgDwell: 3.5, engagementScore: 85, downloads: 0 },
     trend: 142,
     topOEMs: ['CES 전시 방문자'],
   },
@@ -59,7 +59,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'PDF Whitepaper',
     technology: 'transformable-display',
-    metrics: { views: 4920, avgDwell: 10.8, completionRate: 72, downloads: 1542 },
+    metrics: { views: 4920, avgDwell: 10.8, engagementScore: 72, downloads: 1542 },
     trend: 78,
     topOEMs: ['Mercedes', 'Audi', 'Porsche'],
   },
@@ -69,7 +69,7 @@ const CONTENT_DATA = [
     type: 'video' as const,
     format: 'Tech Explainer (5min)',
     technology: 'transformable-display',
-    metrics: { views: 8650, avgDwell: 4.2, completionRate: 78, downloads: 0 },
+    metrics: { views: 8650, avgDwell: 4.2, engagementScore: 78, downloads: 0 },
     trend: 95,
     topOEMs: ['BMW', 'Lucid', 'Rivian'],
   },
@@ -81,7 +81,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'PDF Whitepaper',
     technology: 'digital-cockpit',
-    metrics: { views: 3421, avgDwell: 8.5, completionRate: 68, downloads: 892 },
+    metrics: { views: 3421, avgDwell: 8.5, engagementScore: 68, downloads: 892 },
     trend: 31,
     topOEMs: ['BMW', 'Mercedes', 'Hyundai'],
   },
@@ -91,7 +91,7 @@ const CONTENT_DATA = [
     type: 'webinar' as const,
     format: 'Live Webinar (45min)',
     technology: 'digital-cockpit',
-    metrics: { views: 1856, avgDwell: 38.2, completionRate: 82, downloads: 0 },
+    metrics: { views: 1856, avgDwell: 38.2, engagementScore: 82, downloads: 0 },
     trend: 45,
     topOEMs: ['Toyota', 'VW', 'Ford'],
   },
@@ -101,7 +101,7 @@ const CONTENT_DATA = [
     type: 'video' as const,
     format: 'Demo Video (3min)',
     technology: 'digital-cockpit',
-    metrics: { views: 8920, avgDwell: 2.8, completionRate: 75, downloads: 0 },
+    metrics: { views: 8920, avgDwell: 2.8, engagementScore: 75, downloads: 0 },
     trend: 128,
     topOEMs: ['전시 방문자'],
   },
@@ -113,7 +113,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'Product Overview',
     technology: 'lg-p-pod',
-    metrics: { views: 4580, avgDwell: 6.8, completionRate: 72, downloads: 1245 },
+    metrics: { views: 4580, avgDwell: 6.8, engagementScore: 72, downloads: 1245 },
     trend: 92,
     topOEMs: ['Mercedes', 'BMW', 'Hyundai'],
   },
@@ -123,7 +123,7 @@ const CONTENT_DATA = [
     type: 'video' as const,
     format: 'Product Reveal (6min)',
     technology: 'lg-p-pod',
-    metrics: { views: 9850, avgDwell: 5.2, completionRate: 82, downloads: 0 },
+    metrics: { views: 9850, avgDwell: 5.2, engagementScore: 82, downloads: 0 },
     trend: 158,
     topOEMs: ['CES 전시 방문자'],
   },
@@ -135,7 +135,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'Case Study',
     technology: 'vehicle-vision',
-    metrics: { views: 1245, avgDwell: 6.2, completionRate: 58, downloads: 456 },
+    metrics: { views: 1245, avgDwell: 6.2, engagementScore: 58, downloads: 456 },
     trend: 22,
     topOEMs: ['BMW', 'Audi'],
   },
@@ -145,7 +145,7 @@ const CONTENT_DATA = [
     type: 'video' as const,
     format: 'Tech Explainer (5min)',
     technology: 'vehicle-vision',
-    metrics: { views: 3890, avgDwell: 4.1, completionRate: 62, downloads: 0 },
+    metrics: { views: 3890, avgDwell: 4.1, engagementScore: 62, downloads: 0 },
     trend: 18,
     topOEMs: ['Honda', 'Nissan', 'Stellantis'],
   },
@@ -157,7 +157,7 @@ const CONTENT_DATA = [
     type: 'webinar' as const,
     format: 'On-demand Webinar (60min)',
     technology: 'adas',
-    metrics: { views: 2156, avgDwell: 42.5, completionRate: 72, downloads: 0 },
+    metrics: { views: 2156, avgDwell: 42.5, engagementScore: 72, downloads: 0 },
     trend: 15,
     topOEMs: ['GM', 'Ford', 'Rivian'],
   },
@@ -167,7 +167,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'Technical Specification',
     technology: 'adas',
-    metrics: { views: 987, avgDwell: 12.3, completionRate: 45, downloads: 678 },
+    metrics: { views: 987, avgDwell: 12.3, engagementScore: 45, downloads: 678 },
     trend: 8,
     topOEMs: ['Tesla', 'Lucid'],
   },
@@ -179,7 +179,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'Technical Guide',
     technology: 'ivi',
-    metrics: { views: 1523, avgDwell: 7.8, completionRate: 52, downloads: 389 },
+    metrics: { views: 1523, avgDwell: 7.8, engagementScore: 52, downloads: 389 },
     trend: -5,
     topOEMs: ['Hyundai', 'Kia'],
   },
@@ -189,7 +189,7 @@ const CONTENT_DATA = [
     type: 'video' as const,
     format: 'Product Demo (4min)',
     technology: 'ivi',
-    metrics: { views: 2890, avgDwell: 3.2, completionRate: 68, downloads: 0 },
+    metrics: { views: 2890, avgDwell: 3.2, engagementScore: 68, downloads: 0 },
     trend: 12,
     topOEMs: ['Honda', 'Toyota'],
   },
@@ -201,7 +201,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'Product Brochure',
     technology: 'automotive-display',
-    metrics: { views: 892, avgDwell: 3.5, completionRate: 78, downloads: 234 },
+    metrics: { views: 892, avgDwell: 3.5, engagementScore: 78, downloads: 234 },
     trend: -8,
     topOEMs: ['Mercedes', 'BMW'],
   },
@@ -213,7 +213,7 @@ const CONTENT_DATA = [
     type: 'document' as const,
     format: 'Solution Overview',
     technology: 'telematics',
-    metrics: { views: 456, avgDwell: 4.2, completionRate: 42, downloads: 123 },
+    metrics: { views: 456, avgDwell: 4.2, engagementScore: 42, downloads: 123 },
     trend: -12,
     topOEMs: ['현대모비스'],
   },
@@ -231,15 +231,15 @@ export default function ContentDetailPage() {
     const contents = CONTENT_DATA.filter((c) => c.technology === tech.id);
     const totalViews = contents.reduce((sum, c) => sum + c.metrics.views, 0);
     const totalDownloads = contents.reduce((sum, c) => sum + c.metrics.downloads, 0);
-    const avgCompletion = contents.length > 0 
-      ? Math.round(contents.reduce((sum, c) => sum + c.metrics.completionRate, 0) / contents.length)
+    const avgEngagement = contents.length > 0 
+      ? Math.round(contents.reduce((sum, c) => sum + c.metrics.engagementScore, 0) / contents.length)
       : 0;
     return {
       ...tech,
       contents,
       totalViews,
       totalDownloads,
-      avgCompletion,
+      avgEngagement,
       contentCount: contents.length,
     };
   }).filter((t) => t.contentCount > 0);
@@ -247,7 +247,7 @@ export default function ContentDetailPage() {
   // 전체 통계
   const totalViews = CONTENT_DATA.reduce((sum, c) => sum + c.metrics.views, 0);
   const totalDownloads = CONTENT_DATA.reduce((sum, c) => sum + c.metrics.downloads, 0);
-  const avgCompletion = Math.round(CONTENT_DATA.reduce((sum, c) => sum + c.metrics.completionRate, 0) / CONTENT_DATA.length);
+  const avgEngagement = Math.round(CONTENT_DATA.reduce((sum, c) => sum + c.metrics.engagementScore, 0) / CONTENT_DATA.length);
 
   // 콘텐츠 유형별 통계
   const typeStats = Object.entries(TYPE_CONFIG).map(([type, config]) => {
@@ -266,10 +266,10 @@ export default function ContentDetailPage() {
     .sort((a, b) => b.metrics.views - a.metrics.views)
     .slice(0, 5);
 
-  // 높은 완료율 콘텐츠
+  // 높은 Engagement 콘텐츠
   const highEngagementContents = [...CONTENT_DATA]
-    .filter((c) => c.metrics.completionRate >= 70)
-    .sort((a, b) => b.metrics.completionRate - a.metrics.completionRate);
+    .filter((c) => c.metrics.engagementScore >= 70)
+    .sort((a, b) => b.metrics.engagementScore - a.metrics.engagementScore);
 
   return (
     <div className="min-h-screen">
@@ -312,12 +312,12 @@ export default function ContentDetailPage() {
               <div className="text-2xl font-bold text-brand-primary mt-1">{formatNumber(totalDownloads)}</div>
             </div>
             <div className="bg-white rounded-xl border p-4">
-              <div className="text-sm text-gray-500">평균 완료율</div>
+              <div className="text-sm text-gray-500">평균 Engagement</div>
               <div className={cn(
                 'text-2xl font-bold mt-1',
-                avgCompletion >= 60 ? 'text-green-600' : 'text-yellow-600'
+                avgEngagement >= 60 ? 'text-green-600' : 'text-yellow-600'
               )}>
-                {avgCompletion}%
+                {avgEngagement}점
               </div>
             </div>
             <div className="bg-white rounded-xl border p-4">
@@ -326,7 +326,7 @@ export default function ContentDetailPage() {
                 고관심 콘텐츠
               </div>
               <div className="text-2xl font-bold text-green-600 mt-1">{highEngagementContents.length}개</div>
-              <div className="text-xs text-gray-400">완료율 70%+</div>
+              <div className="text-xs text-gray-400">Engagement 70점+</div>
             </div>
           </section>
 
@@ -432,7 +432,7 @@ export default function ContentDetailPage() {
                           <span>•</span>
                           <span>총 {formatNumber(tech.totalViews)} 조회</span>
                           <span>•</span>
-                          <span>평균 완료율 {tech.avgCompletion}%</span>
+                          <span>평균 Engagement {tech.avgEngagement}점</span>
                         </div>
                       </div>
                     </div>
@@ -468,13 +468,13 @@ export default function ContentDetailPage() {
                               <div className="font-medium">{formatNumber(content.metrics.views)}</div>
                             </div>
                             <div className="text-center">
-                              <div className="text-gray-400">완료율</div>
+                              <div className="text-gray-400">Engagement</div>
                               <div className={cn(
                                 'font-medium',
-                                content.metrics.completionRate >= 70 ? 'text-green-600' :
-                                content.metrics.completionRate >= 50 ? 'text-yellow-600' : 'text-gray-500'
+                                content.metrics.engagementScore >= 70 ? 'text-green-600' :
+                                content.metrics.engagementScore >= 50 ? 'text-yellow-600' : 'text-gray-500'
                               )}>
-                                {content.metrics.completionRate}%
+                                {content.metrics.engagementScore}점
                               </div>
                             </div>
                             <div className="text-center">
@@ -499,8 +499,8 @@ export default function ContentDetailPage() {
           {/* High Engagement Contents */}
           {highEngagementContents.length > 0 && (
             <section className="bg-green-50 border border-green-200 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-green-900 mb-2">높은 관심 콘텐츠 (완료율 70%+)</h3>
-              <p className="text-sm text-green-700 mb-4">끝까지 보는 콘텐츠 = 관심이 높다는 신호</p>
+              <h3 className="text-lg font-semibold text-green-900 mb-2">높은 관심 콘텐츠 (Engagement 70점+)</h3>
+              <p className="text-sm text-green-700 mb-4">높은 Engagement = 관심이 높다는 신호</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {highEngagementContents.map((content) => {
                   const tech = getTechnologyById(content.technology);
@@ -517,7 +517,7 @@ export default function ContentDetailPage() {
                         {content.title}
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-green-600 font-bold">{content.metrics.completionRate}% 완료</span>
+                        <span className="text-green-600 font-bold">{content.metrics.engagementScore}점</span>
                         <span className="text-gray-500">{formatNumber(content.metrics.views)} 조회</span>
                       </div>
                     </div>
@@ -529,11 +529,11 @@ export default function ContentDetailPage() {
 
           {/* Interpretation */}
           <section className="bg-gray-50 border rounded-xl p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">콘텐츠 소비 해석 기준</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">콘텐츠 Engagement 해석 기준</h3>
             <div className="grid grid-cols-3 gap-4 text-xs text-gray-600">
               <div>
-                <div className="font-medium text-gray-900 mb-1">완료율 70%+</div>
-                <div>콘텐츠에 대한 높은 관심. 해당 기술에 대해 깊이 알고 싶어함</div>
+                <div className="font-medium text-gray-900 mb-1">Engagement 70점+</div>
+                <div>콘텐츠에 대한 높은 관심. 조회+체류+액션 종합 점수</div>
               </div>
               <div>
                 <div className="font-medium text-gray-900 mb-1">다운로드 발생</div>

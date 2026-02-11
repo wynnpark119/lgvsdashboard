@@ -40,7 +40,7 @@ export default function CampaignImpactPage() {
           {/* Navigation to Detail Pages */}
           <section className="bg-blue-50 border border-blue-200 rounded-xl p-6">
             <h3 className="font-medium text-blue-900 mb-3">캠페인 상세 분석</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <a href="/campaign-impact/narrative-flow" className="p-4 bg-white rounded-lg border hover:border-blue-300 transition-colors">
                 <div className="font-medium text-gray-900 mb-1">Narrative Flow</div>
                 <div className="text-sm text-gray-600">레이어 간 전환 추적</div>
@@ -48,10 +48,6 @@ export default function CampaignImpactPage() {
               <a href="/campaign-impact/core-pillars" className="p-4 bg-white rounded-lg border hover:border-blue-300 transition-colors">
                 <div className="font-medium text-gray-900 mb-1">Core Tech Pillars</div>
                 <div className="text-sm text-gray-600">HPC vs Display 비교</div>
-              </a>
-              <a href="/campaign-impact/channel-roles" className="p-4 bg-white rounded-lg border hover:border-blue-300 transition-colors">
-                <div className="font-medium text-gray-900 mb-1">Channel Roles</div>
-                <div className="text-sm text-gray-600">채널별 역할 분석</div>
               </a>
             </div>
           </section>

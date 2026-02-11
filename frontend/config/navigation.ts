@@ -72,12 +72,6 @@ export const NAVIGATION_CONFIG: NavSection[] = [
         href: '/campaign-impact/core-pillars',
       },
       {
-        id: 'channel-roles',
-        label: 'Channel Roles',
-        labelKo: '채널 역할',
-        href: '/campaign-impact/channel-roles',
-      },
-      {
         id: 'campaign-history',
         label: 'Campaign History',
         labelKo: '캠페인 히스토리',

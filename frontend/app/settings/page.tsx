@@ -60,6 +60,7 @@ const CONTENT_TYPE_LABELS: Record<ContentUrl['contentType'], string> = {
   whitepaper: '백서',
   'social-post': '소셜포스트',
   webinar: '웨비나',
+  newsletter: '뉴스레터',
 };
 
 const FUNNEL_STAGE_LABELS: Record<ContentUrl['funnelStage'], { label: string; color: string }> = {
@@ -72,6 +73,7 @@ const CHANNEL_LABELS: Record<ContentUrl['channel'], { label: string; icon: strin
   lgcom: { label: 'LG.com', icon: '🌐' },
   linkedin: { label: 'LinkedIn', icon: '💼' },
   youtube: { label: 'YouTube', icon: '📺' },
+  reddit: { label: 'Reddit', icon: '💬' },
 };
 
 export default function SettingsPage() {

@@ -106,7 +106,7 @@ function PillarCard({ data }: { data: CoreTechPillarData }) {
         <div className="text-xs text-gray-500 mb-2">Authority Signals</div>
         <div className="space-y-1">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Expert Engagement</span>
+            <span className="text-gray-600">Engagement</span>
             <span className="font-medium text-gray-700">{data.authoritySignals.expertContentEngagement}%</span>
           </div>
           <div className="flex justify-between text-sm">

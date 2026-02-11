@@ -189,8 +189,8 @@ export interface ContentUrl {
   id: string;
   url: string;
   title: string;
-  channel: 'lgcom' | 'linkedin' | 'youtube';
-  contentType: 'landing' | 'article' | 'video' | 'whitepaper' | 'social-post' | 'webinar';
+  channel: 'lgcom' | 'linkedin' | 'youtube' | 'reddit';
+  contentType: 'landing' | 'article' | 'video' | 'whitepaper' | 'social-post' | 'webinar' | 'newsletter';
   technologies: string[]; // 연관 기술 (다중)
   campaigns: string[]; // 연관 캠페인 (다중, 없으면 독립 콘텐츠)
   funnelStage: 'tofu' | 'mofu' | 'bofu'; // 타겟 퍼널 단계
@@ -200,78 +200,104 @@ export interface ContentUrl {
 
 export const CONTENT_URLS: ContentUrl[] = [
   // ─────────────────────────────────────────────────────────────
-  // Tech On Board 캠페인 관련 콘텐츠
+  // Tech On Board 캠페인 관련 콘텐츠 (7개 레이어 구조)
   // ─────────────────────────────────────────────────────────────
+  
+  // Layer 1: Reddit AI-Defined Vehicle Discussion (Issue Seeding)
   {
-    id: 'tech-on-board-main-landing',
-    url: '/vs/tech-on-board',
-    title: 'Tech On Board 메인 랜딩페이지',
-    channel: 'lgcom',
-    contentType: 'landing',
-    technologies: ['hpc', 'transformable-display', 'lg-p-pod', 'digital-cockpit'],
+    id: 'tech-on-board-reddit-ads',
+    url: 'https://www.reddit.com/r/SelfDrivingCars/comments/tech-on-board',
+    title: 'Reddit AI-Defined Vehicle Discussion',
+    channel: 'reddit',
+    contentType: 'social-post',
+    technologies: ['hpc', 'transformable-display', 'digital-cockpit'],
     campaigns: ['tech-on-board-2026'],
     funnelStage: 'tofu',
-    publishDate: '2026-01-01',
+    publishDate: '2025-12-15',
     active: true,
   },
+  
+  // Layer 2: Tech On Board Campaign Film (Narrative Immersion)
   {
-    id: 'tech-on-board-hpc-page',
-    url: '/vs/tech-on-board/hpc',
-    title: 'HPC (High-Performance Computing) Tech On Board 페이지',
-    channel: 'lgcom',
-    contentType: 'landing',
+    id: 'tech-on-board-campaign-film',
+    url: 'https://www.youtube.com/watch?v=tech-on-board-main',
+    title: 'Tech On Board Campaign Film',
+    channel: 'youtube',
+    contentType: 'video',
+    technologies: ['hpc', 'transformable-display', 'digital-cockpit', 'lg-p-pod'],
+    campaigns: ['tech-on-board-2026'],
+    funnelStage: 'tofu',
+    publishDate: '2026-01-06',
+    active: true,
+  },
+  
+  // Layer 3: HPC Film (Core Tech Pillar)
+  {
+    id: 'tech-on-board-hpc-film',
+    url: 'https://www.youtube.com/watch?v=hpc-core-tech',
+    title: 'HPC (High-Performance Computing) Film',
+    channel: 'youtube',
+    contentType: 'video',
     technologies: ['hpc'],
     campaigns: ['tech-on-board-2026'],
     funnelStage: 'tofu',
     publishDate: '2026-01-20',
     active: true,
   },
+  
+  // Layer 4: Transformable Display Film (Core Tech Pillar)
   {
-    id: 'tech-on-board-display-page',
-    url: '/vs/tech-on-board/display',
-    title: 'Transformable Display Tech On Board 페이지',
-    channel: 'lgcom',
-    contentType: 'landing',
+    id: 'tech-on-board-display-film',
+    url: 'https://www.youtube.com/watch?v=display-core-tech',
+    title: 'Transformable Display Film',
+    channel: 'youtube',
+    contentType: 'video',
     technologies: ['transformable-display'],
     campaigns: ['tech-on-board-2026'],
     funnelStage: 'tofu',
     publishDate: '2026-01-20',
     active: true,
   },
+  
+  // Layer 5: LG.com Tech On Board Hub (Judgment Formation)
   {
-    id: 'tech-on-board-hpc-video',
-    url: 'https://www.youtube.com/watch?v=abc123def456',
-    title: 'HPC (High-Performance Computing) Tech On Board 영상',
-    channel: 'youtube',
-    contentType: 'video',
-    technologies: ['hpc'],
+    id: 'tech-on-board-hub',
+    url: '/vs/tech-on-board',
+    title: 'LG.com Tech On Board Hub',
+    channel: 'lgcom',
+    contentType: 'landing',
+    technologies: ['hpc', 'transformable-display', 'digital-cockpit', 'lg-p-pod'],
     campaigns: ['tech-on-board-2026'],
-    funnelStage: 'tofu',
-    publishDate: '2026-01-20',
+    funnelStage: 'mofu',
+    publishDate: '2026-01-06',
     active: true,
   },
+  
+  // Layer 6: LinkedIn Newsletter (Distribution)
   {
-    id: 'tech-on-board-ppod-video',
-    url: 'https://www.youtube.com/watch?v=ghi789jkl012',
-    title: 'LG P-pod Tech On Board Reveal',
-    channel: 'youtube',
-    contentType: 'video',
-    technologies: ['lg-p-pod', 'digital-cockpit'],
-    campaigns: ['tech-on-board-2026', 'experience-on-board'],
-    funnelStage: 'tofu',
-    publishDate: '2026-01-20',
+    id: 'tech-on-board-linkedin-newsletter',
+    url: 'https://www.linkedin.com/newsletters/lg-vs-tech-insights',
+    title: 'LinkedIn Newsletter (GEO/AIO 최적화)',
+    channel: 'linkedin',
+    contentType: 'newsletter',
+    technologies: ['hpc', 'transformable-display'],
+    campaigns: ['tech-on-board-2026'],
+    funnelStage: 'mofu',
+    publishDate: '2026-01-15',
     active: true,
   },
+  
+  // Layer 7: LinkedIn Expert Answers & TLA (Authority Content)
   {
-    id: 'tech-on-board-hpc-linkedin',
-    url: 'https://www.linkedin.com/posts/lg-vs_hpc-techonboard-xxx',
-    title: 'HPC (High-Performance Computing) Technology Reveal 포스트',
+    id: 'tech-on-board-linkedin-expert',
+    url: 'https://www.linkedin.com/posts/lg-vs_expert-answers',
+    title: 'LinkedIn Expert Answers & TLA',
     channel: 'linkedin',
     contentType: 'social-post',
-    technologies: ['hpc'],
+    technologies: ['hpc', 'transformable-display', 'digital-cockpit'],
     campaigns: ['tech-on-board-2026'],
-    funnelStage: 'tofu',
-    publishDate: '2026-01-20',
+    funnelStage: 'bofu',
+    publishDate: '2026-02-01',
     active: true,
   },
   
@@ -492,6 +518,15 @@ export const CHANNEL_SETTINGS: ChannelSetting[] = [
     type: 'social',
     weight: 0.4,
     metrics: ['views', 'watchTime', 'viewDepth25', 'viewDepth50', 'viewDepth75', 'viewDepth100'],
+    active: true,
+  },
+  {
+    id: 'reddit',
+    name: 'Reddit',
+    nameKo: '레딧',
+    type: 'social',
+    weight: 0.3,
+    metrics: ['impressions', 'clicks', 'comments', 'upvotes', 'engagement'],
     active: true,
   },
   {

@@ -155,11 +155,11 @@ export default function NarrativeFlowTracking({ handoffData }: NarrativeFlowTrac
       </div>
 
       {/* Insight */}
-      <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <div className="text-sm font-medium text-yellow-900">주목: 전환율 낮음</div>
-        <div className="text-sm text-yellow-700 mt-1">
-          {getLayerLabel(lowestHandoff.fromLayer as any)} → {getLayerLabel(lowestHandoff.toLayer as any)} 단계 
-          {' '}{100 - lowestHandoff.handoffRate}% 이탈
+      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
+        <div className="text-sm font-medium text-blue-900">Narrative Flow 효과</div>
+        <div className="text-sm text-blue-700 mt-1">
+          {handoffData.filter(h => h.handoffRate >= 50).length}개 레이어 전환 정상 작동 중
+          {handoffData.some(h => h.quality === 'high') && ' · High Quality Engagement 발생'}
         </div>
       </div>
     </div>

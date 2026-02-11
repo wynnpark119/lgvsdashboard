@@ -33,7 +33,7 @@ const STAGE_CONFIG = {
 const SIGNAL_CONFIG: Record<SignalType, { icon: typeof CheckCircle; color: string; label: string }> = {
   green: { icon: CheckCircle, color: 'text-green-600', label: '문의 전환 · Engagement 高' },
   yellow: { icon: Clock, color: 'text-yellow-600', label: '추가 콘텐츠 노출' },
-  orange: { icon: AlertCircle, color: 'text-orange-600', label: '광고 의존 주의' },
+  orange: { icon: AlertCircle, color: 'text-orange-600', label: '광고 의존도 관리' },
   red: { icon: AlertCircle, color: 'text-red-600', label: 'Engagement 하락' },
   gray: { icon: Minus, color: 'text-gray-500', label: '모니터링' },
 };
