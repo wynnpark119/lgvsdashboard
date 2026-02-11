@@ -159,7 +159,7 @@ export default function NarrativeFlowTracking({ handoffData }: NarrativeFlowTrac
         <div className="text-sm font-medium text-blue-900">Narrative Flow 효과</div>
         <div className="text-sm text-blue-700 mt-1">
           {handoffData.filter(h => h.handoffRate >= 50).length}개 레이어 전환 정상 작동 중
-          {handoffData.some(h => h.quality === 'high') && ' · High Quality Engagement 발생'}
+          {handoffData.some(h => h.engagementQuality === 'high') && ' · High Quality Engagement 발생'}
         </div>
       </div>
     </div>
